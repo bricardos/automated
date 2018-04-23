@@ -1,0 +1,12 @@
+*** Settings ***
+Library           Collections
+Library           HttpLibrary.HTTP
+Library           RequestsLibrary
+Library           DatabaseLibrary
+Library           OperatingSystem
+
+*** Keywords ***
+Is header
+    Create Http Context    80    http
+    ${headers}=    Create Dictionary    Content-Type=application/json
+    Return From Keyword    ${headers}

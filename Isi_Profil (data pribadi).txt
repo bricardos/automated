@@ -1,0 +1,364 @@
+*** Settings ***
+Library           HttpLibrary.HTTP
+Library           Selenium2Library
+
+*** Test Cases ***
+Positif
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    robotest221@gmail.com
+    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    1334307478152323
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (nama depan kosong)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Comment    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    1334307478157783
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (nama belakang kosong)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Comment    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    1334307478157783
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (tanggal lahir kosong)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Comment    Click Element    xpath=//*[@id="dob"]
+    Comment    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Comment    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Comment    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    1334307478157783
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (no. ktp kosong)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Comment    Input Text    xpath=//*[@id="id_card_no"]    1334307478157783
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (foto KTP kosong)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    1334307478157783
+    Comment    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (foto KTP + selfie kosong)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    1334307478157783
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Comment    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (nomor KTP sudah terdaftar)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    1871012203920567
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (nomor KTP kurang dari 16 digit)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    187101220392056
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (nomor KTP lebih dari 16 digit)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    187101220392056798
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (upload foto KTP dengan format .PDF)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    1871012203920567
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\COBA.pdf
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\KTP.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Negatif (upload foto ktp + selfie dengan format .pdf)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    cobacb@gmail.com
+    Input Text    xpath=//*[@id="password"]    CObacoba1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    \ Akun Saya
+    Go To    https://staging.cicil.co.id/profile
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    1871012203920567
+    Choose File    xpath=//*[@id="id_card_button"]    D:\\KTP.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    D:\\COBA.pdf
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button

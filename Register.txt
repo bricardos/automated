@@ -1,0 +1,174 @@
+*** Settings ***
+Library           HttpLibrary.HTTP
+Library           Selenium2Library
+
+*** Test Cases ***
+Positif
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath=//*[@id="email"]    robotest222@gmail.com
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Input Text    xpath=//*[@id="verify_password"]    Robotedo1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+    Location Should Be    https://staging.cicil.co.id/profile
+
+negatif (no domain)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath=//*[@id="email"]    selolahselogehgmail.com
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Input Text    xpath=//*[@id="verify_password"]    Robotedo1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+
+Negatif (tanpa .com)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath=//*[@id="email"]    selolahselogeh@gmail
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Input Text    xpath=//*[@id="verify_password"]    Robotedo1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+
+Negatif (email kosong)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Comment    Input Text    xpath=//*[@id="email"]    selolahselogeh@gmail
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Input Text    xpath=//*[@id="verify_password"]    Robotedo1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+
+Negatif (nomor tidak valid)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath=//*[@id="email"]    selolahselogeh@gmail.com
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    086712132421
+    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Input Text    xpath=//*[@id="verify_password"]    Robotedo1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+
+Negatif (password kosong)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath=//*[@id="email"]    bangadi820@gmail.com
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Comment    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Comment    Input Text    xpath=//*[@id="verify_password"]    Robotedo1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+
+Negatif (password tidak sama dengan yang kedua)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath=//*[@id="email"]    bangadi820@gmail.com
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Input Text    xpath=//*[@id="verify_password"]    Robotedp2
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+
+Negatif (password kedua tidak diisi)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath=//*[@id="email"]    bangadi820@gmail.com
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Comment    Input Text    xpath=//*[@id="verify_password"]
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+
+Negatif (password tidak ada angka)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath=//*[@id="email"]    bangadi820@gmail.com
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Input Text    xpath=//*[@id="verify_password"]    Robotedoa
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+
+Negatif (langsung klik register)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Comment    Input Text    xpath=//*[@id="email"]    bangadi820@gmail.com
+    Capture Page Screenshot
+    Comment    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Comment    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Comment    Input Text    xpath=//*[@id="verify_password"]    Robotedo1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+    Comment    Location Should Be    https://staging.cicil.co.id/profile
+
+Negatif (email sudah terdaftar)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath=//*[@id="email"]    bangadi820@gmail.com
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Input Text    xpath=//*[@id="password"]    Robotedo1
+    Input Text    xpath=//*[@id="verify_password"]    Robotedo1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button
+
+Negatif (password tidak ada kapital)
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Set Selenium Speed    2 seconds
+    Capture Page Screenshot
+    Maximize Browser Window
+    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath=//*[@id="email"]    bangadi82@gmail.com
+    Capture Page Screenshot
+    Input Text    xpath=//*[@id="phonenumber"]    08118185811
+    Input Text    xpath=//*[@id="password"]    robotedo1
+    Input Text    xpath=//*[@id="verify_password"]    robotedo1
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/register/section/form/div[3]/div/button

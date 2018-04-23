@@ -1,0 +1,25 @@
+*** Settings ***
+Library           HttpLibrary.HTTP
+Library           RequestsLibrary
+Resource          ../Keyword/APIs/ck.txt
+Library           Collections
+Library           FakerLibrary
+Library           Selenium2Library
+Library           String
+
+*** Test Cases ***
+coba API
+    ${nama}=    Set Variable    heus
+    ${headers}=    Is header
+    ${Body}=    Set Variable    { \ \ \ \ "name": "${nama}", \ \ \ \ "job": "leader" }
+    Create Session    session    https://reqres.in    ${headers}
+    ${result}=    Post Request    session    /api/users    data=${Body}
+    ### taruh hasil json nya ke variabel
+    ${json}=    Set Variable    ${result.content}
+    ### ambil variabel hasil response
+    ${id}=    Get Json Value    ${json}    /job
+    ${namehasil}=    Get Json Value    ${json}    /name
+    ### buang tanda petik
+    ${namehasil}=    Evaluate    '${namehasil}'.replace('"','')
+    ### tes response nya sama engga
+    BuiltIn.Should Be Equal As Strings    ${namehasil}    ${nama}

@@ -1,0 +1,326 @@
+*** Settings ***
+Library           HttpLibrary.HTTP
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           xml.etree.ElementTree    WITH NAME    ET
+Library           XML
+
+*** Test Cases ***
+Register
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    ${ID}=    set variable    bangkev12+appweb1@gmail.com
+    wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a    timeout=5s
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/div/div/small/span[1]
+    wait until element is visible    xpath=//*[@id="email"]    timeout=5s
+    Input Text    xpath=//*[@id="email"]    ${ID}
+    wait until element is visible    xpath=//*[@id="phonenumber"]    timeout=5s
+    Input Text    xpath=//*[@id="phonenumber"]    81373989259
+    Input Text    xpath=//*[@id="password"]    1234567A
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="verify_password"]    1234567A
+    Input Text    xpath=//*[@id="referral_code"]    amb5
+    Click Element    xpath=//*[@id="cicil_component"]/register_inline/div/div/div/div[2]/div[2]/div[1]/div[2]/div/referral-code-validator/div/div/div/div/div/span/button
+    wait until element is visible    xpath=//*[@id="cicil_component"]/register_inline/div/div/div/div[2]/div[2]/div[1]/div[2]/div/referral-code-validator/div/div/div/div[2]/div/span    timeout=5s
+    Click Element    xpath=//*[@id="cicil_component"]/register_inline/div/div/div/div[2]/div[2]/div[1]/div[3]/div[1]/button
+    Sleep    1s
+    Click Element    xpath=//*[@id="cicil_component"]/register_inline/div/div/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/button
+    Execute Javascript    window.scrollBy(0,250)
+    wait until element is visible    xpath=//*[@id="otp"]    timeout=5s
+    Click Element    xpath=//*[@id="otp"]
+    Sleep    10s
+    Click Element    xpath=//*[@id="cicil_component"]/verify-phone/div/div/div/div[2]/div[2]/div/div[2]/div/div[4]/div[3]/button
+    Execute Javascript    window.scrollBy(0,150)
+    ${body}=    Set Variable    {"username":"${ID}","password":"1234567A"}
+    Create Session    acceptor    http://api-staging.cicil.co.id/v1
+    ${headers}=    Create Dictionary    key=token    key2=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaWNpbCI6IntcImNpXCI6XCJjaV80NVwiLFwiY29cIjpcImY0NDUzZjY5MWQ4YTc5ZGQzNzdhMjQzMTQzNGVmYWYxXCJ9IiwiZXhwIjoxNTIxMDEzMzI2LCJpYXQiOjE1MjEwMDk3MjZ9.yl3RttrPvz1qdKppkaU52OFp9aZR8cR5dsi2UaZoCFU
+    ${resp}=    Post Request    acceptor    /ciciluser    data=${body}
+    Should Not Contain    ${resp}    Wrong username or password
+    ${resp2}=    Get Request    acceptor    /registration/activate_email
+    Should Be Equal As Strings    ${resp2.status_code}    200
+    sleep    5s
+    Click Element    xpath=//*[@id="cicil_component"]/verify-email/div/div/div/div[2]/div[2]/div/div/div[3]/div[2]/button
+    Comment    Click Element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[7]/span[2]
+
+Login
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Set Selenium Speed    2 second
+    click element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    login
+
+ISI PROFILE
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    ${ID}=    set variable    bangkev12+appweb1@gmail.com
+    Set Selenium Speed    1 second
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    wait until element is visible    xpath=//*[@id="username"]    timeout=5s
+    Input Text    xpath=//*[@id="username"]    ${ID}
+    wait until element is visible    xpath=//*[@id="password"]    timeout=5s
+    Input Text    xpath=//*[@id="password"]    1234567A
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    wait until element is visible    xpath=//*[@id="firstname"]    timeout=5s
+    Input Text    xpath=//*[@id="firstname"]    sarjana
+    wait until element is visible    xpath=//*[@id="lastname"]    timeout=5s
+    Input Text    xpath=//*[@id="lastname"]    muda
+    Execute Javascript    window.scrollBy(0,450)
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[61]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[1]/option[10]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[3]/td[5]/div
+    wait until element is visible    xpath=//*[@id="id_card_no"]    timeout=5s
+    Input Text    xpath=//*[@id="id_card_no"]    1334307478158865
+    Execute Javascript    window.scrollBy(0,300)
+    Choose File    xpath=//*[@id="id_card_button"]    /Users/cicil/Documents/e-ktp.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    /Users/cicil/Documents/e-ktp.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,200)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+    Execute Javascript    window.scrollBy(0,-750)
+
+tempat coba
+    Open Browser    https://kumparan.com/    chrome
+    Maximize Browser Window
+    Set Selenium Speed    1seconds
+    sleep    5s
+    Click Element    xpath=//*[@id="onesignal-popover-cancel-button"]
+    Get Window Titles
+    ${windowstitle}=    Get Title
+    sleep    2s
+    Click Element    xpath=//*[@id="content"]/div/div/div/nav/div/div/div/ul/li[1]/a
+    sleep    1s
+    Comment    Click Element    xpath=//*[@id="content"]/div/div/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/button
+    Click Element    xpath=//*[@id="content"]/div/div/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/button/span
+    sleep    4s
+    Get Window Titles
+    Get Location
+    Comment    Input Text    xpath=//*[@id="identifierId"]    ulala@gmail.com
+    Comment    Set Test Variable    ${link}=    https://accounts.google.com/signin/oauth/identifier?client_id=203797405389-ebvfbi965n9kis0qeg8h8mgq40fr5i7k.apps.googleusercontent.com&as=ADGJNU48-1LNngxf2GeEGQ&destination=https%3A%2F%2Fkumparan.com&approval_state=!ChQwaHFXWWdST1FrU2gxSDlmOXJkNBIfWXdJU3RTSE9fRTRWVU9xWmlfQjdtUjgwZnR5b0lCWQ%E2%88%99ACThZt4AAAAAWqPDnvpe5OhpLfBfrfhwTputZ2CC-CXi&xsrfsig=AHgIfE89JY54q47WAZCyr7SILAo6mYIHhw&flowName=GeneralOAuthFlow
+    Select Window    title=Sign in - Google Accounts
+    Input Text    xpath=//*[@id="identifierId"]    bangkev12@gmail.com
+    Click Element    xpath=//*[@id="identifierNext"]/content/span
+    Input Text    xpath=//*[@id="password"]/div[1]/div/div[1]/input    CObacoba1
+    Click Element    xpath=//*[@id="passwordNext"]/content/span
+    Sleep    13s
+    Select Window    title=${windowstitle}
+    Page Should Contain Element    link=Kumparan
+    Click Element    xpath=//*[@id="dropdown-profile"]/img
+    Click Element    xpath=//*[@id="content"]/div/div/div/nav/div/div/div/ul/li[3]/ul/li[5]/a
+    ${text button}=    Get Text    xpath=//*[@id="content"]/div/div/div/nav/div/div/div/ul/li[1]/a
+    BuiltIn.Should Contain    ${text button}    Log In / Sign Up
+    Comment    Select Window    title=Login
+    Comment    Click Element    xpath=//*[@id="content"]/div/div/div/nav/div/div/ul/li[3]/a
+
+coba api
+    ${body}=    Set Variable    {"username":"bangkev12+web20@gmail.com","password":"1234567A"}
+    Create Session    acceptor    http://api-staging.cicil.co.id/v1
+    ${headers}=    Create Dictionary    key=token
+    ${resp}=    Post Request    acceptor    /ciciluser    data=${body}
+    Should Not Contain    ${resp}    Wrong username or password
+    ${resp2}=    Get Request    acceptor    /registration/activate_email
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${token}=    Set Variable    ${resp.json()['token']}
+    Comment    ${install}=    Get Request    acceptor    /profile
+    Comment    ${installrespon}=    Set Variable    ${install.json()}
+
+coba 2
+    Comment    ${body}=    Set Variable    {"username":"bangkev12+web20@gmail.com","password":"1234567A"}
+    ${inquirypayment}=    Create Dictionary    MALLID=4924    CHAINMERCHANT=0    AMOUNT=157804    WORDS=d68265033cdf4cc434f20787e0038ce4f0da4a10    PAYMENTCHANNEL=22
+    ...    PAYMENTCODE=1021710000000259
+    Create Session    acceptor    http://api-staging.cicil.co.id/v1
+    ${headers}=    Create Dictionary    key=token    Content-Type=application/x-www-form-urlencoded
+    ${resppayment}=    Post Request    acceptor    /payment/callback/doku/inquiry    data=${inquirypayment}    headers=${headers}
+    ${INQUIRY_RESPONSE}=    Parse Xml    ${resppayment.text}
+    ${x}    Get Element    ${INQUIRY_RESPONSE}    TRANSIDMERCHANT
+    Log    ${x.text}
+    ${notifypayment}    Create Dictionary    MALLID=0    AMOUNT=157804    CHAINMERCHANT=0    TRANSIDMERCHANT=${x.text}    WORDS=737cb3824d3c52be9b5f608b643f3ac0b26694a3
+    ...    STATUSTYPE=P    RESPONSECODE=0    APPROVALCODE=102476957    RESULTMSG=SUCCESS    PAYMENTCHANNEL=34    PAYMENTCODE=1021710000000259
+    ...    SESSIONID=session1    BANK=BRI    MCN=1021710000000259    PAYMENTDATETIME=20171119130851    VERIFYID=0    VERIFYSCORE=-1
+    ...    VERIFYSTATUS=NA
+    ${headers2}=    Create Dictionary    Content-Type=application/json
+    ${resppayment2}    Post Request    acceptor    /payment/callback/doku/notify    data=${notifypayment}    headers=${headers}
+    Comment    Should Be Equal    ${inquiryrespon.TRANSIDMERCHANT}    INQUIRY_RESPONSE
+    Comment    Should Not Contain    ${resp}    Wrong username or password
+    Comment    ${resp2}=    Get Request    acceptor    /registration/activate_email
+    Comment    Should Be Equal As Strings    ${resp.status_code}    200
+    Comment    ${token}=    Set Variable    ${resp.json()['token']}
+    Comment    ${install}=    Get Request    acceptor    /profile
+    Comment    ${installrespon}=    Set Variable    ${install.json()}
+
+ubah password
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Set Selenium Speed    2 second
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    sleep    2s
+    Comment    Input Text    xpath=//*[@id="username"]    bangkev12+b81@gmail.com
+    login
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    Click Element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[6]/span[2]
+    Input Text    xpath=//*[@id="old_password"]    1234567A
+    Input Text    xpath=//*[@id="new_password"]    12345678A
+    Input Text    xpath=//*[@id="verify_password"]    12345678A
+    Click Element    xpath=//*[@id="account_component"]/div[2]/change-password/div/form/div/div[2]/button
+
+coba3
+    Open Browser    https://staging.cicil.co.id/    safari
+    Maximize Browser Window
+    set selenium speed    2 second
+
+waiting dp
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    ${ID}=    set variable    bangkev12+appweb1@gmail.com
+    ${KTP}=    set variable    1334307478158834
+    Set Selenium Speed    1seconds
+    wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a    timeout=5s
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    ${ID}
+    Input Text    xpath=//*[@id="password"]    1234567A
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
+    comment    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    Akun Saya
+    Comment    sleep    2s
+    click element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    Comment    Go To    https://staging.cicil.co.id/profile
+    wait until element is visible    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[2]/span[2]    timeout=8s
+    click element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[2]/span[2]
+    click element    xpath=//*[@id="account_component"]/div[2]/order_process/div/div[1]/div/div/div[2]/div/button
+    Execute Javascript    window.scrollBy(0,500)
+    click element    xpath=//*[@id="cicil_component"]/payment/div/div/div/div/div/div[2]/div/payment_bank_select/div[2]/div/div/div/div[4]/div/div[1]/div[2]/div
+    Execute Javascript    window.scrollBy(0,400)
+    click element    xpath=//*[@id="cicil_component"]/payment/div/div/div/div/div/div[2]/div/payment_bank_select/div[3]/div[2]/button
+    ${nomor_va}=    Get Text    xpath=//*[@id="cicil_component"]/payment/div/div/div/div/div/div[2]/div/payment_guide_base/div/div[2]/div/div/div[2]/span
+    ${inquirypayment}=    Create Dictionary    MALLID=4924    CHAINMERCHANT=0    AMOUNT=100000    WORDS=d68265033cdf4cc434f20787e0038ce4f0da4a10    PAYMENTCHANNEL=22
+    ...    PAYMENTCODE=${nomor_va}
+    Create Session    acceptor    http://api-staging.cicil.co.id/v1
+    ${headers}=    Create Dictionary    key=token    Content-Type=application/x-www-form-urlencoded
+    ${resppayment}=    Post Request    acceptor    /payment/callback/doku/inquiry    data=${inquirypayment}    headers=${headers}
+    ${INQUIRY_RESPONSE}=    Parse Xml    ${resppayment.text}
+    ${x}    Get Element    ${INQUIRY_RESPONSE}    TRANSIDMERCHANT
+    Log    ${x.text}
+    ${notifypayment}    Create Dictionary    MALLID=0    AMOUNT=100000    CHAINMERCHANT=0    TRANSIDMERCHANT=${x.text}    WORDS=737cb3824d3c52be9b5f608b643f3ac0b26694a3
+    ...    STATUSTYPE=P    RESPONSECODE=0    APPROVALCODE=102476957    RESULTMSG=SUCCESS    PAYMENTCHANNEL=34    PAYMENTCODE=${nomor_va}
+    ...    SESSIONID=session1    BANK=BRI    MCN=${nomor_va}    PAYMENTDATETIME=20171119130851    VERIFYID=0    VERIFYSCORE=-1
+    ...    VERIFYSTATUS=NA
+    ${headers2}=    Create Dictionary    Content-Type=application/json
+    ${resppayment2}    Post Request    acceptor    /payment/callback/doku/notify    data=${notifypayment}    headers=${headers}
+    click element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    wait until element is visible    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[2]/span[2]    timeout=8s
+    click element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[2]/span[2]
+    wait until element is not visible    xpath=//*[@id="account_component"]/div[2]/order_process/div/div[1]/div/div/div[2]/div/button    timeout=3s
+
+isi biodata
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    ${ID}=    set variable    bangkev12+appweb1@gmail.com
+    ${KTP}=    set variable    1334307478158872
+    Set Selenium Speed    1seconds
+    wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a    timeout=5s
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    ${ID}
+    Input Text    xpath=//*[@id="password"]    1234567A
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
+    comment    Location Should Be    https://staging.cicil.co.id/
+    Sleep    3 seconds
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    Akun Saya
+    sleep    2s
+    Go To    https://staging.cicil.co.id/profile
+    comment    wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i    timeout=5s
+    comment    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    Execute Javascript    window.scrollBy(0,250)
+    Set Selenium Speed    1 second
+    Input Text    xpath=//*[@id="firstname"]    hello
+    Input Text    xpath=//*[@id="lastname"]    automated
+    Click Element    xpath=//*[@id="dob"]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="id_card_no"]    ${KTP}
+    Choose File    xpath=//*[@id="id_card_button"]    /Users/cicil/Documents/e-ktp.jpg
+    Sleep    4 seconds
+    Choose File    xpath=//*[@id="photo_button"]    /Users/cicil/Documents/e-ktp.jpg
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,100)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+    Execute Javascript    window.scrollBy(0,-750)
+    Execute Javascript    window.scrollBy(0,350)
+    sleep    2 seconds
+    Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[1]/mdform_typeahead/div/input    bandung
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[1]/mdform_typeahead/div/typeahead-container/ul/li[1]/a
+    Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[2]/mdform_typeahead/div/input    band
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[2]/mdform_typeahead/div/typeahead-container/ul/li/a
+    Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[2]/div/mdform_typeahead/div/input    teknik mesin
+    Click Element    xpath=//*[@id="start_month"]
+    Click Element    xpath=//*[@id="start_month"]/option[5]
+    Input Text    xpath=//*[@id="start_year"]    2016
+    Click Element    xpath=//*[@id="end_month"]
+    Click Element    xpath=//*[@id="end_month"]/option[8]
+    Input Text    xpath=//*[@id="end_year"]    2020
+    Input Text    xpath=//*[@id="gpa"]    3.0
+    Execute Javascript    window.scrollBy(0,500)
+    Input Text    xpath=//*[@id="student_no"]    9086560378
+    Choose File    xpath=//*[@id="student_card_button"]    /Users/cicil/Documents/e-ktp.jpg
+    Sleep    3 seconds
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[2]/button
+    Execute Javascript    window.scrollBy(0,-750)
+    sleep    2 seconds
+    Click Element    xpath=//*[@id="address_type"]
+    Click Element    xpath=//*[@id="address_type"]/option[7]
+    Sleep    2 second
+    Execute Javascript    window.scrollBy(0,300)
+    Input Text    xpath=//*[@id="address" and @type="text"]    jalan jalan terus
+    sleep    2 seconds
+    Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[2]/div[1]/mdform_typeahead/div/input    jaka
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[2]/div[1]/mdform_typeahead/div/typeahead-container/ul/li[3]/a
+    Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div/address-form/div[2]/div[2]/mdform_typeahead/div/input    keba
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div/address-form/div[2]/div[2]/mdform_typeahead/div/typeahead-container/ul/li[1]/a
+    Execute Javascript    window.scrollBy(0,350)
+    Input Text    xpath=//*[@id="postal_code"]    54321
+    Execute Javascript    window.scrollBy(0,150)
+    Click Element    xpath=//*[@id="fix_address_type"]
+    Click Element    xpath=//*[@id="fix_address_type"]/option[1]
+    sleep    2 seconds
+    Input Text    xpath=//*[@id="fix_address"]    testing
+    Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[6]/div[2]/div[1]/mdform_typeahead/div/input    bandar
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[6]/div[2]/div[1]/mdform_typeahead/div/typeahead-container/ul/li/a
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[6]/div[2]/div[2]/mdform_typeahead/div/input
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[6]/div[2]/div[2]/mdform_typeahead/div/typeahead-container/ul/li[1]
+    Input Text    xpath=//*[@id="fix_postal_code"]    23456
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[2]/button
+    Execute Javascript    window.scrollBy(0,-650)
+    Execute Javascript    window.scrollBy(0,390)
+    sleep    2 seconds
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[4]/div/div[2]/div/div/div[1]/guardian-form/div[1]/div[1]/mdform_text/div/div
+    sleep    5 seconds
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[4]/div/div[2]/div/div/div[1]/guardian-form/div[1]/div[2]/mdform_text/div/div
+    sleep    5 second
+    Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[4]/div/div[2]/div/div/div[1]/guardian-form/div[2]/div[1]/mdform_typeahead/div/input    dirumah aja
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[4]/div/div[2]/div/div/div[1]/guardian-form/div[2]/div[2]/mdform_phone/div/div
+    sleep    4 seconds
+    Execute Javascript    window.scrollBy(0,250)
+    Input Text    xpath=//*[@id="firstname_2"]    mbak mbakan
+    Input Text    xpath=//*[@id="lastname_2"]    atheis
+    Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[4]/div/div[2]/div/div/div[1]/guardian-form/div[5]/div[1]/mdform_typeahead/div/input    copas
+    Input Text    xpath=//*[@id="phone_2"]    813456632234
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[4]/div/div[2]/div/div/div[2]/button
+    Execute Javascript    window.scrollBy(0,150)
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/div/div[1]/div/div/label
+    sleep    1 seconds
+    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/div/div[2]/button
+
+*** Keywords ***
+login
+    Input Text    xpath=//*[@id="username"]    bangkev12+appweb1@gmail.com
+    Input Text    xpath=//*[@id="password"]    1234567A
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
+
+Register
