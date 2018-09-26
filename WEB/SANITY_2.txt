@@ -1,0 +1,841 @@
+*** Settings ***
+Suite Teardown    Close Browser
+Library           FakerLibrary
+Library           String
+Library           Selenium2Library
+Library           xml.etree.ElementTree    WITH NAME    ET
+Library           HttpLibrary.HTTP
+Library           XML
+Library           RequestsLibrary
+Resource          resource-folder/general.txt
+Resource          ../global-keyword/global.txt
+Library           AppiumLibrary
+Resource          resource-folder/profile.txt
+Resource          helpers/javascript-action.txt
+Resource          helpers/dropdown-selector.txt
+Resource          helpers/date-picker-selector.txt
+Resource          resource-folder/notification.txt
+Resource          helpers/order-helper.txt
+Resource          resource-folder/order.txt
+Resource          resource-folder/register.txt
+Resource          helpers/register-helper.txt
+Resource          helpers/payment-helper.txt
+Resource          helpers/login-helper.txt
+Resource          ../global-keyword/Admin.txt
+Resource          ../global-keyword/OrderProcessing_CLI.txt
+Resource          resource-folder/payment.txt
+Resource          helpers/ambass-helper.txt
+
+*** Test Cases ***
+Register
+    ${mainBrowser}=    Open Browser    ${url_staging_beta}    chrome
+    Maximize Browser Window
+    Selenium2Library.Wait Until Element Is Visible    //button[text()="Daftar"]    timeout=${timeout_general}
+    Sleep    2s
+    Selenium2Library.Click Element    //button[text()="Daftar"]
+    ### pop up shown (use this on staging env)
+    Comment    Selenium2Library.Wait Until Element Is Visible    //span[text()="Register disini"]    timeout=${timeout_general}
+    Comment    Log    >>> Landed on pop up, clicking Register disini
+    Comment    Selenium2Library.Click Element    //span[text()="Register disini"]
+    ### register page
+    Selenium2Library.Wait Until Element Is Visible    //input[contains(@id, "email")]    timeout=${generalTimeout}
+    Selenium2Library.Wait Until Page Contains    Validasi    timeout=${generalTimeout}
+    ### sleep to prevent angular reload
+    Sleep    3s
+    ${email}=    generate email
+    ${no_hp}=    Set Variable    ${hp_luki}
+    Log    >>> Landed on register form
+    Selenium2Library.Input Text    //input[contains(@id, "email")]    ${email}
+    Selenium2Library.Input Text    //input[contains(@id, "phonenumber")]    ${no_hp}
+    Selenium2Library.Input Text    //input[contains(@id, "password")]    ${pwd}
+    Selenium2Library.Input Text    //input[contains(@id, "verify_password")]    ${pwd}
+    Comment    Input Text    //input[contains(@id, "referral_code")]    ${referral_code}
+    Comment    Selenium2Library.Capture Page Screenshot
+    Comment    Selenium2Library.Click Element    //button[text()="Daftar Baru"]
+    ### input referral code (if configured on resource file)
+    Run Keyword If    '${isuse_kodereferral}'=='1'    Fill In Kode Referral
+    Selenium2Library.Click Element    //cicil-referral-code/parent::*/parent::*/parent::*/div[3]/div[1]/cicil-button-submit/div[1]/button
+    ### konfirmasi data diri page
+    Comment    Selenium2Library.Wait Until Element Is Visible    //button[text()="Tidak, masih salah"]    timeout=3s
+    Page Should Contain    ${email}
+    Page Should Contain    ${no_hp}
+    Comment    Selenium2Library.Click Element    //button[text()="Tidak, masih salah"]
+    Comment    Selenium2Library.Wait Until Element Is Visible    //cicil-button-submit[contains(@ng-reflect-label, "Daftar")]/div[1]/button[1]
+    Comment    Selenium2Library.Click Element    //cicil-button-submit[contains(@ng-reflect-label, "Daftar")]/div[1]/button[1]
+    Sleep    3s
+    Selenium2Library.Click Element    //button[text()="Ya, sudah benar"]
+    Selenium2Library.Wait Until Element Is Visible    //h4[text()="Verifikasi Handphone"]    timeout=10s
+    ### verifikasi handphone page
+    Log    >>> Landed on verifikasi handphone page
+    Page Should Contain    ${no_hp}
+    Log    >>> temporarily sleeping, inputting otp manually..
+    Sleep    15s
+    Selenium2Library.Click Element    //button[text()="Lanjut"]
+    Selenium2Library.Wait Until Element Is Visible    //p[text()="Link verifikasi sudah dikirimkan ke email yang terdaftar:"]    timeout=10s
+    ### verifikasi email
+    Log    >>> Landedn on verifikasi email page
+    Page Should Contain    ${email}
+    ### open gmail and search confirmation email
+    Log    >>> opening Gmail and verifying email
+    Execute Javascript    window.open('https://www.gmail.com');
+    ### select window in order to focus
+    sleep    7s
+    Select Window    title=Gmail
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //input[contains(@id, "identifierId")]    timeout=30s
+    ${local_email_username}=    Set Variable    luki.rompis@cicil.co.id
+    ${local_email_password}=    Set Variable    areforever05
+    Selenium2Library.Input Text    //input[contains(@id, "identifierId")]    ${local_email_username}
+    Selenium2Library.Click Element    //span[text()="Berikutnya"]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //input[contains(@name, "password")]    timeout=30s
+    Selenium2Library.Input Password    //input[contains(@name, "password")]    ${local_email_password}
+    Selenium2Library.Click Element    //span[text()="Berikutnya"]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //input[contains(@aria-label, "Search")]    timeout=30s
+    ### should be logged in to gmail
+    Log    >>> logged in to gmail. waiting for hangouts iframe to show
+    ### make sure the email page fully loaded
+    Comment    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Page Should Contain    ${email_name}
+    Comment    Wait Until Keyword Succeeds    20x    3s    Selenium2Library.Page Should Contain Element    //button[contains(@title, 'New conversation')]
+    Wait Until Keyword Succeeds    20x    3s    Selenium2Library.Page Should Contain Element    ${gmail_hangouts_iframe_locator}
+    Comment    wait until email fully loaded    ${gmail_hangouts_iframe_locator}
+    Log    >>> email page fully loaded. start searching activation email...
+    Selenium2Library.Input Text    //input[contains(@aria-label, "Search")]    ${email} Aktivasi Akun CICIL
+    Press Key    //input[contains(@aria-label, "Search")]    \\13
+    Log    >>> sleep after pressing enter
+    Sleep    10s
+    ### wait for Loading... text dissapeared
+    Log    >>> waiting for Loading... text to dissapear
+    Selenium2Library.Wait Until Element Is Not Visible    //*[@id=":2"]/div/div[2]/div[4]    timeout=30s
+    Selenium2Library.Click Element    //body/div[7]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]
+    Log    >>> sleep waitiig for email body opened
+    Sleep    8s
+    ### should be on email body
+    Log    >>> email body opened.
+    Log    >>> replacing plus sign with placeholder | previous email : ${email}
+    ${placeholder_plus}=    Set Variable    %2B
+    Comment    ${email_replaced}=    Evaluate    '${email}'.replace('+', ${placeholder_plus})
+    ${email_cut}=    Get Substring    ${email}    8
+    ${email_header}=    Set Variable    testing
+    ${email_cat}=    catenate    ${email_header}${placeholder_plus}${email_cut}
+    Sleep    6s
+    Log    >>> clicking activation link
+    Selenium2Library.Click Element    //div[text()="Login kamu: "]/a[contains(@href, "mailto:${email_cat}")]/parent::*/parent::*/div[3]/a
+    ### check if just miss-clicked, and compose new message popup opened
+    Comment    ${composeShown}=    Run Keyword And Return Status    Selenium2Library.Element Should Be Visible    //img[contains(@data-tooltip, 'Save & Close')]
+    ${composeShown}=    Run Keyword And Return Status    Selenium2Library.Page Should Contain Element    //img[contains(@data-tooltip, 'Save & Close')]
+    Run Keyword If    ${composeShown}    Log    >>> closing compose new email popup, and re-click the activation link
+    Run Keyword If    ${composeShown}    Selenium2Library.Click Element    //img[contains(@data-tooltip, 'Save & Close')]
+    ### re-click the activation link, if compose pop up opened previously
+    Run Keyword If    ${composeShown}    Selenium2Library.Click Element    //div[text()="Login kamu: "]/a[contains(@href, "mailto:${email_cat}")]/parent::*/parent::*/div[3]/a
+    Log    >>> Sleeping.. waiting for validation link to fully loaded
+    Sleep    5s
+    ### register case done. setting global parameters
+    Log    >>> register case DONE. setting global parameters...
+    Log    >>> setting global param for {email} : ${email}
+    Set Global Variable    ${email}
+    Comment    ${no_hp_global}=    Catenate    +62${no_hp}
+    ${no_hp_global}=    Catenate    ${no_hp}
+    Log    >>> setting global param for {hp}: ${no_hp_global}
+    Set Global Variable    ${no_hp_global}
+    ### Going to profile page
+    Select Window    title=Aktivasi Email Akun CICIL
+    Log    >>> switched to activation link tab
+    Selenium2Library.Wait Until Element Is Visible    //a[text()="disini"]    timeout=30s
+    Comment    Selenium2Library.Click Element    //a[text()="disini"]
+    Sleep    2s
+    ### verifying that landed on login page
+    Go To    ${url_staging_beta}
+    Comment    Selenium2Library.Wait Until Element Is Visible    //a[contains(@href, "#header")]    timeout=${timeout_general}
+    Selenium2Library.Wait Until Element Is Visible    //button[text()="Akun Saya"]    timeout=${timeout_general}
+    Location Should Be    ${url_staging_beta}
+    Selenium2Library.Click Element    //button[text()="Akun Saya"]
+    Log    >>> Landed on Profile Page
+    ### close voucher pop up on profile page
+    Run Keyword If    '${isuse_kodereferral}'=='1'    Close Voucher Pop Up
+
+Login only
+    ${mainBrowser}=    Open Browser    ${url_staging_beta}    chrome
+    Maximize Browser Window
+    Selenium2Library.Wait Until Element Is Visible    //a[text()="Masuk"]    timeout=${timeout_general}
+    Selenium2Library.Click Element    //a[text()="Masuk"]
+    ### login form
+    ${username}=    Set Variable    testing+joseph966@cicil.co.id
+    Selenium2Library.Wait Until Element Is Visible    //input[contains(@id, 'username')]    timeout=${generalTimeout}
+    ### sleep to prevent angular reload
+    Sleep    3s
+    Selenium2Library.Input Text    //input[contains(@id, 'username')]    ${username}
+    Selenium2Library.Input Password    //input[contains(@id, 'password')]    ${pwd}
+    Selenium2Library.Click Element    //button[text()='Masuk']
+    ### home page
+    Selenium2Library.Wait Until Element Is Visible    //button[text()='Akun Saya']    timeout=${generalTimeout}
+    SLeep    2s
+    Location Should Be    ${url_staging_beta}
+    Log    >>> Log in complete. User ${username} logged in successfully
+
+Profile
+    Log    >>> Filling in Personal Profile (Data Pribadi)
+    Comment    Set Selenium Speed    0.7s
+    Selenium2Library.Wait Until Page Contains Element    ${formPersonalProfileBirthDate}    timeout=10s
+    Scroll To Xpath    ${formPersonalProfile}
+    ${expanded}=    Selenium2Library.Get Element Count    ${formPersonalProfileExpandend}
+    Run Keyword If    ${expanded} < 1    Click Element With Javascript    ${formPersonalProfile}
+    Selenium2Library.Wait Until Element Is Visible    ${formPersonalProfileGroup}    timeout=${generalTimeout}
+    ### variables
+    ${first_name}=    FakerLibrary.First Name
+    ${last_name}=    FakerLibrary.Last Name
+    ${ktp}=    generate ktp
+    Log    >>> inputting gender first
+    Selenium2Library.Click Element    ${formPersonalProfileGender}
+    Selenium2Library.Input Text    ${formPersonalProfileFirstname}    ${first_name}
+    Selenium2Library.Input Text    ${formPersonalProfileLastname}    ${last_name}
+    Comment    Selenium2Library.Input Text    ${formPersonalProfileWaId}    ${EMPTY}
+    Comment    Selenium2Library.Input Text    ${formPersonalProfileLineId}    ${EMPTY}
+    Selenium2Library.Input Text    ${formPersonalProfileIdCardNo}    ${ktp}
+    ### filling personal birth date
+    ${random_birthdate}=    FakerLibrary.Date Time Between    start_date=-24y    end_date=-17y
+    Selenium2Library.Click Element    ${formPersonalProfileBirthDate}
+    Pick A Date From Date Picker    ${random_birthdate.year.__str__()}    ${random_birthdate.month.__str__()}    ${random_birthdate.day.__str__()}
+    Log    >>> uploading ktp file with directory: ${CURDIR}${slashdir${slashdir_envused}}${image_folder}${slashdir${slashdir_envused}}ktp.jpg
+    Selenium2Library.Choose File    ${formPersonalProfileKtpFile}    ${CURDIR}${slashdir${slashdir_envused}}${image_folder}${slashdir${slashdir_envused}}ktp.jpg
+    Log    >>> uploading ktp selfie with directory: ${CURDIR}${slashdir${slashdir_envused}}${image_folder}${slashdir${slashdir_envused}}ktp-selfie.jpg
+    Selenium2Library.Choose File    ${formPersonalProfileSelfieKtpFile}    ${CURDIR}${slashdir${slashdir_envused}}${image_folder}${slashdir${slashdir_envused}}ktp-selfie.jpg
+    Selenium2Library.Wait Until Element Is Visible    ${formPersonalProfileSubmitEnabled}    timeout=${generalTimeout}
+    Log    >>> abis wait tombol submit
+    Scroll To Xpath    ${formPersonalProfileSubmitEnabled}
+    Selenium2Library.Capture Page Screenshot
+    Click Element With Javascript    ${formPersonalProfileSubmitEnabled}
+    Wait Until Notification Is Shown    text="${notif_popup_profile_berhasil}"
+    Sleep    10s
+    ### DATA AKADEMIK
+    Log    >>> Filling in Data Akademis
+    Log    >>> init all random data for academic profile..
+    ${studentStatus}    FakerLibrary.Random Element    ['Mahasiswa Aktif']
+    ${program}    FakerLibrary.Random Element    ['S1', 'S2']
+    ${city}    FakerLibrary.Random Element    ['KOTA DEPOK', 'KOTA BANDUNG', 'KOTA JAKARTA BARAT']
+    Comment    ${university}    FakerLibrary.Random Element    ['Gunadarma1', 'Universitas Bandung', 'Binus Anggrek']
+    Comment    ${university}    FakerLibrary.Random Element    ['Universitas Bandung']
+    ${university}    FakerLibrary.Random Element    ['BINUS ANGGREK']
+    ${faculty}    FakerLibrary.Random Element    ['Teknik Industri', 'Ilmu Komputer', 'Manajemen']
+    ${major}    FakerLibrary.Random Element    ['Teknik Informatika', 'Sistem Informasi', 'Manajemen Bisnis']
+    ${startMonth}    FakerLibrary.Random Element    ['Januari', 'Februari', 'Maret']
+    ${startYear}    FakerLibrary.Random Element    ['2015', '2016', '2017', '2018']
+    ${endMonth}    FakerLibrary.Random Element    ['Januari', 'Februari', 'Maret']
+    ${endYear}    FakerLibrary.Random Element    ['2019', '2020', '2021', '2022']
+    ${gpa}    FakerLibrary.Random Element    ['2', '3', '4']
+    ${studentNo}    FakerLibrary.Numerify    text=%%%%%%%%%%%%%%%%
+    ${studentCardFile}    Set Variable    ${CURDIR}${slashdir${slashdir_envused}}${image_folder}${slashdir${slashdir_envused}}ktm.jpg
+    Log    >>> init all random data for academic profile finished. now start filling academic profile
+    ### start filling academic profile
+    Selenium2Library.Wait Until Page Contains Element    ${formAcademicProfile}    timeout=10s
+    Scroll To Xpath    ${formAcademicProfile}
+    ${expanded}=    Get Element Count    ${formAcademicProfileExpandend}
+    Run Keyword If    ${expanded} < 1    Click Element With Javascript    ${formAcademicProfile}
+    Selenium2Library.Wait Until Element Is Visible    ${formAcademicProfileGroup}    timeout=${generalTimeout}
+    Click Element With Javascript    ${formAcademicProfileStudentStatus}//div[contains(@class, "toggle")]
+    Select A Single Value From Dropdown    ${formAcademicProfileStudentStatus}    ${studentStatus}
+    Click Element With Javascript    ${formAcademicProfileProgram}//div[contains(@class, "toggle")]
+    Select A Single Value From Dropdown    ${formAcademicProfileProgram}    ${program}
+    Click Element With Javascript    ${formAcademicProfileCity}//div[contains(@class, "toggle")]
+    Select A Single Value From Dropdown    ${formAcademicProfileCity}    ${city}
+    Selenium2Library.Input Text    ${formAcademicProfileFaculty}    ${faculty}
+    Selenium2Library.Input Text    ${formAcademicProfileMajor}    ${major}
+    Select Non Searchable Dropdown    ${formAcademicProfileUniversity}    ${university}
+    Click Element With Javascript    ${formAcademicProfileStartMonth}//div[contains(@class, "toggle")]
+    Select A Single Value From Dropdown    ${formAcademicProfileStartMonth}    ${startMonth}
+    Selenium2Library.Input Text    ${formAcademicProfileStartYear}    ${startYear}
+    Click Element With Javascript    ${formAcademicProfileEndMonth}//div[contains(@class, "toggle")]
+    Select A Single Value From Dropdown    ${formAcademicProfileEndMonth}    ${endMonth}
+    Selenium2Library.Input Text    ${formAcademicProfileEndYear}    ${endYear}
+    Selenium2Library.Input Text    ${formAcademicProfileGpa}    ${gpa}
+    Selenium2Library.Input Text    ${formAcademicProfileStudentNo}    ${studentNo}
+    Log    >>> uploading ktm file with directory: ${studentCardFile}
+    Selenium2Library.Choose File    ${formAcademicProfileStudentCardFile}    ${studentCardFile}
+    Selenium2Library.Wait Until Element Is Visible    ${formAcademicProfileSubmitEnabled}    timeout=${generalTimeout}
+    Comment    Scroll To Xpath    ${formAcademicProfileSubmitEnabled}
+    Log    >>> going to click button on: ${formAcademicProfileSubmitEnabled}
+    Sleep    2s
+    Selenium2Library.Capture Page Screenshot
+    Selenium2Library.Click Element    ${formAcademicProfileSubmitEnabled}
+    Wait Until Notification Is Shown    text="${notif_popup_profile_berhasil}"
+    ### ALAMAT DAN KONTAK DETAIL
+    Log    >>> Filling Alamat and Kontak Detail
+    Log    >>> init all random data for alamat
+    ${addressType}    FakerLibrary.Random Element    ['Apartemen', 'Asrama', 'Kontrakan', 'Kost', 'Ruko (rumah-toko)', 'Rumah orang tua', 'Rumah saudara']
+    ${district}    FakerLibrary.Random Element    ['A', 'B']
+    ${postalCode}    FakerLibrary.Numerify    text=%%%%%
+    ${city}    FakerLibrary.Random Element    ['KOTA DEPOK', 'KOTA BANDUNG', 'KOTA JAKARTA BARAT']
+    ${fake_address}    FakerLibrary.Address
+    ${fake_address2}    FakerLibrary.Address
+    Log    >>> finished init ll random data for alamat. now start filling
+    Selenium2Library.Wait Until Page Contains Element    ${formAddressProfile}    timeout=10s
+    Scroll To Xpath    ${formAddressProfile}
+    Log    >>> little bit scrolling up and sleeping
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,-350)
+    Sleep    2s
+    ${expanded}=    Get Element Count    ${formAddressProfileExpanded}
+    Run Keyword If    ${expanded} < 1    Click Element With Javascript    ${formAddressProfile}
+    Selenium2Library.Wait Until Element Is Visible    ${formAddressProfileGroup}    timeout=${generalTimeout}
+    Selenium2Library.Input Text    ${formAddressProfileFixAddress}    ${fake_address}
+    Click Element With Javascript    ${formAddressProfileFixAddressType}//div[contains(@class, "toggle")]
+    Select A Single Value From Dropdown    ${formAddressProfileFixAddressType}    ${addressType}
+    # Try to reset to cascading generation of district
+    Click Element With Javascript    ${formAddressProfileFixCity}//div[contains(@class, "toggle")]
+    Wait Until Keyword Succeeds    1x    200ms    Select A Single Value From Dropdown    ${formAddressProfileFixCity}    KOTA A
+    Click Element With Javascript    ${formAddressProfileFixCity}//div[contains(@class, "toggle")]
+    Wait Until Keyword Succeeds    1x    200ms    Select A Single Value From Dropdown    ${formAddressProfileFixCity}    ${city}
+    Click Element With Javascript    ${formAddressProfileFixDistrict}//div[contains(@class, "toggle")]
+    Sleep    2s
+    Select A Single Value From Dropdown    ${formAddressProfileFixDistrict}    ${district}
+    Sleep    2s
+    Selenium2Library.Input Text    ${formAddressProfileFixPostalCode}    ${postalCode}
+    Log    >>> set city to be used on global variables
+    ${city_address1}=    Selenium2Library.Get Text    ${formAddressProfileFixCity}
+    ${district_address1}=    Selenium2Library.Get Text    ${formAddressProfileFixDistrict}
+    ${city_address1}=    Get Substring    ${city_address1}    \    -2
+    ${district_address1}=    Get Substring    ${district_address1}    \    -2
+    ### commented
+    Comment    Initialize Address Profile Data
+    Scroll To Xpath    ${formAddressProfileSameAddress}
+    Selenium2Library.Input Text    ${formAddressProfileAddress}    ${fake_address2}
+    Click Element With Javascript    ${formAddressProfileAddressType}//div[contains(@class, "toggle")]
+    Select A Single Value From Dropdown    ${formAddressProfileAddressType}    ${addressType}
+    # Try to reset to cascading generation of district
+    Click Element With Javascript    ${formAddressProfileCity}//div[contains(@class, "toggle")]
+    Wait Until Keyword Succeeds    1x    200ms    Select A Single Value From Dropdown    ${formAddressProfileCity}    KOTA A
+    Click Element With Javascript    ${formAddressProfileCity}//div[contains(@class, "toggle")]
+    Wait Until Keyword Succeeds    1x    200ms    Select A Single Value From Dropdown    ${formAddressProfileCity}    ${city}
+    Click Element With Javascript    ${formAddressProfileDistrict}//div[contains(@class, "toggle")]
+    Sleep    2s
+    Select A Single Value From Dropdown    ${formAddressProfileDistrict}    ${district}
+    Sleep    2s
+    Selenium2Library.Input Text    ${formAddressProfilePostalCode}    ${postalCode}
+    Selenium2Library.Wait Until Element Is Visible    ${formAddressProfileSubmitEnabled}    timeout=${generalTimeout}
+    Comment    Scroll To Xpath    ${formAddressProfileSubmitEnabled}
+    ${city_address2}=    Selenium2Library.Get Text    ${formAddressProfileCity}
+    ${district_address2}=    Selenium2Library.Get Text    ${formAddressProfileDistrict}
+    ${city_address2}=    Get Substring    ${city_address2}    \    -2
+    ${district_address2}=    Get Substring    ${district_address2}    \    -2
+    Selenium2Library.Click Element    ${formAddressProfileSubmitEnabled}
+    Wait Until Notification Is Shown    text="${notif_popup_profile_berhasil}"
+    ### LATAR BELAKANG ORANG TUA
+    Log    >>> little hack by scrolling up for final submit button
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,-300)
+    Log    >>> Filling in Data Akademis
+    Log    >>> init all random data for Guardian / latar belakang orang tua
+    ${occupation1}    FakerLibrary.Random Element    ['Seniman', 'Wiraswasta', 'Akademis']
+    ${phone1}    FakerLibrary.Numerify    text=081%%%%%%%%%
+    ${occupation2}    FakerLibrary.Random Element    ['Seniman', 'Wiraswasta', 'Akademis']
+    ${phone2}    FakerLibrary.Numerify    text=081%%%%%%%%%
+    ${fake_firstname1}    FakerLibrary.First Name
+    ${fake_firstname2}    FakerLibrary.First Name
+    ${fake_lastname1}    FakerLibrary.Last Name
+    ${fake_lastname2}    FakerLibrary.Last Name
+    Log    >>> finished init all random data for Guardian / latar belakang orang tua. now start filling
+    Selenium2Library.Wait Until Page Contains Element    ${formGuardianProfileExpanded}    timeout=10s
+    Scroll To Xpath    ${formGuardianProfile}
+    ${expanded}=    Get Element Count    ${formGuardianProfileExpanded}
+    Run Keyword If    ${expanded} < 1    Click Element With Javascript    ${formGuardianProfile}
+    Selenium2Library.Wait Until Element Is Visible    ${formGuardianProfileGroup}    timeout=${generalTimeout}
+    Selenium2Library.Input Text    ${formGuardianProfileFirstName1}    ${fake_firstname1}
+    Selenium2Library.Input Text    ${formGuardianProfileLastName1}    ${fake_lastname1}
+    Selenium2Library.Input Text    ${formGuardianProfilePhone1}    ${phone1}
+    Click Element With Javascript    ${formGuardianProfileOccupation1}//div[contains(@class, "toggle")]
+    Select A Single Value From Dropdown    ${formGuardianProfileOccupation1}    ${occupation1}
+    Comment    Initialize Guardian Profile Data
+    Selenium2Library.Input Text    ${formGuardianProfileFirstName2}    ${fake_firstname2}
+    Selenium2Library.Input Text    ${formGuardianProfileLastName2}    ${fake_lastname2}
+    Selenium2Library.Input Text    ${formGuardianProfilePhone2}    ${phone2}
+    Click Element With Javascript    ${formGuardianProfileOccupation2}//div[contains(@class, "toggle")]
+    Select A Single Value From Dropdown    ${formGuardianProfileOccupation2}    ${occupation2}
+    Selenium2Library.Wait Until Element Is Visible    ${formGuardianProfileSubmitEnabled}    timeout=${generalTimeout}
+    Comment    Scroll To Xpath    ${formGuardianProfileSubmitEnabled}
+    Selenium2Library.Click Element    ${formGuardianProfileSubmitEnabled}
+    Wait Until Notification Is Shown    text="${notif_popup_profile_berhasil}"
+    ### ACCEPT AGREEMENT
+    Selenium2Library.Wait Until Page Contains Element    ${formProfileAgreement}    timeout=10s
+    Scroll To Xpath    ${formProfileAgreement}
+    Click Element With Javascript    ${formProfileAgreement}
+    Selenium2Library.Wait Until Element Is Visible    ${formProfileAgreementSubmitEnabled}    timeout=${generalTimeout}
+    Scroll To Xpath    ${formProfileAgreementSubmitEnabled}
+    Comment    Log    >>> sleeping.. before clicking button accept agreement
+    Comment    Sleep    200s
+    Log    >>> little hack by scrolling up for final submit button
+    Execute Javascript    window.scrollBy(0,-300)
+    Selenium2Library.Click Element    ${formProfileAgreementSubmitEnabled}
+    Selenium2Library.Wait Until Page Contains Element    ${formProfileAgreementSubmitScreen}
+    ### GO BACK TO PROFILE PAGE AND SETTING GLOBAL VARIABLES
+    Log    >>> go back to profile page and setting Global Parameters
+    Comment    ### try to close browser, and then reopening to profile page
+    Comment    Close Browser
+    Comment    Open Browser    ${url_staging_beta}    chrome
+    Comment    Go To    ${url_staging_beta}
+    ### test ###
+    login to staging old    ${admin_username}    ${admin_password}    0    ${url_staging_beta}
+    ### end of test ###
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Wait Until Element Is Visible    //button[text()="Akun Saya"]
+    Comment    Selenium2Library.Wait Until Element Is Visible    //button[text()="Akun Saya"]    timeout=7s
+    Location Should Be    ${url_staging_beta}
+    Selenium2Library.Click Element    //button[text()="Akun Saya"]
+    Log    >>> Landed on Profile Page
+    Set Global Variable    ${first_name}
+    Set Global Variable    ${last_name}
+    Set Global Variable    ${ktp}
+    Log    >>> set up {first_name} for: ${first_name}
+    Log    >>> set up {last_name} for: ${last_name}
+    Log    >>> set up {ktp} for: ${ktp}
+    ### opening data pribadi tab
+    Selenium2Library.Wait Until Page Contains Element    ${formPersonalProfileBirthDate}    timeout=10s
+    Scroll To Xpath    ${formPersonalProfile}
+    ${expanded}=    Selenium2Library.Get Element Count    ${formPersonalProfileExpandend}
+    Run Keyword If    ${expanded} < 1    Click Element With Javascript    ${formPersonalProfile}
+    Selenium2Library.Wait Until Element Is Visible    ${formPersonalProfileGroup}    timeout=${generalTimeout}
+    Comment    ${photo_ktp}=    Selenium2Library.Get Element Attribute    ${formPersonalProfileKtpFile}    src
+    ${photo_ktp}=    Selenium2Library.Get Element Attribute    //span[text()="Data Pribadi"]/ancestor::cicil-accordion-header/following-sibling::*//label[contains(text(), "Kartu Identitas (KTP)")]/ancestor::cicil-form-image-uploader/div/div[2]/div[1]/div[1]/img    src
+    Comment    ${photo_selfie}=    Selenium2Library.Get Element Attribute    ${formPersonalProfileSelfieKtpFile}    src
+    ${photo_selfie}=    Selenium2Library.Get Element Attribute    //span[text()="Data Pribadi"]/ancestor::cicil-accordion-header/following-sibling::*//label[contains(text(), "Foto Selfie + KTP")]/ancestor::cicil-form-image-uploader/div/div[2]/div/div/img    src
+    Set Global Variable    ${photo_ktp}
+    Set Global Variable    ${photo_selfie}
+    Log    >>> set up {photo_ktp} for: ${photo_ktp}
+    Log    >>> set up {photo_selfie} for: ${photo_selfie}
+    ### opening alamat dan kontak detail tab
+    ${address1}=    Set Variable    ${fake_address}
+    ### removing tab and newline characters
+    ${address1}=    Remove String Using Regexp    ${address1}    \t
+    ${address1}=    Remove String Using Regexp    ${address1}    \n
+    ${address1}=    Remove String Using Regexp    ${address1}    \r\n
+    ${tipe_address1}=    Set Variable    ${addressType}
+    ${address2}=    Set Variable    ${fake_address2}
+    ### removing tab and newline characters
+    ${address2}=    Remove String Using Regexp    ${address2}    \t
+    ${address2}=    Remove String Using Regexp    ${address2}    \n
+    ${address2}=    Remove String Using Regexp    ${address2}    \r\n
+    ${tipe_address2}=    Set Variable    ${addressType}
+    Set Global Variable    ${address1}
+    Set Global Variable    ${tipe_address1}
+    Set Global Variable    ${city_address1}
+    Set Global Variable    ${district_address1}
+    Set Global Variable    ${address2}
+    Set Global Variable    ${tipe_address2}
+    Set Global Variable    ${city_address2}
+    Set Global Variable    ${district_address2}
+    Set Global Variable    ${startMonth}
+    Set Global Variable    ${startYear}
+    Set Global Variable    ${endMonth}
+    Set Global Variable    ${endYear}
+    Log    >>> set up {startMonth} for: ${startMonth}
+    Log    >>> set up {startYear} for: ${startYear}
+    Log    >>> set up {endMonth} for: ${endMonth}
+    Log    >>> set up {endYear} for: ${endYear}
+    Log    >>> set up {adress1} for: ${address1}
+    Log    >>> set up {tipe_address1} for: ${tipe_address1}
+    Log    >>> set up {city_address1} for: ${city_address1}
+    Log    >>> set up {district_address1} for: ${district_address1}
+    Log    >>> set up {adress2} for: ${address2}
+    Log    >>> set up {tipe_address2} for: ${tipe_address2}
+    Log    >>> set up {city_address2} for: ${city_address2}
+    Log    >>> set up {district_address2} for: ${district_address2}
+    ### opening data akademik tab
+    Selenium2Library.Wait Until Page Contains Element    ${formAcademicProfile}    timeout=10s
+    Scroll To Xpath    ${formAcademicProfile}
+    ${expanded}=    Get Element Count    ${formAcademicProfileExpandend}
+    Run Keyword If    ${expanded} < 1    Click Element With Javascript    ${formAcademicProfile}
+    Selenium2Library.Wait Until Element Is Visible    ${formAcademicProfileGroup}    timeout=${generalTimeout}
+    ${no_ktm}=    Set Variable    ${studentNo}
+    Comment    ${photo_ktm}=    Selenium2Library.Get Element Attribute    ${formAcademicProfileStudentCardFile}    src
+    ${photo_ktm}=    Selenium2Library.Get Element Attribute    //span[text()="Data Akademik"]/ancestor::cicil-accordion-header/following-sibling::*//label[contains(text(), "Kartu Mahasiswa")]/ancestor::cicil-form-image-uploader/div/div[2]/div/div[1]/img    src
+    ${start_month}=    Set Variable    ${startMonth}
+    ${end_month}=    Set Variable    ${endMonth}
+    ${start_year}=    Set Variable    ${startYear}
+    ${end_year}=    Set Variable    ${endYear}
+    Set Global Variable    ${no_ktm}
+    Set Global Variable    ${photo_ktm}
+    Set Global Variable    ${university}
+    Set Global Variable    ${faculty}
+    Set Global Variable    ${start_month}
+    Set Global Variable    ${end_month}
+    Set Global Variable    ${start_year}
+    Set Global Variable    ${end_year}
+    Log    >>> set up {no_ktm} for: ${no_ktm}
+    Log    >>> set up {photo_ktm} for: ${photo_ktm}
+    Log    >>> set up {university} for: ${university}
+    Log    >>> set up {faculty} for: ${faculty}
+    Log    >>> set up {start_month} for: ${start_month}
+    Log    >>> set up {end_month} for: ${end_month}
+    Log    >>> set up {start_year} for: ${start_year}
+    Log    >>> set up {end_year} for: ${end_year}
+    ### opening latar belakang orang tua tab
+    ${first_name_parent1}=    Set Variable    ${fake_firstname1}
+    ${last_name_parent1}=    Set Variable    ${fake_lastname1}
+    ${no_hp_parent1}=    Set Variable    ${phone1}
+    ### removing 0 on no hp and replacing it with +62
+    Log    >>> removing 0 on no hp and replacing it with +62
+    ${no_hp_parent1}=    Get Substring    ${no_hp_parent1}    1
+    ${no_hp_parent1}=    Catenate    +62${no_hp_parent1}
+    ${first_name_parent2}=    Set Variable    ${fake_firstname2}
+    ${last_name_parent2}=    Set Variable    ${fake_lastname2}
+    ${no_hp_parent2}=    Set Variable    ${phone2}
+    ### removing 0 on no hp and replacing it with +62
+    Log    >>> removing 0 on no hp and replacing it with +62
+    ${no_hp_parent2}=    Get Substring    ${no_hp_parent2}    1
+    ${no_hp_parent2}=    Catenate    +62${no_hp_parent2}
+    Set Global Variable    ${first_name_parent1}
+    Set Global Variable    ${last_name_parent1}
+    Set Global Variable    ${no_hp_parent1}
+    Set Global Variable    ${first_name_parent2}
+    Set Global Variable    ${last_name_parent2}
+    Set Global Variable    ${no_hp_parent2}
+    Log    >>> set up {first_name_parent1} for: ${first_name_parent1}
+    Log    >>> set up {last_name_parent1} for: ${last_name_parent1}
+    Log    >>> set up {no_hp_parent1} for: ${no_hp_parent1}
+    Log    >>> set up {first_name_parent2} for: ${first_name_parent2}
+    Log    >>> set up {last_name_parent2} for: ${last_name_parent2}
+    Log    >>> set up {no_hp_parent2} for: ${no_hp_parent2}
+    Log    >>> SETTING ALL GLOBAL PARAMETERS ON REGISTER CASE DONE.
+
+Order
+    Log    >>> ORDER - start ordering stuffs..
+    Go To    ${url_staging_beta}
+    Selenium2Library.Wait Until Element Is Visible    //input[contains(@placeholder, 'Masukkan URL produk dari eCommerce manapun')]    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //span[contains(@class, 'break_word')]
+    ${url_order}=    Selenium2Library.Get Text    //span[contains(@id, 'sample_url')]
+    Selenium2Library.Click Element    //button[contains(@type, 'submit')]
+    sleep    5s
+    ### stuff detail page
+    Log    >>> stuff detail page
+    Drag Slider Tenure    ${tenure_length}
+    ${tenure}=    Selenium2Library.Get Text    //p[contains(@class, 'text-right ng-star-inserted')]
+    ${tenure}=    Substring Tenure Only Number    ${tenure}
+    Should Be Equal As Strings    ${tenure}    ${tenure_length}
+    ${price}=    Selenium2Library.Get Text    //div[contains(@class, 'col-12 d-none d-md-block ng-star-inserted')]/h3
+    ${price}=    Make Plain Numbers    ${price}
+    Comment    Selenium2Library.Input Text    //input[contains(@id, 'downpayment')]    ${down_payment}
+    ${dp}=    Count DownPayment by Percentage of Price    ${price}
+    Selenium2Library.Input Text    //input[contains(@id, 'downpayment')]    ${dp}
+    ${installment}=    Selenium2Library.Get Text    //div[text()='Cicilan perbulan']/parent::*/div[2]
+    ${installment}=    Make Plain Numbers    ${installment}
+    ${stuff_name}=    Selenium2Library.Get Text    //div[contains(@class, 'col-12 d-none d-md-block ng-star-inserted')]/h4
+    Selenium2Library.Input Text    //textarea[contains(@id, 'notes')]    ${formsubmit_input_catatan}
+    ${imgsrc_left}=    Selenium2Library.Get Element Attribute    //img[contains(@class, 'product-image mb-4')]    src
+    Selenium2Library.Click Element    //button[contains(@class, 'btn btn-orange btn-block')]
+    ### alamat pengiriman page
+    Selenium2Library.Wait Until Element Is Visible    //p[text()='Catatan untuk penjual (opsional)']/parent::*/span    timeout=${generalTimeout}
+    Log    >>> alamat pengiriman page
+    Verify Detail Pesanan Right Float    ${price}    ${dp}    ${tenure}    ${installment}    ${formsubmit_input_catatan}    ${stuff_name}
+    ...    ${imgsrc_left}
+    Log    >>> alamat pengiriman page verified
+    Selenium2Library.Wait Until Element Is Visible    //button[text()='Lanjut']    timeout=30s
+    Selenium2Library.Click Element    //button[text()='Lanjut']
+    ### detail pesanan / voucher page
+    Selenium2Library.Wait Until Element Is Visible    //p[text()='Catatan untuk penjual (opsional)']/parent::*/span    timeout=${generalTimeout}
+    Log    >>> detail pesanan page
+    Verify Detail Pesanan Right Float    ${price}    ${dp}    ${tenure}    ${installment}    ${formsubmit_input_catatan}    ${stuff_name}
+    ...    ${imgsrc_left}
+    ### input voucher code (if configured on resource file)
+    Run Keyword If    '${isuse_vouchercode}'=='1'    Fill In Voucher Code
+    Log    >>> detail pesanan \ page verified
+    Comment    Log    >>> scroll down to Lanjut button
+    Comment    Execute Javascript    window.scrollBy(0,100)
+    Comment    Selenium2Library.Wait Until Element Is Visible    //button[text()='Lanjut']    timeout=30s
+    Comment    Selenium2Library.Click Element    //button[text()='Lanjut']
+    Execute Javascript    window.scrollBy(0,150)
+    Selenium2Library.Click Element    //cicil-product-checkout-voucher/div[1]/div[1]/div[1]/div[2]/div[2]/button
+    Log    >>> sleep after click lanjut button
+    Sleep    3s
+    ### dikirim ke' page
+    Selenium2Library.Wait Until Element Is Visible    //h5[text()='Dikirim ke']    timeout=${generalTimeout}
+    Comment    Selenium2Library.Element Should Be Disabled    //button[text()='Lanjut']
+    Comment    Selenium2Library.Click Element    //div[contains(@class, 'custom-control custom-checkbox')]
+    Selenium2Library.Click Element    //button[text()='Lanjut']
+    ### syarat dan ketentuan page
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Page Should Contain    Cicil Syarat dan Ketentuan
+    Log    >>> scrolling down to proses pesanan button
+    Execute Javascript    window.scrollBy(0, 1000)
+    Selenium2Library.Element Should Be Disabled    //button[text()='Proses Pesanan']
+    Log    >>> button is disabled
+    Selenium2Library.Click Element    //cicil-product-checkout-terms/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]
+    Comment    //input[contains(@id, 'agree')]
+    Log    >>> clicked element
+    Selenium2Library.Element Should Be Enabled    //button[text()='Proses Pesanan']
+    Log    >>> button is enabled
+    Log    >>> clicking element
+    Selenium2Library.Click Element    //button[text()='Proses Pesanan']
+    ### konfirmasi checkout pop up
+    Selenium2Library.Wait Until Element Is Visible    //h4[text()='Konfirmasi Checkout']    timeout=${generalTimeout}
+    Selenium2Library.Wait Until Element Is Enabled    //h4[text()='Masukan kode OTP']/parent::*/div[2]/button    timeout=${generalTimeout}
+    Log    >>> temporarily sleeping, inputting otp manually..
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Element Should Be Enabled    //u[text()='Tutup']/parent::*/parent::*/parent::*/div[3]/div[3]/button
+    Sleep    2s
+    Selenium2Library.Click Element    //u[text()='Tutup']/parent::*/parent::*/parent::*/div[3]/div[3]/button
+    ### pesanan selesai page
+    Wait Until Keyword Succeeds    5x    2s    Selenium2Library.Page Should Contain Element    //u[text()='Tutup']/parent::*/parent::*/parent::*/div[3]/div[3]/button
+    Sleep    3s
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Wait Until Element Is Visible    //button[text()='Lihat pesanan saya']
+    Log    >>> sleep for 2s and click "Lihat Pesanan Saya"
+    Sleep    2s
+    Selenium2Library.Click Element    //button[text()='Lihat pesanan saya']
+    ### mark the order number, and then logout
+    Selenium2Library.Wait Until Element Is Visible    //span[text()='Keluar']    timeout=${generalTimeout}
+    Log    >>> getting the order number for stuff that just ordered
+    sleep    10s
+    Comment    ${order_no}=    Selenium2Library.Get Text    //div[contains(@class, 'row ng-star-inserted')]/div[1]/cicil-panel/div[1]/div[1]/div[1]/div[1]/div[1]/h5
+    ${order_no}=    Selenium2Library.Get Text    //cicil-panel/div[1]/div[1]/div[1]/div[1]/div[1]/h5
+    ${order_no}=    Get Substring    ${order_no}    1
+    Log    >>> Order no is: ${order_no} . Now logging out
+    Selenium2Library.Click Element    //span[text()='Keluar']
+    Sleep    1s
+    ${page_location}=    Get Location
+    Should Contain    ${page_location}    ${url_staging_beta}
+    Log    >>> Logged out successfully
+    ### setting global parameters
+    ${down_payment}=    Set Variable    ${dp}
+    Set Global Variable    ${order_no}
+    Set Global Variable    ${tenure}
+    Set Global Variable    ${url_order}
+    Set Global Variable    ${price}
+    Set Global Variable    ${installment}
+    Set Global Variable    ${down_payment}
+    Log    >>> set up {order_no} for: ${order_no}
+    Log    >>> set up {tenure} for: ${tenure}
+    Log    >>> set up {url_order} for: ${url_order}
+    Log    >>> set up {price} for: ${price}
+    Log    >>> set up {installment} for: ${installment}
+    Log    >>> set up {down_payment} for: ${down_payment}
+    Close Browser
+
+verification, assign, approve
+    Log    >>> START VERIFICATION
+    Verification
+    Log    >>> START ASSIGN AMBASSADOR
+    assign ambassador
+    Log    >>> START APPROVE ORDER
+    Approve Order
+    Log    >>> Verification, Assign Ambassador, Approve Order Done.
+    Log    >>> Closing current browser..
+    Close Browser
+
+Set Meet Up and Upload Agreement
+    Log    >>> login as ambassador, and set a meetup schedule
+    Log    >>> logging in as ambas: ${ambass_name}
+    Login    ${ambass_name}    ${ambass_pwd}
+    Comment    login to staging old    ${ambass_name}    ${ambass_pwd}    1    ${EMPTY}
+    Selenium2Library.Click Element    //button[text()='Akun Saya']
+    Wait Until Keyword Succeeds    10    1    Selenium2Library.Wait Until Element Is Visible    //span[text()='List User']    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //span[text()='List User']
+    ### list user page
+    Comment    Selenium2Library.Wait Until Element Is Visible    //cicil-user-list/div[1]/div[1]/cicil-tab/div[1]/div[2]/div[1]/div[1]/cicil-accordion/div[1]/div[1]/div[1]/cicil-accordion-header/div[1]/div[1]/div[1]/div[1]/div[1]/accordion-header/div[1]/div[2]/span    timeout=${generalTimeout}
+    Comment    ${order_id}=    Selenium2Library.Get Text    //cicil-user-list/div[1]/div[1]/cicil-tab/div[1]/div[2]/div[1]/div[1]/cicil-accordion/div[1]/div[1]/div[1]/cicil-accordion-header/div[1]/div[1]/div[1]/div[1]/div[1]/accordion-header/div[1]/div[2]/span
+    Comment    Selenium2Library.Wait Until Element Is Visible    //*[@id="top"]/cicil-account/div/div/div/div[2]/cicil-user-list/div/div/cicil-tab/div/div[2]/div    timeout=${generalTimeout}
+    Comment    Click Ambas Last Order    //*[@id="top"]/cicil-account/div/div/div/div[2]/cicil-user-list/div/div/cicil-tab/div/div[2]/div
+    wait until memuat data finished
+    Sleep    3s
+    ${order_number}=    Get Variable Value    ${order_no}
+    Selenium2Library.Click Element    //span[text()='${order_number}']
+    Comment    Selenium2Library.Click Element    //cicil-user-list/div[1]/div[1]/cicil-tab/div[1]/div[2]/div[1]/div[1]/cicil-accordion/div[1]/div[1]/div[1]/cicil-accordion-header/div[1]/div[1]/div[1]/div[1]/div[1]/accordion-header/div[1]/div[2]/span
+    ### open order tab, and set jadwal
+    Comment    Selenium2Library.Wait Until Element Is Visible    //*[@id="top"]/cicil-account/div/div/div/div[2]/cicil-user-list/div/div/cicil-tab/div/div[2]/div/div[1]/cicil-accordion/div/div/div/div/div/div/accordion-content/cicil-user-list-detail/div/div[1]/cicil-panel/div/div/div/div/div/button[1]    timeout=${generalTimeout}
+    Log    >>> setting meet up schedule for: ${order_number}
+    Selenium2Library.Wait Until Element Is Visible    //span[text()='${order_no}']/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/following-sibling::*/div/div/accordion-content/cicil-user-list-detail/div/div/cicil-panel/div/div/div/div/div/button    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //span[text()='${order_no}']/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/following-sibling::*/div/div/accordion-content/cicil-user-list-detail/div/div/cicil-panel/div/div/div/div/div/button
+    ${jadwal_catatan}=    Set Variable    automate catatan - bawa makanan
+    Selenium2Library.Input Text    //textarea[contains(@id, 'notes')]    ${jadwal_catatan}
+    Selenium2Library.Click Element    //input[contains(@id, 'meetup_time')]/parent::*/div[1]/button
+    ${random_meetupdate}=    FakerLibrary.Date Time Between    start_date=-30y    end_date=now
+    ${random_year}=    FakerLibrary.Random Element    ['2018', '2019']
+    Pick A Date From Date Picker    ${random_year}    ${random_meetupdate.month.__str__()}    ${random_meetupdate.day.__str__()}
+    Selenium2Library.Click Element    //button[text()='Simpan Tanggal Meet Up']
+    Wait Until Meetup Notification Shown    text="${notif_popup_meetup_berhasil}"
+    wait until memuat data finished
+    Log    >>> setting meet up schedule for: ${order_number} complete.
+    ### open order tab, and upload foto
+    Comment    Selenium2Library.Click Element    //cicil-user-list/div[1]/div[1]/cicil-tab/div[1]/div[2]/div[1]/div[1]/cicil-accordion/div[1]/div[1]/div[1]/cicil-accordion-header/div[1]/div[1]/div[1]/div[1]/div[1]/accordion-header/div[1]/div[2]/span
+    Log    >>> uploading agreement photo for: ${order_number}
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //span[text()='${order_number}']    timeout=30s
+    Selenium2Library.Click Element    //span[text()='${order_number}']
+    Comment    Selenium2Library.Click Element    //span[text()='${order_no}']/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/following-sibling::*/div/div/accordion-content/cicil-user-list-detail/div/div/cicil-panel/div/div/div/div/div/button[2]
+    Comment    Selenium2Library.Wait Until Element Is Visible    //*[@id="top"]/cicil-account/div/div/div/div[2]/cicil-user-list/div/div/cicil-tab/div/div[2]/div/div[1]/cicil-accordion/div/div/div/div/div/div/accordion-content/cicil-user-list-detail/div/div[1]/cicil-panel/div/div/div/div/div/button[2]    timeout=${generalTimeout}
+    Selenium2Library.Wait Until Element Is Visible    //span[text()='${order_no}']/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/following-sibling::*/div/div/accordion-content/cicil-user-list-detail/div/div/cicil-panel/div/div/div/div/div/button[2]    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //span[text()='${order_no}']/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/parent::*/following-sibling::*/div/div/accordion-content/cicil-user-list-detail/div/div/cicil-panel/div/div/div/div/div/button[2]
+    ${agreementDir}=    Set Variable    ${CURDIR}${slashdir${slashdir_envused}}${image_folder}${slashdir${slashdir_envused}}agreement.jpg
+    Log    >>> uploading agreement file with directory: ${agreementDir}
+    Selenium2Library.Choose File    //input[contains(@name, 'upload_file')]    ${agreementDir}
+    Selenium2Library.Wait Until Element Is Enabled    //button[text()='Simpan Foto']    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //button[text()='Simpan Foto']
+    Wait Until Meetup Notification Shown    text="${notif_popup_meetupfoto_berhasil}"
+    wait until memuat data finished
+    Log    >>> uploading agreement photo for: ${order_number} complete
+    ### ambassador step done. logging out
+    Comment    Log    >>> logging out ${ambass_name}
+    Comment    Selenium2Library.Wait Until Element Is Visible    //span[text()='Keluar']    timeout=${generalTimeout}
+    Comment    Selenium2Library.Click Element    //span[text()='Keluar']
+    Comment    Wait Until Notification Is Shown    ${notif_logout}
+    Comment    Log    >>> ambas ${ambass_name} logged out successfully
+    Comment    Sleep    30s
+    Log    >>> Closing browser. Forcing log ot process for ambass ${ambass_name}
+    Close Browser
+
+Payment DP
+    Comment    ${username}=    Set Variable    testing+william398@cicil.co.id
+    ${username}=    Get Variable Value    ${email}
+    Log    >>> Start Payment DP for Student: ${username}
+    Login    ${username}    ${pwd}
+    Selenium2Library.Click Element    //button[text()='Akun Saya']
+    Selenium2Library.Wait Until Element Is Visible    //span[text()='Status Pesanan']    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //span[text()='Status Pesanan']
+    ### on status pesanan page
+    Wait Until Keyword Succeeds    7x    1s    Page Should Not Contain    Memuat data...
+    Selenium2Library.Wait Until Element Is Visible    //button[text()='Bayar Uang Muka']    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //button[text()='Bayar Uang Muka']
+    ### pilih cara bayar page
+    Log    Sleeping
+    Sleep    7s
+    Scroll To Xpath    //cicil-payment-bank-list/div[1]/div[1]/cicil-panel/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]
+    Sleep    7s
+    Log    sleep after scroll
+    Execute Javascript    window.scrollBy(0,-300)
+    Selenium2Library.Wait Until Element Is Visible    //cicil-payment-bank-list/div[1]/div[1]/cicil-panel/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //cicil-payment-bank-list/div[1]/div[1]/cicil-panel/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]
+    Selenium2Library.Element Should Be Enabled    //button[text()='Bayar Sekarang']
+    Selenium2Library.Click Element    //button[text()='Bayar Sekarang']
+    ### petunjuk pembayaran page
+    Selenium2Library.Wait Until Element Is Visible    //h4[text()='Petunjuk Pembayaran']    timeout=${generalTimeout}
+    ${no_va}=    Selenium2Library.Get Text    //h4[text()='Petunjuk Pembayaran']/parent::*/following-sibling::*/cicil-panel/div[1]/div[1]/div[1]/div[1]/div[2]/span
+    ${amount}=    Selenium2Library.Get Text    //span[text()='Total']/parent::*/following-sibling::*/span
+    ${amount}=    Make Plain Numbers    ${amount}
+    ### start payment
+    Log    >>> Payment DP - Inquiry Start
+    ${transid_merchant}=    Inquiry Payment    ${no_va}    ${amount}
+    Log    >>> Inquiry Payment succeeded with TRANSIDMERCHANT: ${transid_merchant}
+    Log    >>> Payment DP - Notify Start
+    Notify Payment    ${no_va}    ${no_va}    ${amount}    ${transid_merchant}
+    ### back to home, go to status pemesanan
+    Log    >>> making sure button bayar uang muka is dissapeared
+    Go to    ${url_staging_beta}
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Wait Until Element Is Visible    //button[text()='Akun Saya']
+    Selenium2Library.Click Element    //button[text()='Akun Saya']
+    Selenium2Library.Wait Until Element Is Visible    //span[text()='Status Pesanan']    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //span[text()='Status Pesanan']
+    Selenium2Library.Wait Until Element Is Visible    //cicil-panel/div[1]/div[1]/div[contains(@class, 'panel clickable')]    timeout=${generalTimeout}
+    Selenium2Library.Page Should Not Contain Element    //button[text()='Bayar Uang Muka']
+    Log    >>> Payment DP for Student: ${username} success
+    Log    >>> Closing browser. Forcing log out for student: ${username} after Payment DP
+    Close Browser
+
+Order Processing
+    Optional Login as Admin to CLI    dev@cicil.co    Rahasia1
+    Open Order Bucket
+    Open Processing Tab
+    Disbursement Pending Check    ORD180814-158083
+    Sleep    2s
+    Paid Check    Email    ORD180814-158083
+
+Installment
+    ### TODO replace from Global Variable
+    ${username}=    Set Variable    testing+daniel550@cicil.co.id
+    Log    >>> Start Payment Installment for Student: ${username}
+    Login    ${username}    ${pwd}
+    Selenium2Library.Click Element    //button[text()='Akun Saya']
+    Selenium2Library.Wait Until Element Is Visible    //span[text()='Cicilan']    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //span[text()='Cicilan']
+    ### should be on Cicilan page
+    Wait Until Keyword Succeeds    10x    3s    Selenium2Library.Page Should Not Contain    ${payment_label_noinstallment}
+    Wait Until Keyword Succeeds    10x    3s    Selenium2Library.Page Should Contain Element    //button[text()='Lakukan Pembayaran']
+    Selenium2Library.Element Should Be Enabled    //button[text()='Lakukan Pembayaran']
+    Selenium2Library.Click Element    //button[text()='Lakukan Pembayaran']
+    ### should be on Pilih Bank page
+    Wait Until Keyword Succeeds    10x    3s    Selenium2Library.Page Should Contain    ${payment_label_choosebank}
+    Scroll To Xpath    //cicil-payment-bank-list/div[1]/div[1]/cicil-panel/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]
+    Sleep    7s
+    Log    sleep after scroll
+    Execute Javascript    window.scrollBy(0,-300)
+    Selenium2Library.Wait Until Element Is Visible    //cicil-payment-bank-list/div[1]/div[1]/cicil-panel/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //cicil-payment-bank-list/div[1]/div[1]/cicil-panel/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]
+    Selenium2Library.Element Should Be Enabled    //button[text()='Bayar Sekarang']
+    Selenium2Library.Click Element    //button[text()='Bayar Sekarang']
+    ### petunjuk pembayaran page
+    Selenium2Library.Wait Until Element Is Visible    //h4[text()='Petunjuk Pembayaran']    timeout=${generalTimeout}
+    ${no_va}=    Selenium2Library.Get Text    //h4[text()='Petunjuk Pembayaran']/parent::*/following-sibling::*/cicil-panel/div[1]/div[1]/div[1]/div[1]/div[2]/span
+    ${amount}=    Selenium2Library.Get Text    //span[text()='Total']/parent::*/following-sibling::*/span
+    ${amount}=    Make Plain Numbers    ${amount}
+    ### start payment
+    Log    >>> Pay Installment - Inquiry Start
+    ${transid_merchant}=    Inquiry Payment    ${no_va}    ${amount}
+    Log    >>> Inquiry Payment succeeded with TRANSIDMERCHANT: ${transid_merchant}
+    Log    >>> Pay Installment - Notify Start
+    Notify Payment    ${no_va}    ${no_va}    ${amount}    ${transid_merchant}
+    ### back to home, go to Cicilan page
+    Log    >>> making sure Installment data is dissapeared from Cicilan page
+    Go to    ${url_staging_beta}
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Wait Until Element Is Visible    //button[text()='Akun Saya']
+    Selenium2Library.Click Element    //button[text()='Akun Saya']
+    Selenium2Library.Wait Until Element Is Visible    //span[text()='Cicilan']    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //span[text()='Cicilan']
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Page Should Contain    ${payment_label_noinstallment}
+    Log    >>> Pay Installment for Student: ${username}, amount: ${amount} completed successfully.
+    Log    >>> Close browser. Forcing log out for Student ${username}
+    Sleep    3s
+    Close Browser
+
+Headless Chrome - Create Webdriver
+    ${chrome options} =    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+    Call Method    ${chrome options}    add_argument    headless
+    Call Method    ${chrome options}    add_argument    disable-gpu
+    ${options}=    Call Method    ${chrome_options}    to_capabilities
+    Comment    Create Webdriver    Remote    command_executor=http://127.0.0.1:4444/wd/hub    desired_capabilities=${options}
+    Comment    Go to    http://cnn.com
+    Comment    Maximize Browser Window
+    Comment    Capture Page Screenshot
+    ###
+    Open Browser    http://cnn.com    browser=headlesschrome    alias=None    remote_url=False    desired_capabilities=${options}    ff_profile_dir=None
+    Sleep    3s
+    Selenium2Library.Capture Page Screenshot
+    Maximize Browser Window
+    Selenium2Library.Get Element Count
+
+generate only
+    ${tes}=    generate email
+    Comment    ${tes2}=    set variable    02 Agustus 2018
+    Comment    ${tes2}=    Get Substring    ${tes2}    -4
+    Log    >>> test ambil order number
+    ${hasil}=    Get Variable Value    ${order_no}
+
+tes bayar
+    LOg    >>> start payment
+    ${va}=    Set Variable    8777810000001006
+    ${amount}=    Set Variable    649750
+    ${transid_merchant}=    Inquiry Payment    ${va}    ${amount}
+    Log    >>> notify merchant
+    Notify Payment    ${va}    ${va}    ${amount}    ${transid_merchant}
+
+tes bayar xendit
+    Log    >>> start payment xendit
+    Xendit Payment    MANDIRI    886081024992892    500000
+
+test convert kalender
+    Comment    ${hasil}=    Convert Date to English    Juni
+    Comment    ${hasil2}=    Convert Date to Indo    December
+    Log    >>> test with arg 0
+    test empty arg    0
+    Log    >>> test with arg empty
+    test empty arg    ${EMPTY}
+
+test switch tab browser
+    Comment    ${mainBrowser}=    Open Browser    ${url_staging_beta}    chrome
+    Comment    Maximize Browser Window
+    ### open gmail and switch tab
+    Log    >>> opening Gmail and verifying email
+    Execute Javascript    window.open('https://www.gmail.com');
+    Sleep    7s
+    Select Window    title=Gmail
+    ### open staging old and switch tab
+    Execute Javascript    window.open('${url_staging_main}');
+    Sleep    20s
+    Select Window    NEW
+    Log    >>> switched to staging tab (third tab)
+    Selenium2Library.Wait Until Element Is Visible    //span[text()='Login/Register']    timeout=30s
+    Log    >>> complete
+    Comment    profile page on line 190

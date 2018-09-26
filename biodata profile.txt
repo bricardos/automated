@@ -301,22 +301,23 @@ end "cicil sekarang"
 order
     Open Browser    https://staging.cicil.co.id/    chrome
     Maximize Browser Window
-    Click Element    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
-    Input Text    xpath=//*[@id="username"]    robotest38@gmail.com
+    wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a    timeout=5s
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    Input Text    xpath=//*[@id="username"]    bangkev12+roboted@gmail.com
     Input Text    xpath=//*[@id="password"]    Robotedo1
-    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/signin/section/div/form/div/div[3]/button
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
     Location Should Be    https://staging.cicil.co.id/
     Sleep    3 seconds
-    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a
-    BuiltIn.Should Contain    ${text button}    \ Akun Saya
-    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    Akun Saya
+    Comment    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
     Set Selenium Speed    2 seconds
     Execute Javascript    window.scrollBy(0,100)
     Input Text    xpath=//*[@id="copasurl_form"]/input[2]    https://www.tokopedia.com/scooterlike/variator-polini-with-flyweel?refined=true&trkid=f=Ca0000L000P0W0S0Sh00Co0Po0Fr0Cb0_src=search_page=1_ob=23_q=variator+polini_catid=1352_po=1
     sleep    2 seconds
     Click Element    xpath=//*[@id="copasurl_form"]/button
     Execute Javascript    window.scrollBy(0,250)
-    Input Text    xpath=//*[@id="tab-1"]/div[2]/div[1]/input    500000
+    Input Text    xpath=//*[@id="tab-1"]/div[2]/div[1]/input    100000
     Click Element    xpath=//*[@id="tab-1"]/div[2]/div[2]/select
     Click Element    xpath=//*[@id="tab-1"]/div[2]/div[2]/select/option[20]
     Execute Javascript    window.scrollBy(0,350)
@@ -328,3 +329,5 @@ order
     Execute Javascript    window.scrollBy(0,750)
     Click Element    xpath=//*[@id="cicil_component"]/apply-confirmation/div/div[5]/div/div[2]/div[1]/div/div[1]/div
     Click Element    xpath=//*[@id="cicil_component"]/apply-confirmation/div/div[5]/div/div[2]/div[2]/button
+    click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/input_otp_modal/div/div[1]/input
+    click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/input_otp_modal/div/div[3]/button

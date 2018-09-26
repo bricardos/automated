@@ -1,0 +1,63 @@
+*** Variables ***
+${formPersonalProfile}    //span[text()="Data Pribadi"]
+${formPersonalProfileGroup}    ${formPersonalProfile}/ancestor::cicil-accordion-header/following-sibling::*
+${formPersonalProfileExpandend}    ${formPersonalProfile}/ancestor::*[contains(@class, "accordion_header_container expanded")]
+${formPersonalProfileFirstname}    ${formPersonalProfileGroup}//input[@id="firstname"]
+${formPersonalProfileLastname}    ${formPersonalProfileGroup}//input[@id="lastname"]
+${formPersonalProfileBirthDate}    ${formPersonalProfileGroup}//label[contains(text(), "Tanggal Lahir")]/parent::cicil-form-label/following-sibling::div//button
+${formPersonalProfileGender}    ${formPersonalProfileGroup}//label[text()="Pria"]
+${formPersonalProfileWaId}    ${formPersonalProfileGroup}//input[@id="wa_id"]
+${formPersonalProfileLineId}    ${formPersonalProfileGroup}//input[@id="line_id"]
+${formPersonalProfileIdCardNo}    ${formPersonalProfileGroup}//input[@id="id_card_no"]
+${formPersonalProfileKtpFile}    ${formPersonalProfileGroup}//label[contains(text(), "Kartu Identitas (KTP)")]/ancestor::cicil-form-image-uploader//input[@type="file"]
+${formPersonalProfileSelfieKtpFile}    ${formPersonalProfileGroup}//label[contains(text(), "Foto Selfie + KTP")]/ancestor::cicil-form-image-uploader//input[@type="file"]
+${formPersonalProfileSubmitEnabled}    ${formPersonalProfileGroup}//button[text()="Simpan Perubahan Data" and not(@disabled)]
+${formAcademicProfile}    //span[text()="Data Akademik"]
+${formAcademicProfileGroup}    ${formAcademicProfile}/ancestor::cicil-accordion-header/following-sibling::*
+${formAcademicProfileExpandend}    ${formAcademicProfile}/ancestor::*[contains(@class, "accordion_header_container expanded")]
+${formAcademicProfileStudentStatus}    ${formAcademicProfileGroup}//label[contains(text(), "Status Kemahasiswaan")]/parent::*/following-sibling::*//ng-select
+${formAcademicProfileProgram}    ${formAcademicProfileGroup}//label[contains(text(), "Program")]/parent::*/following-sibling::*//ng-select
+${formAcademicProfileCity}    ${formAcademicProfileGroup}//label[contains(text(), "Kota")]/parent::*/following-sibling::*//ng-select
+${formAcademicProfileUniversity}    ${formAcademicProfileGroup}//input[@id="university"]
+${formAcademicProfileFaculty}    ${formAcademicProfileGroup}//input[@id="faculty"]
+${formAcademicProfileMajor}    ${formAcademicProfileGroup}//input[@id="major"]
+${formAcademicProfileStartMonth}    ${formAcademicProfileGroup}//label[contains(text(), "Bulan Mulai Kuliah")]/parent::*/following-sibling::*//ng-select
+${formAcademicProfileStartYear}    ${formAcademicProfileGroup}//input[@id="start_year"]
+${formAcademicProfileEndMonth}    ${formAcademicProfileGroup}//label[contains(text(), "Perkiraan Bulan Kelulusan")]/parent::*/following-sibling::*//ng-select
+${formAcademicProfileEndYear}    ${formAcademicProfileGroup}//input[@id="end_year"]
+${formAcademicProfileGpa}    ${formAcademicProfileGroup}//input[@id="gpa"]
+${formAcademicProfileStudentNo}    ${formAcademicProfileGroup}//input[@id="student_no"]
+${formAcademicProfileStudentCardFile}    ${formAcademicProfileGroup}//label[contains(text(), "Kartu Mahasiswa")]/ancestor::cicil-form-image-uploader//input[@type="file"]
+${formAcademicProfileSubmitEnabled}    ${formAcademicProfileGroup}//button[text()="Simpan Perubahan Data" and not(@disabled)]
+${formAddressProfile}    //span[text()="Alamat & Kontak Detail"]
+${formAddressProfileGroup}    ${formAddressProfile}/ancestor::cicil-accordion-header/following-sibling::*
+${formAddressProfileExpanded}    ${formAddressProfile}/ancestor::*[contains(@class, "accordion_header_container expanded")]
+${formAddressProfileFixAddress}    ${formAddressProfileGroup}//input[@id="fix_address"]
+${formAddressProfileFixAddressType}    ${formAddressProfileGroup}//label[@for="fix_address_type"]/parent::*/following-sibling::*//ng-select
+${formAddressProfileFixCity}    ${formAddressProfileGroup}//label[@for="address_fix_city"]/parent::*/following-sibling::*//ng-select
+${formAddressProfileFixDistrict}    ${formAddressProfileGroup}//label[@for="address_fix_district"]/parent::*/following-sibling::*//ng-select
+${formAddressProfileFixPostalCode}    ${formAddressProfileGroup}//input[@id="fix_postal_code"]
+${formAddressProfileSameAddress}    ${formAddressProfileGroup}//input[@id="same_address"]
+${formAddressProfileAddress}    ${formAddressProfileGroup}//input[@id="address"]
+${formAddressProfileAddressType}    ${formAddressProfileGroup}//label[@for="address_type"]/parent::*/following-sibling::*//ng-select
+${formAddressProfileCity}    ${formAddressProfileGroup}//label[@for="address_city"]/parent::*/following-sibling::*//ng-select
+${formAddressProfileDistrict}    ${formAddressProfileGroup}//label[@for="address_district"]/parent::*/following-sibling::*//ng-select
+${formAddressProfilePostalCode}    ${formAddressProfileGroup}//input[@id="postal_code"]
+${formAddressProfileSubmitEnabled}    ${formAddressProfileGroup}//button[text()="Simpan Perubahan Data" and not(@disabled)]
+${formGuardianProfile}    //span[text()="Latar Belakang Orang Tua"]
+${formGuardianProfileGroup}    ${formGuardianProfile}/ancestor::cicil-accordion-header/following-sibling::*
+${formGuardianProfileExpanded}    ${formGuardianProfile}/ancestor::*[contains(@class, "accordion_header_container expanded")]
+${formGuardianProfileFirstName1}    ${formGuardianProfileGroup}//input[@id="firstname_guardian"]
+${formGuardianProfileLastName1}    ${formGuardianProfileGroup}//input[@id="lastname_guardian"]
+${formGuardianProfileOccupation1}    ${formGuardianProfileGroup}//label[@for="occupation_guardian"]/parent::*/following-sibling::*//ng-select
+${formGuardianProfilePhone1}    ${formGuardianProfileGroup}//input[@id="phone_guardian"]
+${formGuardianProfileFirstName2}    ${formGuardianProfileGroup}//input[@id="firstname_guardian_2"]
+${formGuardianProfileLastName2}    ${formGuardianProfileGroup}//input[@id="lastname_guardian_2"]
+${formGuardianProfileOccupation2}    ${formGuardianProfileGroup}//label[@for="occupation_guardian_2"]/parent::*/following-sibling::*//ng-select
+${formGuardianProfilePhone2}    ${formGuardianProfileGroup}//input[@id="phone_guardian_2"]
+${formGuardianProfileSubmitEnabled}    ${formGuardianProfileGroup}//button[text()="Simpan Perubahan Data" and not(@disabled)]
+${formProfileAgreement}    //label[@for="agree"]
+# For the sake of consistency
+${formProfileAgreementGroup}    ${formProfileAgreement}/ancestor::cicil-panel
+${formProfileAgreementSubmitEnabled}    ${formProfileAgreementGroup}//button[text()="LANJUT" and not(@disabled)]
+${formProfileAgreementSubmitScreen}    //h4[contains(text(), "Terima kasih sudah mendaftarkan profil kamu")]

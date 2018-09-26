@@ -1,0 +1,38 @@
+*** Settings ***
+Library           Selenium2Library
+Library           String
+Resource          ../resource-folder/general.txt
+Resource          ../resource-folder/notification.txt
+
+*** Keywords ***
+login to staging old
+    [Arguments]    ${username}    ${pass}    ${openNewBrowser}    ${callbackUrl}
+    Log    >>> Start Keyword Log <<<
+    ### determine whether to open new browser or not
+    Run Keyword If    '${openNewBrowser}' == '1'    Open Browser    ${url_staging_main}    chrome
+    Run Keyword If    '${openNewBrowser}' == '1'    Maximize Browser Window
+    Run Keyword If    '${openNewBrowser}' == '0'    Execute Javascript    window.open('${url_staging_main}');
+    Run Keyword If    '${openNewBrowser}' == '0'    Select Window    NEW
+    Run Keyword If    '${openNewBrowser}' == '0'    Sleep    7s
+    ### open login pop up
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Wait Until Element Is Visible    //span[text()='Login/Register']
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Wait Until Element Is Visible    //ul[contains(@class, 'recommended_list')]/li
+    Selenium2Library.Click Element    //span[text()='Login/Register']
+    Selenium2Library.Wait Until Element Is Visible    //button[text()='Login']    timeout=30s
+    ### fill login data
+    Selenium2Library.Input Text    //input[contains(@id, 'username')]    ${username}
+    Selenium2Library.Input Password    //input[contains(@id, 'password')]    ${pass}
+    Selenium2Library.Click Element    //button[text()='Login']
+    Selenium2Library.Wait Until Element Is Visible    //div[contains(@class, 'navigation-account')]/div/a/span    timeout=30s
+    Sleep    3s
+    Page Should Contain    Akun Saya
+    Log    >>> Login as ${username} to staging old complete.
+    Run Keyword If    '${openNewBrowser}' == '0'    Log    >>> Opening new tab with callback URL: ${callbackUrl}
+    Run Keyword If    '${openNewBrowser}' == '0'    Execute Javascript    window.open('${callbackUrl}');
+    Run Keyword If    '${openNewBrowser}' == '0'    Select Window    NEW
+    Log    >>> End Keyword Log <<<
+
+test empty arg
+    [Arguments]    ${arg}
+    Run Keyword If    '${arg}' == '0'    Log    arg is 0
+    Run Keyword If    '${arg}' == '${EMPTY}'    Log    arg is empty

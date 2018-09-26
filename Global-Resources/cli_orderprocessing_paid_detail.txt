@@ -1,0 +1,34 @@
+*** Settings ***
+Library           Selenium2Library
+Library           AppiumLibrary
+
+*** Variables ***
+${xpath_op_paid_other_totalpayment}    //cicil-admin-dynamic-form/div[1]/div[1]/div[10]/div[1]/cicil-admin-mdform-text[1]/div[1]/p[1]
+${xpath_op_paid_other_account}    //cicil-admin-dynamic-form/div[1]/div[1]/div[1]/div[1]/cicil-admin-mdform-select/div[1]/div[1]/div[1]/span[1]
+${xpath_op_paid_other_method}    //cicil-admin-dynamic-form/div[1]/div[1]/div[2]/div[1]/cicil-admin-mdform-select[1]/div[1]/div[1]/div[1]/span[1]
+${xpath_op_paid_other_ecommerce}    //cicil-admin-dynamic-form/div[1]/div[1]/div[3]/div[1]/cicil-admin-mdform-text[1]/div[1]/p[1]
+${xpath_op_paid_other_ecommerceaccountname}    //cicil-admin-dynamic-form/div[1]/div[1]/div[5]/div[1]/cicil-admin-mdform-text[1]/div[1]/p[1]
+${xpath_op_paid_other_ecommercebankname}    //cicil-admin-dynamic-form/div[1]/div[1]/div[6]/div[1]/cicil-admin-mdform-text[1]/div[1]/p[1]
+${xpath_op_paid_other_ecommerceaccountnumber}    //cicil-admin-dynamic-form/div[1]/div[1]/div[7]/div[1]/cicil-admin-mdform-text[1]/div[1]/p[1]
+${xpath_op_paid_other_invoiceno}    //cicil-admin-dynamic-form/div[1]/div[1]/div[8]/div[1]/cicil-admin-mdform-text[1]/div[1]/p[1]
+${xpath_op_paid_other_invoiceurl}    //cicil-admin-dynamic-form/div[1]/div[1]/div[9]/div[1]/cicil-admin-mdform-text[1]/div[1]/p[1]
+${xpath_op_paid_other_validatedaccountname}    //cicil-admin-dynamic-form/div[1]/div[1]/div[11]/div[1]/cicil-admin-mdform-text[1]/div[1]/p[1]
+${xpath_op_paid_other_invoice}    //cicil-admin-dynamic-form/div[1]/div[1]/div[13]/div[1]/cicil-admin-mdform-image-uploader[1]/div[1]/div[2]/div[1]/img[1]
+${xpath_op_paid_other_notes}    //cicil-admin-dynamic-form/div[1]/div[1]/div[15]/div[1]/cicil-admin-mdform-textarea[1]/div[1]/p[1]
+${xpath_op_paid_orderinformation_orderno}    //cicil-admin-order-card/div[1]/div[1]/div[1]/div[2]/div[2]/a[1]
+${xpath_op_paid_orderinformation_URL}    //cicil-admin-order-card/div[1]/div[1]/div[1]/div[3]/div[2]/a[1]
+${xpath_op_paid_orderinformation_customernotes}    //cicil-admin-order-card/div[1]/div[1]/div[1]/div[4]/div[2]
+${xpath_op_paid_orderinformation_price}    //cicil-admin-order-card/div[1]/div[1]/div[1]/div[5]/div[2]
+${xpath_op_paid_orderinformation_downpayment}    //cicil-admin-order-card/div[1]/div[1]/div[1]/div[6]/div[2]
+${xpath_op_paid_orderinformation_installment}    //cicil-admin-order-card/div[1]/div[1]/div[1]/div[7]/div[2]
+${xpath_op_paid_userinformation_university}    //cicil-admin-order-card/div[1]/div[2]/div[1]/div[2]/div[2]
+${xpath_op_paid_userinformation_name}    //cicil-admin-order-card/div[1]/div[2]/div[1]/div[3]/div[2]
+${xpath_op_paid_userinformation_email}    //cicil-admin-order-card/div[1]/div[2]/div[1]/div[4]/div[2]
+${xpath_op_paid_userinformation_phone}    //cicil-admin-order-card/div[1]/div[2]/div[1]/div[5]/div[2]
+${xpath_op_paid_userinformation_shippingaddress}    //cicil-admin-order-card/div[1]/div[2]/div[1]/div[6]/div[2]
+${xpath_op_paid_ambasinfo_university}    //cicil-admin-order-card/div[1]/div[3]/div[1]/div[2]/div[2]
+${xpath_op_paid_ambasinfo_name}    //cicil-admin-order-card/div[1]/div[3]/div[1]/div[3]/div[2]
+${xpath_op_paid_ambasinfo_email}    //cicil-admin-order-card/div[1]/div[3]/div[1]/div[4]/div[2]
+${xpath_op_paid_ambasinfo_phone}    //cicil-admin-order-card/div[1]/div[3]/div[1]/div[5]/div[2]
+${xpath_op_paid_invoicepaiddocument}    //input[contains(@id, 'invoice_paid_document')]
+${invoice_paid_doc_dir}    ${EXECDIR}${slashdir${slashdir_envused}}latest_git2${slashdir${slashdir_envused}}WEB${slashdir${slashdir_envused}}${image_folder}${slashdir${slashdir_envused}}invoice_paid_doc.jpg

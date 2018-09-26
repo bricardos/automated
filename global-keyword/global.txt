@@ -1,0 +1,117 @@
+*** Settings ***
+Library           FakerLibrary
+Library           String
+Library           AppiumLibrary
+Library           Collections
+Library           Selenium2Library
+
+*** Variables ***
+${pwd}            1234567A
+${referral_code}    abc123
+${selenium_speed}    1s
+${slashdir_windows}    \\
+${slashdir_linux}    /
+${slashdir_envused}    linux
+
+*** Keywords ***
+generate email
+    Log    >>> generating random email
+    ### generate fakers
+    ${fake_name}=    FakerLibrary.First Name
+    ${fake_name_lower}=    Convert To Lowercase    ${fake_name}
+    ${randomNumber}=    FakerLibrary.Numerify    text=###
+    ### generate dummy email
+    ${email_prefix}=    Set Variable    testing+
+    ${email_suffix}=    Set Variable    @cicil.co.id
+    ${email}=    Catenate    ${email_prefix}${fake_name_lower}${randomNumber}${email_suffix}
+    Return From Keyword    ${email}
+
+generate handphone
+    Log    >>> generating handphone - excluding +62857
+    ${prefix}=    Set Variable    857
+    ${random}=    FakerLibrary.Numerify    text=########
+    Log    random: ${random}
+    ${hp}=    Catenate    ${prefix}${random}
+    Return From Keyword    ${hp}
+
+generate ktp
+    Log    >>> Generating Random KTP (16 digits random number)
+    ${no_ktp}=    FakerLibrary.Numerify    text=%%%%%%%%%%%%%%%%
+    Return From Keyword    ${no_ktp}
+
+cari element by swipe
+    [Arguments]    ${searchElement}    ${startX}    ${startY}    ${offsetX}    ${offsetY}
+    : FOR    ${loopCount}    IN RANGE    0    5
+    \    Swipe    ${startX}    ${startY}    ${offsetX}    ${offsetY}
+    \    ${el}    Run Keyword And Return Status    AppiumLibrary.Wait Until Page Contains Element    ${searchElement}
+    \    log    ${el}
+    \    Run Keyword If    ${el}    Exit For Loop
+    \    ${loopCount}    Set Variable    ${loopCount}+1
+
+cari tanggal kalendar
+    : FOR    ${loopCount}    IN RANGE    0    5
+    \    Swipe    ${startX}    ${startY}    ${offsetX}    ${offsetY}
+    \    ${el}    Run Keyword And Return Status    AppiumLibrary.Wait Until Page Contains Element    ${searchElement}
+    \    log    ${el}
+    \    Run Keyword If    ${el}    Exit For Loop
+    \    ${loopCount}    Set Variable    ${loopCount}+1
+
+Get Month English
+    ${engMonArray}=    Create List    January    February    March    April    May
+    ...    June    July    August    September    October    November
+    ...    December
+    Return From Keyword    ${engMonArray}
+
+Get Month Indo
+    ${indMonArray}=    Create List    Januari    Februari    Maret    April    Mei
+    ...    Juni    Juli    Agustus    September    Oktober    November
+    ...    Desember
+    Return From Keyword    ${indMonArray}
+
+Convert Date to English
+    [Arguments]    ${stringMonthIndo}
+    Log    >>> Start Log Keyword - DATE CONVERTER <<<
+    ### prepare date month array
+    ${engMonArray}=    Get Month English
+    ${indMonArray}=    Get Month Indo
+    ${counter}=    Set Variable    0
+    ${result}=    Set Variable    ${stringMonthIndo}
+    ${foundMatch}=    Set Variable    0
+    ### start converting
+    : FOR    ${INDEX}    IN RANGE    0    12
+    \    ${temp}=    Get From List    ${indMonArray}    ${INDEX}
+    \    ${foundMatch}=    Set Variable If    '${temp}' == '${stringMonthIndo}'    1
+    \    Run Keyword If    '${temp}' == '${stringMonthIndo}'    Exit For Loop
+    \    Log    ${result}
+    \    ${counter}=    Evaluate    ${counter}+1
+    ${result}=    Get From List    ${engMonArray}    ${counter}
+    ### returning the result
+    Log    >>> End Log Keyword - DATE CONVERTER <<<
+    Log    >>> FoundMatch: ${foundMatch}
+    Return From Keyword    ${result}
+    Comment    Run Keyword If    '${foundMatch}' == '1'    Return From Keyword    ${result}
+    Comment    Run Keyword If    '${foundMatch}' == '0'    Return From Keyword    ${stringMonthIndo}
+
+Convert Date to Indo
+    [Arguments]    ${stringMonthEnglish}
+    Log    >>> Start Log Keyword - DATE CONVERTER <<<
+    ### prepare date month array
+    ${engMonArray}=    Get Month English
+    ${indMonArray}=    Get Month Indo
+    ${counter}=    Set Variable    0
+    ${result}=    Set Variable    ${stringMonthEnglish}
+    ${foundMatch}=    Set Variable    0
+    ### start converting
+    : FOR    ${INDEX}    IN RANGE    0    12
+    \    ${temp}=    Get From List    ${engMonArray}    ${INDEX}
+    \    ${foundMatch}=    Set Variable If    '${temp}' == '${stringMonthEnglish}'    1
+    \    Run Keyword If    '${temp}' == '${stringMonthEnglish}'    Exit For Loop
+    \    Log    ${result}
+    \    ${counter}=    Evaluate    ${counter}+1
+    ${result}=    Get From List    ${indMonArray}    ${counter}
+    ### returning the result
+    Log    >>> End Log Keyword - DATE CONVERTER <<<
+    Log    >>> FoundMatch: ${foundMatch}
+    Return From Keyword    ${result}
+    Comment    Run Keyword If    '${foundMatch}' == '1'    Return From Keyword    ${result}
+    Comment    Run Keyword If    '${foundMatch}' == '0'    Return From Keyword    ${stringMonthIndo}

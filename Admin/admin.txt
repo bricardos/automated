@@ -1,0 +1,567 @@
+*** Settings ***
+Suite Teardown    Close Browser
+Library           HttpLibrary.HTTP
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           xml.etree.ElementTree    WITH NAME    ET
+Library           XML
+Library           BuiltIn
+Library           String
+Resource          ../global-keyword/global.txt
+
+*** Variables ***
+${email}          testing+lisa645@cicil.co.id
+${photo_ktp}      https://marvel-staging-old.cicil.co.id/api/image/643/1603
+${no_ktp}         2819782007891111
+${first_name}     novi
+${last_name}      mvl7
+${photo_selfie}    https://marvel-staging-old.cicil.co.id/api/image/643/1604
+${tipe_address}    Rumah orang tua
+${address}        53829 Donna GardensPort David, NE 45748
+${city_address}    KABUPATEN ACEH BARAT
+${district_address}    BUBON
+${photo_ktm}      https://marvel-staging-old.cicil.co.id/api/image/643/1605
+${no_ktm}         150271872181
+${university}     BINUS ANGGREK
+${faculty}        Hukum
+${start_month}    January
+${start_year}     2017
+${end_year}       2020
+${end_month}      January
+${first_name_parent}    ma
+${last_name_parent}    ma1
+${no_hp_parent}    +6282716271811
+${no_hp_alternative}    ${EMPTY}
+${order_no}       ORD180814-158083
+${price}          1299500
+${tenure}         3
+${referral_code}    ${EMPTY}
+${voucher_code}    ${EMPTY}
+${url_order}      https://www.tokopedia.com/coffeehqbiz/pullman-dtcustoms-nexus-teak-tamper
+${installment}    316564
+${down_payment}    500000
+${email_ambassador}    dream@mailinator.com
+${photo_agreement}    https://marvel-staging-old.cicil.co.id/api/image/162/1710
+${phone}          +6285710020377
+${zip_code}       16444
+@{installment+tenure}    ${tenure}    ${installment}
+${shop_name}      Tokopedia
+${eCommerce_account_name}    Annisa
+${eCommerce_bank_name}    Mandiri
+${eCommerce_account_number}    9291829718
+${invoice_no}     2819829819829
+${invoice_url}    https://www.tokopedia.com/
+${total_payment}    90000
+${notes}          testing
+
+*** Test Cases ***
+Verification user
+    login admin
+    Wait Until Element Is Visible    //div//div[text()="Verification"]    timeout=15s
+    Click Element    //div//div[text()="Verification"]
+    Wait Until Element Is Visible    //input [@formcontrolname="fcSearch"]    timeout=15s
+    Input Text    //input [@formcontrolname="fcSearch"]    ${email}
+    Wait Until Element Is Visible    //tr[contains(@class, "yellow-text clickable")]/td[1]/span[1]    timeout=15s
+    Click Element    //tr[contains(@class, "yellow-text clickable")]/td[1]/span[1]
+    Wait Until Element Is Visible    //button/*[text()="Mulai Verifikasi" or text()="Lanjutkan Verifikasi"]    timeout=15s
+    Click Element    //button/*[text()="Mulai Verifikasi" or text()="Lanjutkan Verifikasi"]
+    #1.Does the ID card originals
+    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    Log    photo ktp: ${photo_ktp}
+    Log    //div//img[@src="${photo_ktp}"]
+    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Log    sama
+    Wait Until Element Is Visible    //div//label[@class="btn btn-secondary"]    timeout=15s
+    Click Element    //div//label[@class="btn btn-secondary"]
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #2.Does the ID Card information readable?
+    Sleep    1s
+    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #3.Does the ID card number match?
+    Sleep    1s
+    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    ${no_ktp_cek}    Selenium2Library.Get Element Attribute    //input[contains(@id,"id_no")]    id
+    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    ${no_ktp_cek}=    Get Value    //*[@id="id_no"]
+    Should Be Equal As Strings    ${no_ktp_cek}    ${no_ktp}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #4. Does the name on the ID match?
+    Sleep    1s
+    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    ${first_name_cek}=    Get Value    //*[@id="firstname"]
+    Should Be Equal As Strings    ${first_name_cek}    ${first_name}
+    ${last_name_cek}=    Get Value    //*[@id="lastname"]
+    Should Be Equal As Strings    ${last_name_cek}    ${last_name}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #5. Does the person email match his name ?
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="email"]
+    ${email_cek}=    Get Value    //*[@id="email"]
+    Should Be Equal As Strings    ${email_cek}    ${email}
+    ${first_name_cek}=    Get Value    //*[@id="firstname"]
+    Should Be Equal As Strings    ${first_name_cek}    ${first_name}
+    ${last_name_cek}=    Get Value    //*[@id="lastname"]
+    Should Be Equal As Strings    ${last_name_cek}    ${last_name}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #6. Does the selfie photo taken properly?
+    Sleep    1s
+    Wait Until Element Is Visible    //div//img[@src="${photo_selfie}"]    timeout=15s
+    ${photo_selfie_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_selfie}"]    src
+    Should Be Equal As Strings    ${photo_selfie_cek}    ${photo_selfie}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #7.Does the person in the selfie match the photo on his cards?
+    Sleep    1s
+    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]    timeout=15s
+    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    ${photo_selfie_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_selfie}"]    src
+    Should Be Equal As Strings    ${photo_selfie_cek}    ${photo_selfie}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #8. Does the permanent address match the address on KTP?
+    Sleep    1s
+    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]    timeout=15s
+    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    ${tipe_address_cek}=    Get Value    //*[@id="fix_address_type"]
+    Should Be Equal As Strings    ${tipe_address_cek}    ${tipe_address}
+    ${address_cek}=    Get Value    //*[@id="fix_address"]
+    Should Be Equal As Strings    ${address_cek}    ${address}
+    ${city_address_cek}=    Get Value    //*[@id="fix_city"]
+    Should Be Equal As Strings    ${city_address_cek}    ${city_address}
+    ${district_address_cek}=    Get Value    //*[@id="fix_district"]
+    Should Be Equal As Strings    ${district_address_cek}    ${district_address}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #10.Does the Student Card Original
+    Sleep    1s
+    Wait Until Element Is Visible    //div//img[@src="${photo_ktm}"]    timeout=15s
+    ${photo_ktm_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktm}"]    src
+    Should Be Equal As Strings    ${photo_ktm_cek}    ${photo_ktm}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #9.Is Currently a student
+    Sleep    1s
+    Wait Until Element Is Visible    //div//img[@src="${photo_ktm}"]    timeout=15s
+    ${photo_ktm_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktm}"]    src
+    Should Be Equal As Strings    ${photo_ktm_cek}    ${photo_ktm}
+    ${no_ktm_cek}=    Get Value    //*[@id="student_no"]
+    Should Be Equal As Strings    ${no_ktm_cek}    ${no_ktm}
+    ${university_cek}=    Get Value    //*[@id="university"]
+    Should Be Equal As Strings    ${university_cek}    ${university}
+    ${faculty_cek}=    Get Value    //*[@id="faculty"]
+    Should Be Equal As Strings    ${faculty_cek}    ${faculty}
+    ${start_month_cek}=    Get Value    //*[@id="start_month"]
+    Should Be Equal As Strings    ${start_month_cek}    ${start_month}
+    ${start_year_cek}=    Get Value    //*[@id="start_year"]
+    Should Be Equal As Strings    ${start_year_cek}    ${start_year}
+    ${end_year_cek}=    Get Value    //*[@id="end_year"]
+    Should Be Equal As Strings    ${end_year_cek}    ${end_year}
+    ${end_month_cek}=    Get Value    //*[@id="end_month"]
+    Should Be Equal As Strings    ${end_month_cek}    ${end_month}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #11.Does his current address match his university city
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="university"]    timeout=15s
+    ${university_cek}=    Get Value    //*[@id="university"]
+    Should Be Equal As Strings    ${university_cek}    ${university}
+    ${address_cek}=    Get Value    //*[@id="address"]
+    Should Be Equal As Strings    ${address_cek}    ${address}
+    ${district_address_cek}=    Get Value    //*[@id="district"]
+    Should Be Equal As Strings    ${district_address_cek}    ${district_address}
+    ${tipe_address_cek}=    Get Value    //*[@id="address_type"]
+    Should Be Equal As Strings    ${tipe_address_cek}    ${tipe_address}
+    ${city_address_cek}=    Get Value    //*[@id="city"]
+    Should Be Equal As Strings    ${city_address_cek}    ${city_address}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    #12. Do Guardian contacts is real?
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="firstname"]    timeout=15s
+    ${first_name_parent_cek}=    Get Value    //*[@id="firstname"]
+    Should Be Equal As Strings    ${first_name_parent_cek}    ${first_name_parent}
+    ${last_name_parent_cek}=    Get Value    //*[@id="lastname"]
+    Should Be Equal As Strings    ${last_name_parent_cek}    ${last_name_parent}
+    ${no_hp_parent_cek}=    Get Value    //*[@id="phone"]
+    Should Be Equal As Strings    ${no_hp_parent_cek}    ${no_hp_parent}
+    ${no_hp_alternative_cek}=    Get Value    //*[@id="phone_alt"]
+    Should Be Equal As Strings    ${no_hp_alternative_cek}    ${no_hp_alternative}
+    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Click Element    //button[contains(text(), "Next")]
+    Wait Until Element Is Visible    //button[text()=" Complete Data Verification "]    timeout=15s
+    Click Element    //button[text()=" Complete Data Verification "]
+    Wait Until Element Is Visible    //button[text()="See Order"]    timeout=15s
+    Click Element    //button[text()="See Order"]
+
+Assign ambassador & approve order
+    loginadmin
+    Wait Until Element Is Visible    //div[text()="Campus Coordinator"]
+    Click Element    //div[text()="Campus Coordinator"]
+    Wait Until Element Is Visible    //div/select/option[2]
+    Click Element    //div/select/option[2]
+    Input Text    //div/input[contains(@class,"form- control ng-untouched ng-pristine ng-valid")]    ${order_no}
+    Sleep    5s
+    Wait Until Element Is Visible    //button/*[text()="Assign Ambassador"]
+    Click Element    //button/*[text()="Assign Ambassador"]
+    Wait Until Element Is Visible    //input[contains(@id,"order_no_readonly")]
+    ${order_no_cek}    Get Value    //input[contains(@id,"order_no_readonly")]
+    Should Be Equal As Strings    ${order_no_cek}    ${order_no}
+    ${email_cek}    Get Value    //input[contains(@id,"email")]
+    Should Be Equal As Strings    ${email_cek}    ${email}
+    ${university_cek}    Get Value    //input[contains(@id,"university")]
+    Should Be Equal As Strings    ${university_cek}    ${university}
+    ${referral_code_cek}    Get Value    //input[contains(@id,"referral_code")]
+    Should Be Equal As Strings    ${referral_code_cek}    ${referral_code}
+    ${voucher_code_cek}    Get Value    //input[contains(@id,"voucher_code")]
+    Should Be Equal As Strings    ${voucher_code_cek}    ${voucher_code}
+    ${tenure_cek}    Get Value    //input[contains(@id,"tenure")]
+    Should Be Equal As Strings    ${tenure_cek}    ${tenure}
+    ${url_order_cek}    Get Value    //input[contains(@id,"url")]
+    Should Be Equal As Strings    ${url_order_cek}    ${url_order}
+    ${price_cek}    Get Value    //input[contains(@id,"price")]
+    ### replace koma
+    ${price_cek}=    Evaluate    '${price_cek}'.replace(',','')
+    ${price_cek}=    Evaluate    '${price_cek}'.replace('Rp ','')
+    Should Be Equal As Strings    ${price_cek}    ${price}
+    Wait Until Element Is Visible    //button[1][contains(@class,"btn cicilgreen_btn btn-right-space")]
+    Click Element    //button[1][contains(@class,"btn cicilgreen_btn btn-right-space")]
+    ${email_ambassador}=    Set Variable    ice@mailinator.com
+    Set Global Variable    ${email_ambassador}
+    Wait Until Element Is Visible    //div//*[contains(@value,"${email_ambassador}")]
+    Click Element    //div//*[contains(@value,"${email_ambassador}")]
+    Wait Until Element Is Visible    //div//button[text()="Proceed"]
+    Click Element    //div//button[text()="Proceed"]
+
+Approve order
+    Comment    loginadmin
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[7]    timeout=10s
+    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[7]
+    Wait Until Element Is Visible    //div/input[contains(@class,"form-control ng-untouched ng-pristine ng-valid")]    timeout=10s
+    Input Text    //div/input[contains(@class,"form-control ng-untouched ng-pristine ng-valid")]    ${order_no}
+    Sleep    5s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]    timeout=15
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]
+    Wait Until Element Is Visible    //div/input[contains(@id,"assigned_ambassador_readonly")]    timeout=15
+    ${email_ambassador_cek}    Get Value    //div/input[contains(@id,"assigned_ambassador_readonly")]
+    Should Be Equal As Strings    ${email_ambassador_cek}    ${email_ambassador}
+    ${order_no_cek}    Get Value    //div//input[contains(@id,"order_no")]
+    Should Be Equal As Strings    ${order_no_cek}    ${order_no}
+    ${url_order_cek}    Get Value    //div//div//input[(@id="url")]
+    Should Be Equal As Strings    ${url_order_cek}    ${url_order}
+    ${price_cek}    Get Value    //div//input[contains(@id,"price")]
+    Should Be Equal As Strings    ${price_cek}    ${price}
+    ${installment_cek}    Get Value    //div//input[contains(@id,"current_installment")]
+    Should Be Equal As Strings    ${installment_cek}    ${installment}
+    ${tenure_cek}    Get Value    //div//input[contains(@id,"current_time_period")]
+    Should Be Equal As Strings    ${tenure_cek}    ${tenure}
+    ${down_payment_cek}    Get Value    //div//input[(@id="downpayment")]
+    Should Be Equal As Strings    ${down_payment_cek}    ${down_payment}
+    ${voucher_code_cek}    Get Value    //input[contains(@id,"voucher_code")]
+    Should Be Equal As Strings    ${voucher_code_cek}    ${voucher_code}
+    ${tipe_address_cek}    Get Value    //div//input[contains(@id,"shipment_type")]
+    Should Be Equal As Strings    ${tipe_address_cek}    ${tipe_address}
+    ${address_cek}    Get Value    //*[@id="shipment_address"]
+    Should Be Equal As Strings    ${address_cek}    ${address}
+    ${city_address_cek}    Get Value    //div//input[contains(@id,"shipment_city")]
+    Should Be Equal As Strings    ${city_address_cek}    ${city_address}
+    ${district_address_cek}    Get Value    //div//input[contains(@id,"shipment_district")]
+    Should Be Equal As Strings    ${district_address_cek}    ${district_address}
+    Wait Until Element Is Visible    //div//button[(text()="Approve")]    timeout=15s
+    Click Element    //div//button[(text()="Approve")]
+    Wait Until Element Is Visible    //div//button[(text()="Proceed")]    timeout=15s
+    Click Element    //div//button[(text()="Proceed")]
+
+Order Processing >> Pending Doc
+    loginadmin
+    Selenium2Library.Wait Until Element Is Visible    //div[text()="Order Processing"]
+    Selenium2Library.Click Element    //div[text()="Order Processing"]
+    Selenium2Library.Wait Until Element Is Visible    //div//option[contains(@value,"order_no")]
+    Selenium2Library.Click Element    //div//option[contains(@value,"order_no")]
+    Selenium2Library.Input Text    //div/input[contains(@class,"form-control ng-untouched ng-pristine ng-valid")]    ${order_no}
+    Sleep    3s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-pending/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/span/span
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-pending/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/span/span
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="form"]
+    ${university_cek}    Selenium2Library.Get Value    //*[@id="form"]
+    Should Be Equal As Strings    ${university_cek}    ${university}
+    ${photo_ktp_cek}    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    ${photo_selfie_cek}    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_selfie}"]    src
+    Should Be Equal As Strings    ${photo_selfie_cek}    ${photo_selfie}
+    ${photo_ktm_cek}    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktm}"]    src
+    Should Be Equal As Strings    ${photo_ktm_cek}    ${photo_ktm}
+    ${photo_agreement_cek}    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_agreement}"]    src
+    Should Be Equal As Strings    ${photo_agreement_cek}    ${photo_agreement}
+    Selenium2Library.Click Element    //div//button[text()="Approve"]
+
+Order Processing >> For Processing >> For Ordering
+    loginadminCLI
+    sleep    3s
+    Selenium2Library.Wait Until Element Is Visible    //div//span[contains(text(),"Orders")]    timeout=5s
+    Selenium2Library.Click Element    //div//span[contains(text(),"Orders")]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//li[2]/span[contains(@class,"child")]    timeout=5
+    Selenium2Library.Click Element    //div//li[2]/span[contains(@class,"child")]
+    Selenium2Library.Wait Until Element Is Visible    //div/span[contains(text(),"For Ordering")]    timeout=5
+    Selenium2Library.Click Element    //div/span[contains(text(),"For Ordering")]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//div//div[contains(@class,'toggle ng-star-inserted')]    timeout=5
+    Selenium2Library.Click Element    //div//div//div[contains(@class,'toggle ng-star-inserted')]
+    Selenium2Library.Wait Until Element Is Visible    //div//ul//li//span[text()="Order No"]    timeout=5
+    Selenium2Library.Click Element    //div//ul//li//span[text()="Order No"]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//input[contains(@placeholder,"Search...")]    timeout=5
+    Selenium2Library.Input Text    //div//input[contains(@placeholder,"Search...")]    ${order_no}
+    #click view detail
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //td//button[contains(text(),"View Detail")]    timeout=5
+    Selenium2Library.Click Element    //td//button[contains(text(),"View Detail")]
+    # Check order information
+    Order Information
+    #Check user information
+    User Information
+    # Check Ambassador Information
+    Ambassador Information
+    Selenium2Library.Wait Until Element Is Visible    //div[3]/div[2]/div/div/button[1]    timeout=5s
+    Selenium2Library.Click Element    //div[3]/div[2]/div/div/button[1]
+    Sleep    2s
+    # Procedd With Purchase
+    Selenium2Library.Wait Until Element Is Visible    //div//div/div[2][contains(@class,'toggle ng-star-inserted')]
+    Selenium2Library.Click Element    //div//div/div[2][contains(@class,'toggle ng-star-inserted')]
+    Selenium2Library.Click Element    //div/div[2]/ul/li[1]/span[contains(text(),"JNE")]
+    Selenium2Library.Input Text    //*[@id="shipment_cost"]    0
+    Selenium2Library.Wait Until Element Is Visible    (//div/div/ng-select/div/div/div[2][contains(@class,'toggle ng-star-inserted')])[2]
+    Selenium2Library.Click Element    (//div/div/ng-select/div/div/div[2][contains(@class,'toggle ng-star-inserted')])[2]
+    Selenium2Library.Click Element    //div/div[2]/ul/li[1]/span[contains(text(),"Annisa")]
+    Selenium2Library.Click Element    (//div/div/ng-select/div/div/div[2][contains(@class,'toggle ng-star-inserted')])[3]
+    Selenium2Library.Click Element    //div/div[2]/ul/li[5]/span[contains(text(),"New Mandiri Virtual Account")]
+    ${shop_name}=    Set Variable    Tokopedia
+    Selenium2Library.Input Text    //*[@id="shop_name"]    ${shop_name}
+    ${eCommerce_account_name}    Set Variable    Annisa
+    Selenium2Library.Input Text    //*[@id="payment_account_name"]    ${eCommerce_account_name}
+    ${eCommerce_bank_name}    Set Variable    Mandiri
+    Selenium2Library.Input Text    //*[@id="payment_bank_name"]    ${eCommerce_bank_name}
+    ${eCommerce_account_number}    Set Variable    9291829718
+    Selenium2Library.Input Text    //*[@id="payment_account_no"]    ${eCommerce_account_number}
+    ${invoice_no}    Set Variable    2819829819829
+    Selenium2Library.Input Text    //*[@id="invoice_no"]    ${invoice_no}
+    ${invoice_url}    Set Variable    https://www.tokopedia.com/
+    Selenium2Library.Input Text    //*[@id="invoice_url"]    ${invoice_url}
+    ${total_payment}    Set Variable    90000
+    Selenium2Library.Input Text    //*[@id="total_payment"]    ${total_payment}
+    ${invoice_picture}    Set Variable    ${EXECDIR}${slashdir_${slashdir_envused}}Global-Resources${slashdir${slashdir_envused}}admin-images${slashdir${slashdir_envused}}rabbit.jpg
+    Choose File    //*[@id="invoice_document"]    ${invoice_picture}
+    ${notes}    Set Variable    testing
+    Selenium2Library.Input Text    //*[@id="order_process_notes"]    ${notes}
+    Set Global Variable    ${shop_name}
+    Set Global Variable    ${eCommerce_account_name}
+    Set Global Variable    ${eCommerce_bank_name}
+    Set Global Variable    ${eCommerce_account_number}
+    Set Global Variable    ${invoice_no}
+    Set Global Variable    ${invoice_url}
+    Set Global Variable    ${total_payment}
+    Set Global Variable    ${notes}
+    Sleep    5s
+    Wait Until Element Is Enabled    //div[2]/button[contains(@class,"btn btn-orange")]    timeout=10s
+    Selenium2Library.Click Element    //div[2]/button[contains(@class,"btn btn-orange")]
+    Selenium2Library.Wait Until Element Is Visible    //div/div/div[1]/div/button    timeout=10s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="logout-button"]    timeout=10s
+    Selenium2Library.Click Element    //*[@id="logout-button"]
+
+Order Processing >> For Review
+    loginadminCLI[Dream]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//span[contains(text(),"Orders")]    timeout=10s
+    Selenium2Library.Click Element    //div//span[contains(text(),"Orders")]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//li[2]/span[contains(@class,"child")]    timeout=10s
+    Selenium2Library.Click Element    //div//li[2]/span[contains(@class,"child")]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div/span[contains(text(),"For Review")]    timeout=10s
+    Selenium2Library.Click Element    //div/span[contains(text(),"For Review")]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//div//div[contains(@class,'toggle ng-star-inserted')]    timeout=10s
+    Selenium2Library.Click Element    //div//div//div[contains(@class,'toggle ng-star-inserted')]
+    Selenium2Library.Wait Until Element Is Visible    //div//ul//li//span[text()="Order No"]    timeout=10s
+    Selenium2Library.Click Element    //div//ul//li//span[text()="Order No"]
+    Selenium2Library.Input Text    //*[@id="undefined"]    ${order_no}
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //td//button[contains(text(),"View Detail")]    timeout=10s
+    Selenium2Library.Click Element    //td//button[contains(text(),"View Detail")]
+    # Check order information
+    Order Information
+    #Check user information
+    User Information
+    # Check Ambassador Information
+    Ambassador Information
+    # Check Addtional Information
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    (//div/div/div/span[contains(text(),"")])[6]
+    Comment    ${account_check}    Selenium2Library.Get Text    (//div/div/div/span[contains(text(),"")])[6]
+    Comment    Should Be Equal    ${account_check}    ${eCommerce_account_name}
+    Comment    \    \    (//div/div/div/span[contains(text(),"")])[8]
+    ${shop_name_check}    Selenium2Library.Get Text    //div/p[contains(text(),"")]
+    ${shop_name_global}=    Get Variable Value    ${shop_name}
+    Should Be Equal    ${shop_name_check}    ${shop_name_global}
+    ${eCommerce_account_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[2]
+    Should Be Equal    ${eCommerce_account_check}    ${eCommerce_account_name}
+    ${eCommerce_bank_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[3]
+    Should Be Equal    ${eCommerce_bank_check}    ${eCommerce_bank_name}
+    ${account_number_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[4]
+    Should Be Equal    ${account_number_check}    ${eCommerce_account_number}
+    ${invoice_no_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[5]
+    Should Be Equal    ${invoice_no_check}    ${invoice_no}
+    ${invoice_url_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[6]
+    Should Be Equal    ${invoice_url_check}    ${invoice_url}
+    ${total_payment_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[7]
+    ${total_payment_check}    Evaluate    '${total_payment_check}'.replace('.','')
+    ${total_payment_check}    Evaluate    '${total_payment_check}'.replace('Rp ','')
+    Should Be Equal    ${total_payment_check}    ${total_payment}
+    ${notes_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[9]
+    Should Be Equal    ${notes_check}    ${notes}
+    Sleep    2s
+    Selenium2Library.Click Element    //div[3]/div[2]/div/div/button[1]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="remark1"]    timeout=10s
+    Selenium2Library.Input Text    //*[@id="remark1"]    test1
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="remark2"]    timeout=10s
+    Selenium2Library.Input Text    //*[@id="remark2"]    test2
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="pin"]    timeout=10s
+    Selenium2Library.Input Text    //*[@id="pin"]    123
+    Sleep    5s
+    Selenium2Library.Wait Until Element Is Visible    //div/div/cicil-admin-dynamic-form/div[2]/button    timeout=10s
+    Selenium2Library.Click Element    //div/div/cicil-admin-dynamic-form/div[2]/button
+
+test
+    Log    ${EXECDIR}${slashdir_${slashdir_envused}}Global-Resources${slashdir${slashdir_envused}}admin-images${slashdir${slashdir_envused}}rabbit.jpg
+    Log    ${slashdir_${slashdir_envused}}Global-Resources${slashdir${slashdir_envused}}admin-images${slashdir${slashdir_envused}}rabbit.jpg
+    ${ecommerce_name}=    Set Variable    Tokopedia
+    Set Global Variable    ${ecommerce_name}
+
+test2
+    ${hasil}=    Get Variable Value    ${ecommerce_name}
+
+*** Keywords ***
+loginadmin
+    Open Browser    https://marvel-staging-old.cicil.co.id/    Chrome
+    Maximize Browser Window
+    Selenium2Library.Wait Until Element Is Visible    //span[text()="Login/Register"]    timeout=5s
+    Click Element    //span[text()="Login/Register"]
+    Selenium2Library.Wait Until Element Is Visible    //input[@id="username"]    timeout=5s
+    Selenium2Library.Input Text    //input[@id="username"]    Dev@cicil.co
+    Selenium2Library.Wait Until Element Is Visible    //input[@id="password"]    timeout=5s
+    Selenium2Library.Input Text    //input[@id="password"]    Rahasia1
+    Selenium2Library.Wait Until Element Is Visible    //button[text()="Login"]    timeout=10s
+    Selenium2Library.Click Element    //button[text()="Login"]
+    Sleep    5s
+    Go To    https://marvel-staging-old.cicil.co.id/cicil4j4
+
+loginadminCLI
+    Open Browser    https://staging-beta.cicil.co.id/    Chrome
+    Maximize Browser Window
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="top"]/cicil-header/div[1]/div/div[1]/div/div[3]/div/div[1]/span/a    timeout=5s
+    Selenium2Library.Click Element    //*[@id="top"]/cicil-header/div[1]/div/div[1]/div/div[3]/div/div[1]/span/a
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="username"]    timeout=5s
+    Selenium2Library.Input Text    //*[@id="username"]    dev@cicil.co
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="password"]    timeout=5s
+    Selenium2Library.Input Text    //*[@id="password"]    Rahasia1
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="button"]    timeout=5s
+    Selenium2Library.Click Element    //*[@id="button"]
+
+Order Information
+    Selenium2Library.Wait Until Element Is Visible    //div[1]//div//div[contains(@class,"col-12 mb-2")]//a[contains(text(),"${order_no}")]
+    ${order_no_check}    Selenium2Library.Get Text    //div[1]//div//div[contains(@class,"col-12 mb-2")]//a[contains(text(),"${order_no}")]
+    ${order_no_check}    Evaluate    '${order_no_check}'.replace('#','')
+    Should Be Equal    ${order_no_check}    ${order_no}
+    Comment    ${url_order_check}    Get Value    //div[1]/div/div[3]//div[2][contains(@class,"col-12 mb-2")]//a[contains(@href,"${url_order}")]
+    Comment    Should Be Equal    ${url_order_check}    ${url_order}
+    ${price_check}    Selenium2Library.Get Text    //div/div[1]/div/div[5]/div[2][contains(text(),"")]
+    ${price_check}    Evaluate    '${price_check}'.replace('.','')
+    ${price_check}    Evaluate    '${price_check}'.replace('Rp ','')
+    Should Be Equal    ${price_check}    ${price}
+    ${down_payment_check}    Selenium2Library.Get Text    //div/div[1]/div/div[6]/div[2][contains(text(),"")]
+    ${down_payment_check}    Evaluate    '${down_payment_check}'.replace('.','')
+    ${down_payment_check}    Evaluate    '${down_payment_check}'.replace('Rp ','')
+    Should Be Equal    ${down_payment_check}    ${down_payment}
+    ${installment+tenur_check}    Selenium2Library.Get Text    //div/div[1]/div/div[7]/div[2][contains(text(),"")]
+    ${installment+tenur_check}    Evaluate    '${installment+tenur_check}'.replace('.','')
+    ${installment+tenur_check}    Evaluate    '${installment+tenur_check}'.replace('Rp','')
+    ${installment+tenur_check}    Evaluate    '${installment+tenur_check}'.replace(')','')
+    ${installment+tenur_check}    Evaluate    '${installment+tenur_check}'.replace('(','')
+    ${installment+tenur_check}    Evaluate    '${installment+tenur_check}'.replace('x','')
+    ${cat}=    Catenate    ${installment} ${tenure}
+    Comment    Should Be Equal    ${installment+tenur_check}    @{installment+tenure}
+    Comment    Should Be Equal    ${installment+tenur_check}    ${cat}
+
+User Information
+    Sleep    2s
+    ${university_check}    Selenium2Library.Get Text    //div/div[2]/div/div[2]/div[2][contains(text(),"")]
+    Should Be Equal    ${university_check}    ${university}
+    ${email_check}    Selenium2Library.Get Text    //div/div[2]/div/div[4]/div[2][contains(text(),"")]
+    Should Be Equal    ${email_check}    ${email}
+    ${phone_check}    Selenium2Library.Get Text    //div/div[2]/div/div[5]/div[2][contains(text(),"")]
+    Should Be Equal    ${phone_check}    ${phone}
+    #shipping address
+    ${address_check}    Selenium2Library.Get Text    //div/div[2]/div/div[6]/div[2]/span[1][contains(text(),"")]
+    Should Be Equal    ${address_check}    ${address}
+    ${district_address_check}    Selenium2Library.Get Text    //div/div[2]/div/div[6]/div[2]/span[2][contains(text(),"")]
+    ${district_address_check}    Evaluate    '${district_address_check}'.replace(',','')
+    Should Be Equal    ${district_address_check}    ${district_address}
+    ${city_address_check}    Selenium2Library.Get Text    //div/div[2]/div/div[6]/div[2]/span[3][contains(text(),"")]
+    Should Be Equal    ${city_address_check}    ${city_address}
+    ${zip_code_check}    Selenium2Library.Get Text    //div/div[2]/div/div[6]/div[2]/span[4][contains(text(),"")]
+    Should Be Equal    ${zip_code_check}    ${zip_code}
+
+Ambassador Information
+    Sleep    1s
+    ${email_ambassador_check}    Selenium2Library.Get Text    //div/div[3]/div/div[4]/div[2][contains(text(),"")]
+    Should Be Equal    ${email_ambassador_check}    ${email_ambassador}
+
+loginadminCLI[Dream]
+    Comment    Open Browser    https://staging-beta.cicil.co.id/    Chrome
+    Comment    Maximize Browser Window
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="top"]/cicil-header/div[1]/div/div[1]/div/div[3]/div/div[1]/span/a    timeout=5s
+    Selenium2Library.Click Element    //*[@id="top"]/cicil-header/div[1]/div/div[1]/div/div[3]/div/div[1]/span/a
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="username"]    timeout=5s
+    Selenium2Library.Input Text    //*[@id="username"]    dream@mailinator.com
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="password"]    timeout=5s
+    Selenium2Library.Input Text    //*[@id="password"]    1234567A
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="button"]    timeout=5s
+    Selenium2Library.Click Element    //*[@id="button"]

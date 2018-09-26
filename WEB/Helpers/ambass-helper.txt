@@ -1,0 +1,3 @@
+*** Keywords ***
+wait until memuat data finished
+    Wait Until Keyword Succeeds    3x    2s    Selenium2Library.Wait Until Page Does Not Contain    Memuat data...

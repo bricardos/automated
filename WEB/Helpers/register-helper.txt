@@ -1,0 +1,37 @@
+*** Settings ***
+Library           Selenium2Library
+Resource          ../resource-folder/register.txt
+Resource          ../resource-folder/notification.txt
+
+*** Keywords ***
+Fill In Kode Referral
+    ### input and submit referral code
+    Selenium2Library.Wait Until Element Is Visible    //button[text()='Validasi']    timeout=${generalTimeout}
+    Selenium2Library.Element Should Be Disabled    //button[text()='Validasi']
+    Selenium2Library.Input Text    //input[contains(@id, 'referral_code')]    ${isuse_kodereferral_value}
+    Selenium2Library.Element Should Be Enabled    //button[text()='Validasi']
+    Selenium2Library.Click Element    //button[text()='Validasi']
+    ### wait referral code validation
+    Selenium2Library.Wait Until Element Is Visible    //div[contains(@class, 'notification-panel success')]/span    timeout=${generalTimeout}
+    ${msgOnScreen}=    Selenium2Library.Get Text    //div[contains(@class, 'notification-panel success')]/span
+    Should Be Equal As Strings    ${msgOnScreen}    ${isuse_kodereferral_value_success}
+    Log    >>> kode referral filled in successfully
+    Sleep    1s
+
+Close Voucher Pop Up
+    ### add close voucher popup on profile page
+    Selenium2Library.Wait Until Element Is Visible    //img[contains(@class, 'voucher')]    timeout=${generalTimeout}
+    Selenium2Library.Click Element    //img[contains(@src, 'assets/images/close_icon.svg')]
+
+wait until email fully loaded
+    [Arguments]    ${iframe_locator}
+    ### move to side frame
+    ### https://stackoverflow.com/questions/52178556/gmail-waiting-for-the-page-for-fully-loaded#52179093
+    Log    >>> start keyword log <<<
+    Log    >>> selecting side iframe for google hangout
+    Selenium2Library.Select Frame    ${iframe_locator}
+    Wait Until Keyword Succeeds    20x    3s    Selenium2Library.Page Should Contain Element    //button[contains(@title, 'New conversation')]
+    ### back to main page
+    Log    >>> page fully loaded. going back to main page
+    Selenium2Library.Unselect Frame
+    Log    >>> end keyword log <<<

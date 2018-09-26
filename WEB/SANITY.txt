@@ -1,220 +1,91 @@
 *** Settings ***
-Test Teardown     Close Browser
 Library           HttpLibrary.HTTP
+Library           Selenium2Library
 Library           RequestsLibrary
 Library           xml.etree.ElementTree    WITH NAME    ET
 Library           XML
-Library           SeleniumLibrary
 Library           BuiltIn
 Library           String
 
 *** Variables ***
-@{user_email}     testing42@cicil.co.id
+@{user_email}     testing+edo141@cicil.co.id
 @{user_pass}      1234567A
-@{KTP}            7127638798359679
+@{ktp}            5823090273745131
+@{url_main}       https://staging.cicil.co.id/
+@{url_marvel}     https://marvel-staging.cicil.co.id/
+@{url_scd}        https://scd-staging.cicil.co.id/
 
 *** Test Cases ***
 Register
-    [Documentation]    Register User Baru
-    Comment    expected result
-    Open Browser    https://marvel-staging.cicil.co.id/    chrome
+    Open Browser    @{url_main}    chrome
     Maximize Browser Window
     ${ID}=    set variable    @{user_email}
-
-Login
-    [Documentation]    cobacoba
-    Open Browser    https://staging.cicil.co.id/    chrome
-    Maximize Browser Window
-    Set Selenium Speed    2 second
-    click element    xpath=//*[@id="header"]/div/div/d1]/div/div/div[3]/div/a
-    login
-
-ISI PROFILE
-    Open Browser    https://staging.cicil.co.id/    chrome
-    Maximize Browser Window
-    ${ID}=    set variable    @{useremail}
-    Set Selenium Speed    1 second
+    wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a    timeout=7s
     Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    wait until element is visible    xpath=//*[@id="username"]    timeout=5s
-    Input Text    xpath=//*[@id="username"]    ${ID}
-    wait until element is visible    xpath=//*[@id="password"]    timeout=5s
+    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/div/div/small/span[1]
+    wait until element is visible    xpath=//*[@id="email"]    timeout=5s
+    Input Text    xpath=//*[@id="email"]    ${ID}
+    wait until element is visible    xpath=//*[@id="phonenumber"]    timeout=5s
+    Input Text    xpath=//*[@id="phonenumber"]    81373989259
     Input Text    xpath=//*[@id="password"]    1234567A
-    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
-    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    wait until element is visible    xpath=//*[@id="firstname"]    timeout=5s
-    Input Text    xpath=//*[@id="firstname"]    sarjana
-    wait until element is visible    xpath=//*[@id="lastname"]    timeout=5s
-    Input Text    xpath=//*[@id="lastname"]    muda
-    Execute Javascript    window.scrollBy(0,450)
-    Click Element    xpath=//*[@id="dob"]
-    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[61]
-    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[1]/option[10]
-    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[3]/td[5]/div
-    wait until element is visible    xpath=//*[@id="id_card_no"]    timeout=5s
-    Input Text    xpath=//*[@id="id_card_no"]    1334307478158865
-    Execute Javascript    window.scrollBy(0,300)
-    Choose File    xpath=//*[@id="id_card_button"]    /Users/cicil/Documents/e-ktp.jpg
-    Sleep    4 seconds
-    Choose File    xpath=//*[@id="photo_button"]    /Users/cicil/Documents/e-ktp.jpg
-    sleep    4 seconds
-    Execute Javascript    window.scrollBy(0,200)
-    Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
-    Execute Javascript    window.scrollBy(0,-750)
-
-tempat coba
-    Open Browser    https://kumparan.com/    chrome
-    Maximize Browser Window
-    Set Selenium Speed    1seconds
-    sleep    5s
-    Click Element    xpath=//*[@id="onesignal-popover-cancel-button"]
-    Get Window Titles
-    ${windowstitle}=    Get Title
-    sleep    2s
-    Click Element    xpath=//*[@id="content"]/div/div/div/nav/div/div/div/ul/li[1]/a
-    sleep    1s
-    Comment    Click Element    xpath=//*[@id="content"]/div/div/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/button
-    Click Element    xpath=//*[@id="content"]/div/div/div/div[2]/div[2]/div/div[1]/div[2]/div[2]/button/span
-    sleep    4s
-    Get Window Titles
-    Get Location
-    Comment    Input Text    xpath=//*[@id="identifierId"]    ulala@gmail.com
-    Comment    Set Test Variable    ${link}=    https://accounts.google.com/signin/oauth/identifier?client_id=203797405389-ebvfbi965n9kis0qeg8h8mgq40fr5i7k.apps.googleusercontent.com&as=ADGJNU48-1LNngxf2GeEGQ&destination=https%3A%2F%2Fkumparan.com&approval_state=!ChQwaHFXWWdST1FrU2gxSDlmOXJkNBIfWXdJU3RTSE9fRTRWVU9xWmlfQjdtUjgwZnR5b0lCWQ%E2%88%99ACThZt4AAAAAWqPDnvpe5OhpLfBfrfhwTputZ2CC-CXi&xsrfsig=AHgIfE89JY54q47WAZCyr7SILAo6mYIHhw&flowName=GeneralOAuthFlow
-    Select Window    title=Sign in - Google Accounts
-    Input Text    xpath=//*[@id="identifierId"]    bangkev12@gmail.com
-    Click Element    xpath=//*[@id="identifierNext"]/content/span
-    Input Text    xpath=//*[@id="password"]/div[1]/div/div[1]/input    CObacoba1
-    Click Element    xpath=//*[@id="passwordNext"]/content/span
-    Sleep    13s
-    Select Window    title=${windowstitle}
-    Page Should Contain Element    link=Kumparan
-    Click Element    xpath=//*[@id="dropdown-profile"]/img
-    Click Element    xpath=//*[@id="content"]/div/div/div/nav/div/div/div/ul/li[3]/ul/li[5]/a
-    ${text button}=    Get Text    xpath=//*[@id="content"]/div/div/div/nav/div/div/div/ul/li[1]/a
-    BuiltIn.Should Contain    ${text button}    Log In / Sign Up
-    Comment    Select Window    title=Login
-    Comment    Click Element    xpath=//*[@id="content"]/div/div/div/nav/div/div/ul/li[3]/a
-
-coba api
-    ${body}=    Set Variable    {"username":"bangkev12+web20@gmail.com","password":"1234567A"}
+    Execute Javascript    window.scrollBy(0,400)
+    Input Text    xpath=//*[@id="verify_password"]    1234567A
+    Comment    Input Text    xpath=//*[@id="referral_code"]    amb5
+    Comment    Click Element    xpath=//*[@id="cicil_component"]/register_inline/div/div/div/div[2]/div[2]/div[1]/div[2]/div/referral-code-validator/div/div/div/div/div/span/button
+    comment    wait until element is visible    xpath=//*[@id="cicil_component"]/register_inline/div/div/div/div[2]/div[2]/div[1]/div[2]/div/referral-code-validator/div/div/div/div[2]/div/span    timeout=5s
+    Click Element    xpath=//*[@id="cicil_component"]/register_inline/div/div/div/div[2]/div[2]/div[1]/div[3]/div[1]/button
+    Sleep    1s
+    Click Element    xpath=//*[@id="cicil_component"]/register_inline/div/div/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/button
+    Execute Javascript    window.scrollBy(0,250)
+    wait until element is visible    xpath=//*[@id="otp"]    timeout=10s
+    Click Element    xpath=//*[@id="otp"]
+    Create Session    acceptor_register    http://dhooker.kiubernetis.cf
+    ${resp_dhooker_clear}=    Get Request    acceptor_register    /clear/1527676381
+    Should Be Equal As Strings    ${resp_dhooker_clear.status_code}    200
+    ${resp_dhooker_subscribe}=    Get Request    acceptor_register    /subscribe/1527676381
+    Should Be Equal As Strings    ${resp_dhooker_subscribe.status_code}    200
+    ${resp_dhooker_subscribe}=    Get Request    acceptor_register    /subscribe/1527676381
+    Should Be Equal As Strings    ${resp_dhooker_subscribe.status_code}    200
+    Input Text    xpath=//*[@id="otp"]    ${resp_dhooker_subscribe.json()['otp']}
+    Click Element    xpath=//*[@id="cicil_component"]/verify-phone/div/div/div/div[2]/div[2]/div/div[2]/div/div[4]/div[3]/button
+    Execute Javascript    window.scrollBy(0,150)
+    ${body}=    Set Variable    {"username":"${ID}","password":"1234567A"}
     Create Session    acceptor    http://api-staging.cicil.co.id/v1
-    ${headers}=    Create Dictionary    key=token
+    ${headers}=    Create Dictionary    key=token    key2=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaWNpbCI6IntcImNpXCI6XCJjaV80NVwiLFwiY29cIjpcImY0NDUzZjY5MWQ4YTc5ZGQzNzdhMjQzMTQzNGVmYWYxXCJ9IiwiZXhwIjoxNTIxMDEzMzI2LCJpYXQiOjE1MjEwMDk3MjZ9.yl3RttrPvz1qdKppkaU52OFp9aZR8cR5dsi2UaZoCFU
     ${resp}=    Post Request    acceptor    /ciciluser    data=${body}
     Should Not Contain    ${resp}    Wrong username or password
     ${resp2}=    Get Request    acceptor    /registration/activate_email
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${token}=    Set Variable    ${resp.json()['token']}
-    Comment    ${install}=    Get Request    acceptor    /profile
-    Comment    ${installrespon}=    Set Variable    ${install.json()}
+    Should Be Equal As Strings    ${resp2.status_code}    200
+    sleep    5s
+    Click Element    xpath=//*[@id="cicil_component"]/verify-email/div/div/div/div[2]/div[2]/div/div/div[3]/div[2]/button
+    Comment    Click Element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[7]/span[2]
+    sleep    3s
+    comment    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/got-voucher-modal/div/div[1]/img
+    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[4]/ul/li[1]/a
 
-coba 2
-    Comment    ${body}=    Set Variable    {"username":"bangkev12+web20@gmail.com","password":"1234567A"}
-    ${inquirypayment}=    Create Dictionary    MALLID=4924    CHAINMERCHANT=0    AMOUNT=157804    WORDS=d68265033cdf4cc434f20787e0038ce4f0da4a10    PAYMENTCHANNEL=22
-    ...    PAYMENTCODE=1021710000000259
-    Create Session    acceptor    http://api-staging.cicil.co.id/v1
-    ${headers}=    Create Dictionary    key=token    Content-Type=application/x-www-form-urlencoded
-    ${resppayment}=    Post Request    acceptor    /payment/callback/doku/inquiry    data=${inquirypayment}    headers=${headers}
-    ${INQUIRY_RESPONSE}=    Parse Xml    ${resppayment.text}
-    ${x}    Get Element    ${INQUIRY_RESPONSE}    TRANSIDMERCHANT
-    Log    ${x.text}
-    ${notifypayment}    Create Dictionary    MALLID=0    AMOUNT=157804    CHAINMERCHANT=0    TRANSIDMERCHANT=${x.text}    WORDS=737cb3824d3c52be9b5f608b643f3ac0b26694a3
-    ...    STATUSTYPE=P    RESPONSECODE=0    APPROVALCODE=102476957    RESULTMSG=SUCCESS    PAYMENTCHANNEL=34    PAYMENTCODE=1021710000000259
-    ...    SESSIONID=session1    BANK=BRI    MCN=1021710000000259    PAYMENTDATETIME=20171119130851    VERIFYID=0    VERIFYSCORE=-1
-    ...    VERIFYSTATUS=NA
-    ${headers2}=    Create Dictionary    Content-Type=application/json
-    ${resppayment2}    Post Request    acceptor    /payment/callback/doku/notify    data=${notifypayment}    headers=${headers}
-    Comment    Should Be Equal    ${inquiryrespon.TRANSIDMERCHANT}    INQUIRY_RESPONSE
-    Comment    Should Not Contain    ${resp}    Wrong username or password
-    Comment    ${resp2}=    Get Request    acceptor    /registration/activate_email
-    Comment    Should Be Equal As Strings    ${resp.status_code}    200
-    Comment    ${token}=    Set Variable    ${resp.json()['token']}
-    Comment    ${install}=    Get Request    acceptor    /profile
-    Comment    ${installrespon}=    Set Variable    ${install.json()}
-
-ubah password
-    Open Browser    https://staging.cicil.co.id/    chrome
-    Maximize Browser Window
-    Set Selenium Speed    2 second
-    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    sleep    2s
-    Comment    Input Text    xpath=//*[@id="username"]    bangkev12+b81@gmail.com
-    login
-    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    Click Element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[6]/span[2]
-    Input Text    xpath=//*[@id="old_password"]    1234567A
-    Input Text    xpath=//*[@id="new_password"]    12345678A
-    Input Text    xpath=//*[@id="verify_password"]    12345678A
-    Click Element    xpath=//*[@id="account_component"]/div[2]/change-password/div/form/div/div[2]/button
-
-coba3
-    Open Browser    https://staging.cicil.co.id/    safari
-    Maximize Browser Window
-    set selenium speed    2 second
-
-uang muka
-    Open Browser    https://staging.cicil.co.id/    chrome
-    Maximize Browser Window
-    ${ID}=    set variable    @{useremail}
-    ${KTP}=    set variable    1334307478158834
-    Set Selenium Speed    1seconds
-    wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a    timeout=5s
-    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    Input Text    xpath=//*[@id="username"]    ${ID}
-    Input Text    xpath=//*[@id="password"]    1234567A
-    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
-    comment    Location Should Be    https://staging.cicil.co.id/
-    Sleep    3 seconds
+Isi biodata
     ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
     BuiltIn.Should Contain    ${text button}    Akun Saya
-    Comment    sleep    2s
-    click element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    Comment    Go To    https://staging.cicil.co.id/profile
-    wait until element is visible    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[2]/span[2]    timeout=8s
-    click element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[2]/span[2]
-    click element    xpath=//*[@id="account_component"]/div[2]/order_process/div/div[1]/div/div/div[2]/div/button
-    Execute Javascript    window.scrollBy(0,500)
-    click element    xpath=//*[@id="cicil_component"]/payment/div/div/div/div/div/div[2]/div/payment_bank_select/div[2]/div/div/div/div[4]/div/div[1]/div[2]/div
-    Execute Javascript    window.scrollBy(0,400)
-    click element    xpath=//*[@id="cicil_component"]/payment/div/div/div/div/div/div[2]/div/payment_bank_select/div[3]/div[2]/button
-    ${nomor_va}=    Get Text    xpath=//*[@id="cicil_component"]/payment/div/div/div/div/div/div[2]/div/payment_guide_base/div/div[2]/div/div/div[2]/span
-    ${amount}    Get Text    xpath=//*[@id="cicil_component"]/payment/div/div/div/div/div/div[1]/div/payment_detail/div/div[3]/div/div/div[2]
-    Log    text=${amount}
-    ${inquirypayment}=    Create Dictionary    MALLID=4924    CHAINMERCHANT=0    AMOUNT=100000    WORDS=d68265033cdf4cc434f20787e0038ce4f0da4a10    PAYMENTCHANNEL=22
-    ...    PAYMENTCODE=${nomor_va}
-    Create Session    acceptor    http://api-staging.cicil.co.id/v1
-    ${headers}=    Create Dictionary    key=token    Content-Type=application/x-www-form-urlencoded
-    ${resppayment}=    Post Request    acceptor    /payment/callback/doku/inquiry    data=${inquirypayment}    headers=${headers}
-    ${INQUIRY_RESPONSE}=    Parse Xml    ${resppayment.text}
-    ${x}    Get Element    ${INQUIRY_RESPONSE}    TRANSIDMERCHANT
-    Log    ${x.text}
-    ${notifypayment}    Create Dictionary    MALLID=0    AMOUNT=100000    CHAINMERCHANT=0    TRANSIDMERCHANT=${x.text}    WORDS=737cb3824d3c52be9b5f608b643f3ac0b26694a3
-    ...    STATUSTYPE=P    RESPONSECODE=0    APPROVALCODE=102476957    RESULTMSG=SUCCESS    PAYMENTCHANNEL=34    PAYMENTCODE=${nomor_va}
-    ...    SESSIONID=session1    BANK=BRI    MCN=${nomor_va}    PAYMENTDATETIME=20171119130851    VERIFYID=0    VERIFYSCORE=-1
-    ...    VERIFYSTATUS=NA
-    ${headers2}=    Create Dictionary    Content-Type=application/json
-    ${resppayment2}    Post Request    acceptor    /payment/callback/doku/notify    data=${notifypayment}    headers=${headers}
-    click element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    wait until element is visible    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[2]/span[2]    timeout=8s
-    click element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[2]/span[2]
-    wait until element is not visible    xpath=//*[@id="account_component"]/div[2]/order_process/div/div[1]/div/div/div[2]/div/button    timeout=3s
-
-isi biodata
-    [Documentation]    Isi biodata user
-    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    BuiltIn.Should Contain    ${text button}    Akun Saya
-    sleep    2s
+    sleep    1s
     Go To    https://staging.cicil.co.id/profile
     comment    wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i    timeout=5s
     comment    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
     Execute Javascript    window.scrollBy(0,250)
-    Set Selenium Speed    1 second
+    Set Selenium Speed    1 seconds
+    Wait Until Element Is Visible    xpath=//*[@id="firstname"]    timeout=5s
     Input Text    xpath=//*[@id="firstname"]    hello
+    Wait Until Element Is Visible    xpath=//*[@id="lastname"]    timeout=5s
     Input Text    xpath=//*[@id="lastname"]    automated
+    Wait Until Element Is Visible    xpath=//*[@id="dob"]    timeout=5s
     Click Element    xpath=//*[@id="dob"]
+    Wait Until Element Is Visible    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]    timeout=5s
     Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Wait Until Element Is Visible    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]    timeout=5s
     Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[66]
     Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[4]/div
     Execute Javascript    window.scrollBy(0,400)
-    Input Text    xpath=//*[@id="id_card_no"]    ${KTP}
+    Wait Until Element Is Visible    xpath=//*[@id="id_card_no"]
+    Input Text    xpath=//*[@id="id_card_no"]    @{ktp}
     Choose File    xpath=//*[@id="id_card_button"]    /Users/cicil/Documents/e-ktp.jpg
     Sleep    4 seconds
     Choose File    xpath=//*[@id="photo_button"]    /Users/cicil/Documents/e-ktp.jpg
@@ -225,6 +96,7 @@ isi biodata
     Execute Javascript    window.scrollBy(0,350)
     sleep    2 seconds
     Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[1]/mdform_typeahead/div/input    bandung
+    Wait Until Element Is Visible    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[1]/mdform_typeahead/div/typeahead-container/ul/li[1]/a    timeout=5s
     Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[1]/mdform_typeahead/div/typeahead-container/ul/li[1]/a
     Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[2]/mdform_typeahead/div/input    band
     Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[2]/mdform_typeahead/div/typeahead-container/ul/li/a
@@ -240,6 +112,7 @@ isi biodata
     Input Text    xpath=//*[@id="student_no"]    9086560378
     Choose File    xpath=//*[@id="student_card_button"]    /Users/cicil/Documents/e-ktp.jpg
     Sleep    3 seconds
+    Execute Javascript    window.scrollBy(0,220)
     Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[2]/button
     Execute Javascript    window.scrollBy(0,-750)
     sleep    2 seconds
@@ -251,9 +124,12 @@ isi biodata
     sleep    2 seconds
     Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[2]/div[1]/mdform_typeahead/div/input    jaka
     Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[2]/div[1]/mdform_typeahead/div/typeahead-container/ul/li[3]/a
+    wait until element is visible    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div/address-form/div[2]/div[2]/mdform_typeahead/div/input    timeout=5s
     Input Text    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div/address-form/div[2]/div[2]/mdform_typeahead/div/input    keba
+    wait until element is visible    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div/address-form/div[2]/div[2]/mdform_typeahead/div/typeahead-container/ul/li[1]/a    timeout=5s
     Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div/address-form/div[2]/div[2]/mdform_typeahead/div/typeahead-container/ul/li[1]/a
-    Execute Javascript    window.scrollBy(0,350)
+    Execute Javascript    window.scrollBy(0,250)
+    Wait Until Element Is Visible    xpath=//*[@id="postal_code"]    timeout=5s
     Input Text    xpath=//*[@id="postal_code"]    54321
     Execute Javascript    window.scrollBy(0,120)
     Click Element    xpath=//*[@id="fix_address_type"]
@@ -288,58 +164,14 @@ isi biodata
     Click Element    xpath=//*[@id="account_component"]/div[2]/ciciluser/div/div[3]/div/div[2]/button
     Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[4]/ul/li[1]/a
 
-Register (non referral)
-    Comment    expected result
-    Open Browser    https://staging.cicil.co.id/    chrome
-    Maximize Browser Window
-    ${ID}=    set variable    @{user_email}
-    wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a    timeout=5s
-    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/div/div/small/span[1]
-    wait until element is visible    xpath=//*[@id="email"]    timeout=5s
-    Input Text    xpath=//*[@id="email"]    ${ID}
-    wait until element is visible    xpath=//*[@id="phonenumber"]    timeout=5s
-    Input Text    xpath=//*[@id="phonenumber"]    81373989259
-    Input Text    xpath=//*[@id="password"]    1234567A
-    Execute Javascript    window.scrollBy(0,400)
-    Input Text    xpath=//*[@id="verify_password"]    1234567A
-    Click Element    xpath=//*[@id="cicil_component"]/register_inline/div/div/div/div[2]/div[2]/div[1]/div[3]/div[1]/button
-    Sleep    1s
-    Click Element    xpath=//*[@id="cicil_component"]/register_inline/div/div/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/button
-    Execute Javascript    window.scrollBy(0,250)
-    wait until element is visible    xpath=//*[@id="otp"]    timeout=5s
-    Click Element    xpath=//*[@id="otp"]
-    Sleep    10s
-    Click Element    xpath=//*[@id="cicil_component"]/verify-phone/div/div/div/div[2]/div[2]/div/div[2]/div/div[4]/div[3]/button
-    Execute Javascript    window.scrollBy(0,150)
-    ${body}=    Set Variable    {"username":"${ID}","password":"1234567A"}
-    Create Session    acceptor    http://api-staging.cicil.co.id/v1
-    ${headers}=    Create Dictionary    key=token    key2=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaWNpbCI6IntcImNpXCI6XCJjaV80NVwiLFwiY29cIjpcImY0NDUzZjY5MWQ4YTc5ZGQzNzdhMjQzMTQzNGVmYWYxXCJ9IiwiZXhwIjoxNTIxMDEzMzI2LCJpYXQiOjE1MjEwMDk3MjZ9.yl3RttrPvz1qdKppkaU52OFp9aZR8cR5dsi2UaZoCFU
-    ${resp}=    Post Request    acceptor    /ciciluser    data=${body}
-    Should Not Contain    ${resp}    Wrong username or password
-    ${resp2}=    Get Request    acceptor    /registration/activate_email
-    Should Be Equal As Strings    ${resp2.status_code}    200
-    sleep    5s
-    Click Element    xpath=//*[@id="cicil_component"]/verify-email/div/div/div/div[2]/div[2]/div/div/div[3]/div[2]/button
-    wait until element is visible    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[1]/span[2]    timeout=8s
-
 Order
-    Open Browser    https://staging.cicil.co.id/    chrome
-    Maximize Browser Window
-    ${ID}=    set variable    @{useremail}
-    Set Selenium Speed    1 second
-    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    wait until element is visible    xpath=//*[@id="username"]    timeout=5s
-    Input Text    xpath=//*[@id="username"]    ${ID}
-    wait until element is visible    xpath=//*[@id="password"]    timeout=5s
-    Input Text    xpath=//*[@id="password"]    1234567A
-    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
     ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
     BuiltIn.Should Contain    ${text button}    Akun Saya
     Comment    Click Element    xpath=//*[@id="header"]/div/div/div[1]/div[3]/i
-    Set Selenium Speed    2 seconds
+    Set Selenium Speed    1 seconds
     Execute Javascript    window.scrollBy(0,100)
-    Input Text    xpath=//*[@id="copasurl_form"]/input[2]    https://www.tokopedia.com/scooterlike/variator-polini-with-flyweel?refined=true&trkid=f=Ca0000L000P0W0S0Sh00Co0Po0Fr0Cb0_src=search_page=1_ob=23_q=variator+polini_catid=1352_po=1
+    comment    Input Text    xpath=//*[@id="copasurl_form"]/input[2]    https://www.tokopedia.com/scooterlike/variator-polini-with-flyweel?refined=true&trkid=f=Ca0000L000P0W0S0Sh00Co0Po0Fr0Cb0_src=search_page=1_ob=23_q=variator+polini_catid=1352_po=1
+    Input Text    xpath=//*[@id="copasurl_form"]/input[2]    https://www.tokopedia.com/miband/xiaomi-yi-action-camera-wifi-hitam
     sleep    2 seconds
     Click Element    xpath=//*[@id="copasurl_form"]/button
     Execute Javascript    window.scrollBy(0,250)
@@ -356,173 +188,186 @@ Order
     Click Element    xpath=//*[@id="cicil_component"]/apply-confirmation/div/div[5]/div/div[2]/div[1]/div/div[1]/div
     Click Element    xpath=//*[@id="cicil_component"]/apply-confirmation/div/div[5]/div/div[2]/div[2]/button
     wait until element is visible    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/input_otp_modal/div/div[1]/input    timeout=5s
-    click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/input_otp_modal/div/div[1]/input
-    sleep    13s
+    Comment    click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/input_otp_modal/div/div[1]/input
+    Create Session    acceptor_order    http://dhooker.kiubernetis.cf
+    ${resp_dhooker_clear_order}=    Get Request    acceptor_order    /clear/1527676381
+    Should Be Equal As Strings    ${resp_dhooker_clear_order.status_code}    200
+    ${resp_dhooker_subscribe_order}=    Get Request    acceptor_order    /subscribe/1527676381
+    log    ambilotp=${resp_dhooker_subscribe_order}
+    Should Be Equal As Strings    ${resp_dhooker_subscribe_order.status_code}    200
+    ${resp_dhooker_subscribe_order}=    Get Request    acceptor_order    /subscribe/1527676381
+    log    ambilotp=${resp_dhooker_subscribe_order}
+    Should Be Equal As Strings    ${resp_dhooker_subscribe_order.status_code}    200
+    Input Text    //*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/input_otp_modal/div/div[1]/input    ${resp_dhooker_subscribe_order.json()['otp']}
     click element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/input_otp_modal/div/div[3]/button
     wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a    timeout=5s
     click element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    wait until element is visible    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[9]/span[2]    timeout=5s
-    click element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[9]/span[2]
+    wait until element is visible    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[7]/span[2]    timeout=10s
+    click element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[7]/span[2]
     ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
     BuiltIn.Should Contain    ${text button}    Login/Register
 
-meetup
-    Open Browser    https://marvel-staging.cicil.co.id/    chrome
-    Maximize Browser Window
-    Wait Until Element Is Visible    //a[text()="Masuk"]    timeout=10s
-    Click Element    //a[text()="Masuk"]
-    Wait Until Element Is Visible    //input[@id="username"]    timeout=5s
-    Input Text    //input[@id="username"]    amb5@mailinator.com
-    Wait Until Element Is Visible    //input[@id="password"]    timeout=5s
-    Input Text    //input[@id="password"]    1234567A
-    Wait Until Element Is Visible    //cicil-button-submit//button[text()="Masuk"]    timeout=5s
-    Click Element    //cicil-button-submit//button[text()="Masuk"]
-    BuiltIn.Sleep    1s
-    Wait Until Element Is Visible    //button[text()="Akun Saya"]    timeout=5s
-    Click Element    //button[text()="Akun Saya"]
-    Wait Until Element Is Visible    //span[text()="List User"]    timeout=5s
-    Click Element    //span[text()="List User"]
-    Wait Until Element Is Visible    //span[text()="ORD180107-174780"]    timeout=5s
-    Click Element    //span[text()="ORD180107-174780"]
-    Wait Until Element Is Visible    //*[@id="top"]/cicil-account/div/div/div/div[2]/cicil-user-list/div/div/cicil-tab/div/div[2]/div/div[3]/cicil-accordion/div/div/div/div/div/div/accordion-content/cicil-user-list-detail/div/div[1]/cicil-panel/div/div/div/div/div[1]/button[1]    timeout=5s
-    Click Element    //*[@id="top"]/cicil-account/div/div/div/div[2]/cicil-user-list/div/div/cicil-tab/div/div[2]/div/div[3]/cicil-accordion/div/div/div/div/div/div/accordion-content/cicil-user-list-detail/div/div[1]/cicil-panel/div/div/div/div/div[1]/button[1]
-    Wait Until Element Is Visible    //input[@id="meetup_time"]    timeout=5s
-    Click Element    //input[@id="meetup_time"]
-    BuiltIn.Sleep    4s
-
-assign ambassador
+Verification user
     loginadmin
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[6]/div[2]
     Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[6]/div[2]
     #Input Email
     Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[2]/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    timeout=5s
-    Input Text    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[2]/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    bangkev12+appweb@gmail.com
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[2]/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    @{user_email}
     #Click email
     sleep    3s
     comment    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[2]/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]/span/span    timeout=5s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[2]/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]/span/span
     #Click Mulai Verifikasi button
-    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[1]/div/button[2]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[1]/div/button[2]    timeout=6
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[1]/div/button[2]
     #Question 1, Click yes and next
-    Sleep    2s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 2, Click yes and next
-    sleep    2s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 3, Click yes and next
-    Sleep    2s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 4, Click yes and next
-    Sleep    2s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 5, Click yes and next
-    Sleep    2s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 6, Click yes and next
-    Sleep    2s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 7, Click yes and next
-    Sleep    2s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 8, Click yes and next
-    Sleep    2s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 10, Click yes and next
-    Sleep    2s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 9, Click yes and next
-    Sleep    2s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=5s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 11, Click yes and next
-    Sleep    2s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
     #Question 12, Click yes and next
-    Sleep    2s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
-    sleep    2s
+    sleep    1s
     Execute Javascript    window.scrollBy(0,250)
-    Sleep    2s
+    Comment    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-email/section/div[1]/div/div[2]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-email/section/div[1]/div/div[2]/button[3]
     #see order
-    sleep    2s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-email/section/div[2]/button[3]    timeout=6s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-email/section/div[2]/button[3]
     Execute Javascript    window.scrollBy(0,-250)
-    Wait Until Element Is Visible    //*[@id="md-tab-content-0-3"]/div/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]/span/span
+    Wait Until Element Is Visible    //*[@id="md-tab-content-0-3"]/div/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]/span/span    timeout=5s
     Click Element    //*[@id="md-tab-content-0-3"]/div/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]/span/span
-    sleep    3s
     ${ord}=    Get Value    xpath=//*[@id="order_no"]
-    Log    order_id=${ord}
-    Set Global Variable    ${ord}
+    ${order_no}    BuiltIn.Set Variable    ${ord}
+    Log    order_id=${order_no}
+    Set Global Variable    ${order_no}
     Comment    @{ord}=    ${ord_id}
-    Comment    Sleep    2s
+    Comment    Sleep    1s
     Comment    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-email/section/div[2]/button[1]
     Comment    Wait Until Element Is Visible    xpath=//*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-email/section/div[2]/button[3]    timeout=5s
     Comment    click element    xpath=//*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-email/section/div[2]/button[3]
     Comment    wait until element is visible    xpath=//*[@id="md-tab-content-1-3"]/div/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[4]    timeout=5s
     Comment    click element    xpath=//*[@id="md-tab-content-1-3"]/div/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[4]
-    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[5]
-    Sleep    5s
-    Click Element    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
-    sleep    2s
-        
 
 Assign ambassador
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[5]    timeout=5s
     Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[5]
-    Sleep    5s
+    Sleep    3s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]    timeout=5s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
-    sleep    2s
-    Log    >>>GLOBAL: ${ord}
-    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input
-    Input Text    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    @{ord}
-    Sleep    2s
+    sleep    1s
+    Log    order_id=${order_no}
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    timeout=5s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${order_no}
+    Sleep    1s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[10]/div/a/button/span
-    Sleep    2s
+    Sleep    1s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-detail/div/div/admin_view/div/div[1]/div/div/div/div/admin_action/div/div/div/button[1]
     Click Element    //*[@id="assigned_ambassador"]/option[12]
     Click Element    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-detail/div/div/admin_view/div/div[1]/div/div/div/div/admin_action/div[2]/div[4]/div/div/button
-    Sleep    2s
+    Sleep    1s
     Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[7]
     #Input Order
-    Sleep    3s
-    Input Text    //*[@id="admin_component"]/div/div[2]/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    global
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    timeout=5s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${order_no}
     #Click order
-    sleep    3s
+    sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[3]/span/span    timeout=5s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[3]/span/span
     #Click Approve Button
-    Sleep    3s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin_order/div/div/admin_view/div/div[1]/div/div/div/div/admin_action/div/div/div/button[1]    timeout=5s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin_order/div/div/admin_view/div/div[1]/div/div/div/div/admin_action/div/div/div/button[1]
     #Click Proceed Button
-    Sleep    2s
+    Sleep    1s
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin_order/div/div/admin_view/div/div[1]/div/div/div/div/admin_action/div[2]/div[4]/div/div/button    timeout=5s
     Click Element    //*[@id="admin_component"]/div/div[2]/admin_order/div/div/admin_view/div/div[1]/div/div/div/div/admin_action/div[2]/div[4]/div/div/button
+    sleep    1s
+    Wait Until Element Is Visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a    timeout=5s
+    click element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    wait until element is visible    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[7]/span[2]    timeout=10s
+    click element    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[7]/span[2]
+    Wait Until Element is visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    BuiltIn.Should Contain    ${text button}    Login/Register
 
 Waiting DP
-    Open Browser    https://staging.cicil.co.id/    chrome
-    Maximize Browser Window
-    ${ID}=    set variable    @{useremail}
-    ${KTP}=    set variable    1334307478158834
-    Set Selenium Speed    1seconds
+    ${ID}=    set variable    @{user_email}
     wait until element is visible    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a    timeout=5s
     Click Element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
-    Input Text    xpath=//*[@id="username"]    testing+edo81@cicil.co.id
+    Input Text    xpath=//*[@id="username"]    ${ID}
     Input Text    xpath=//*[@id="password"]    1234567A
     Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
     comment    Location Should Be    https://staging.cicil.co.id/
     Sleep    3 seconds
     ${text button}=    Get Text    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
     BuiltIn.Should Contain    ${text button}    Akun Saya
-    Comment    sleep    2s
+    Comment    sleep    1s
     click element    xpath=//*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
     Comment    Go To    https://staging.cicil.co.id/profile
     wait until element is visible    xpath=//*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[2]/span[2]    timeout=8s
@@ -535,7 +380,6 @@ Waiting DP
     ${nomor_va}=    Get Text    xpath=//*[@id="cicil_component"]/payment/div/div/div/div/div/div[2]/div/payment_guide_base/div/div[2]/div/div/div[2]/span
     ${bayar}    Get Text    xpath=//*[@id="cicil_component"]/payment/div/div/div/div/div/div[1]/div/payment_detail/div/div[3]/div/div/div[2]
     Log    text=${bayar}
-    Comment    ${bro}=    BuiltIn.Set Variable    ${bayar}
     ${integer_1}=    Remove String    ${bayar}    Rp \
     Log    hasil=${integer_1}
     BuiltIn.Should Be Equal    ${integer_1}    100.000
@@ -562,7 +406,7 @@ Waiting DP
 
 *** Keywords ***
 Login Admin
-    Open Browser    https://staging.cicil.co.id/    chrome
+    comment    Open Browser    @{url_main}    chrome
     Click Element    xpath ://*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
     sleep    5s
     Input Text    xpath://*[@id="username"]    dev@cicil.co
@@ -570,13 +414,3 @@ Login Admin
     Click Element    xpath://*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
     Sleep    3s
     Go To    https://staging.cicil.co.id/cicil4j4
-
-login
-    Input Text    xpath=//*[@id="username"]    @{user_email}
-    Comment    Input Text    xpath=//*[@id="password"]    @{user_pass}
-    Click Element    xpath=//*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
-
-Register
-
-@{user_pass}
-    1234567A

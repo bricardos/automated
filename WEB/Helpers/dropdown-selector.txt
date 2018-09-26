@@ -1,0 +1,16 @@
+*** Settings ***
+Library           Selenium2Library
+
+*** Keywords ***
+Select A Single Value From Dropdown
+    [Arguments]    ${selector}    ${selectedValue}
+    ${formDropdownInput}=    Set Variable    ${selector}//input
+    Selenium2Library.Wait Until Element Is Visible    ${formDropdownInput}
+    Selenium2Library.Input Text    ${formDropdownInput}    ${selectedValue}
+    Selenium2Library.Press Key    ${formDropdownInput}    \\13
+
+Select Non Searchable Dropdown
+    [Arguments]    ${selector}    ${selectedValue}
+    Selenium2Library.Wait Until Element Is Visible    ${selector}
+    Selenium2Library.Input Text    ${selector}    ${selectedValue}
+    Selenium2Library.Press Key    ${selector}    \\13

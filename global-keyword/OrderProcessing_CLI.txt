@@ -1,0 +1,448 @@
+*** Settings ***
+Library           Selenium2Library
+Library           String
+Resource          ../WEB/resource-folder/general.txt
+Resource          ../WEB/helpers/order-helper.txt
+Resource          ../global-resources/cli_orderprocessing_paid_detail.txt
+
+*** Variables ***
+${xpath_orders_bucket}    //cicil-admin-sidenav/ul[1]/li[5]/div[1]/span[1]
+${xpath_orders_pending}    //cicil-admin-sidenav/ul[1]/li[5]/ul[1]/li[1]
+${xpath_orders_processing}    //cicil-admin-sidenav/ul[1]/li[5]/ul[1]/li[2]
+${xpath_orders_monitoring}    //cicil-admin-sidenav/ul[1]/li[5]/ul[1]/li[3]
+${xpath_order_processing_refreshbutton}    //cicil-admin-table-serverside/div/div[1]/div[1]/div[1]/button[1]
+${xpath_order_processing_resultrow}    (//table[contains(@class, 'table center_rows')])[1]/tbody/tr[1]/td[1]/div[1]/span[1]
+${refresh_loop}    8
+${xpath_order_processing_resultrow_viewdetailbutton}    (//table[contains(@class, 'table center_rows')])[1]/tbody/tr[1]/td[9]/button[1]
+
+*** Keywords ***
+wait loading data to complete
+    ### wait for data to fully loaded
+    Wait Until Keyword Succeeds    20x    2s    Selenium2Library.Wait Until Page Does Not Contain    Loading Data
+    Sleep    3s
+    Log    >>> Page Loaded.
+
+make sure on order bucket already
+    ### make sure on order bucket already
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Page Should Contain    Order Processing Bucket
+    Log    >>> Already Landed on Order Bucket.
+
+refresh until paid or reject
+    Log    >>> refresh until paid or reject
+    Sleep    2s
+    ${result}=    Set Variable    0
+    ### loop the refresh button
+    : FOR    ${INDEX}    IN RANGE    0    ${refresh_loop}
+    \    Log    >>> Sleeping on iteration: ${INDEX}
+    \    Sleep    3s
+    \    Selenium2Library.Click Element    ${xpath_order_processing_refreshbutton}
+    \    ${isStillExists}=    Run Keyword And Return Status    Selenium2Library.Page Should Contain Element    ${xpath_order_processing_resultrow}
+    \    ${result}=    Set Variable If    '${isStillExists}'=='False'    0
+    \    ${result}=    Set Variable If    '${isStillExists}'=='True'    1
+    \    Run Keyword If    '${isStillExists}'=='False'    Log    >>> force exiting for loop
+    \    Run Keyword If    '${isStillExists}'=='False'    Exit For Loop
+    Log    >>> returning search {result} as: ${result}
+    Return From Keyword    ${result}
+
+search data on order
+    [Arguments]    ${checkedText}    ${searchBy}    ${searchValue}
+    ### refer to https://stackoverflow.com/questions/3674569/how-to-select-specified-node-within-xpath-node-sets-by-index-with-selenium
+    ### choose search by order no
+    Selenium2Library.Click Element    (//span[text()='${checkedText}'])[1]
+    Selenium2Library.Click Element    //span[text()='${searchBy}']
+    wait loading data to complete
+    ### input order no
+    Selenium2Library.Input Text    //input[contains(@placeholder, 'Search...')]    ${searchValue}
+    wait loading data to complete
+    ### check if result exists, and Refresh until it dissapeared
+    ${isDataExists}=    Run Keyword And Return Status    Selenium2Library.Page Should Contain Element    ${xpath_order_processing_resultrow_viewdetailbutton}
+    Return From Keyword    ${isDataExists}
+
+order information
+    [Arguments]    ${order_no}    ${price}
+    Selenium2Library.Wait Until Element Is Visible    //div[1]//div//div[contains(@class,"col-12 mb-2")]//a[contains(text(),"${order_no}")]
+    ${order_no_check}    Selenium2Library.Get Text    //div[1]//div//div[contains(@class,"col-12 mb-2")]//a[contains(text(),"${order_no}")]
+    ${order_no_check}    Evaluate    '${order_no_check}'.replace('#','')
+    Should Be Equal    ${order_no_check}    ${order_no}
+    Comment    ${url_order_check}    Get Value    //div[1]/div/div[3]//div[2][contains(@class,"col-12 mb-2")]//a[contains(@href,"${url_order}")]
+    Comment    Should Be Equal    ${url_order_check}    ${url_order}
+    ${price_check}    Selenium2Library.Get Text    //div/div[1]/div/div[5]/div[2][contains(text(),"")]
+    ${price_check}    Evaluate    '${price_check}'.replace('.','')
+    ${price_check}    Evaluate    '${price_check}'.replace('Rp ','')
+    Should Be Equal    ${price_check}    ${price}
+    ${down_payment_check}    Selenium2Library.Get Text    //div/div[1]/div/div[6]/div[2][contains(text(),"")]
+    ${down_payment_check}    Evaluate    '${down_payment_check}'.replace('.','')
+    ${down_payment_check}    Evaluate    '${down_payment_check}'.replace('Rp ','')
+    Should Be Equal    ${down_payment_check}    ${down_payment}
+    ${installment+tenur_check}    Selenium2Library.Get Text    //div/div[1]/div/div[7]/div[2][contains(text(),"")]
+    ${installment+tenur_check}    Evaluate    '${installment+tenur_check}'.replace('.','')
+    ${installment+tenur_check}    Evaluate    '${installment+tenur_check}'.replace('Rp','')
+    ${installment+tenur_check}    Evaluate    '${installment+tenur_check}'.replace(')','')
+    ${installment+tenur_check}    Evaluate    '${installment+tenur_check}'.replace('(','')
+    ${installment+tenur_check}    Evaluate    '${installment+tenur_check}'.replace('x','')
+    ${cat}=    Catenate    ${installment} ${tenure}
+    Comment    Should Be Equal    ${installment+tenur_check}    @{installment+tenure}
+    Comment    Should Be Equal    ${installment+tenur_check}    ${cat}
+
+user information
+    [Arguments]    ${university}    ${email}    ${phone}    ${address}    ${district_address}    ${city_address}
+    ...    ${zip_code}
+    Sleep    2s
+    ${university_check}    Selenium2Library.Get Text    //div/div[2]/div/div[2]/div[2][contains(text(),"")]
+    Should Be Equal    ${university_check}    ${university}
+    ${email_check}    Selenium2Library.Get Text    //div/div[2]/div/div[4]/div[2][contains(text(),"")]
+    Should Be Equal    ${email_check}    ${email}
+    ${phone_check}    Selenium2Library.Get Text    //div/div[2]/div/div[5]/div[2][contains(text(),"")]
+    Should Be Equal    ${phone_check}    ${phone}
+    #shipping address
+    ${address_check}    Selenium2Library.Get Text    //div/div[2]/div/div[6]/div[2]/span[1][contains(text(),"")]
+    Should Be Equal    ${address_check}    ${address}
+    ${district_address_check}    Selenium2Library.Get Text    //div/div[2]/div/div[6]/div[2]/span[2][contains(text(),"")]
+    ${district_address_check}    Evaluate    '${district_address_check}'.replace(',','')
+    Should Be Equal    ${district_address_check}    ${district_address}
+    ${city_address_check}    Selenium2Library.Get Text    //div/div[2]/div/div[6]/div[2]/span[3][contains(text(),"")]
+    Should Be Equal    ${city_address_check}    ${city_address}
+    ${zip_code_check}    Selenium2Library.Get Text    //div/div[2]/div/div[6]/div[2]/span[4][contains(text(),"")]
+    Should Be Equal    ${zip_code_check}    ${zip_code}
+
+ambassador information
+    [Arguments]    ${email_ambassador}
+    Sleep    1s
+    ${email_ambassador_check}    Selenium2Library.Get Text    //div/div[3]/div/div[4]/div[2][contains(text(),"")]
+    Should Be Equal    ${email_ambassador_check}    ${email_ambassador}
+
+Optional Login as Admin to OLD
+    [Arguments]    ${uname}    ${pass}
+    Open Browser    ${url_staging_main}    Chrome
+    Maximize Browser Window
+    Selenium2Library.Wait Until Element Is Visible    //span[text()="Login/Register"]    timeout=5s
+    Click Element    //span[text()="Login/Register"]
+    Selenium2Library.Wait Until Element Is Visible    //input[@id="username"]    timeout=5s
+    Selenium2Library.Input Text    //input[@id="username"]    ${uname}
+    Selenium2Library.Wait Until Element Is Visible    //input[@id="password"]    timeout=5s
+    Selenium2Library.Input Text    //input[@id="password"]    ${pass}
+    Selenium2Library.Wait Until Element Is Visible    //button[text()="Login"]    timeout=10s
+    Selenium2Library.Click Element    //button[text()="Login"]
+    Sleep    5s
+    Go To    https://marvel-staging-old.cicil.co.id/cicil4j4
+
+Optional Login as Admin to CLI
+    [Arguments]    ${uname}    ${pass}
+    ${mainBrowser}=    Open Browser    ${url_staging_beta}    chrome
+    Maximize Browser Window
+    Wait Until Keyword Succeeds    10    1    Selenium2Library.Wait Until Element Is Visible    //a[text()="Masuk"]    timeout=${timeout_general}
+    Selenium2Library.Click Element    //a[text()="Masuk"]
+    ### login form
+    Selenium2Library.Wait Until Element Is Visible    //input[contains(@id, 'username')]    timeout=${generalTimeout}
+    Sleep    3s
+    Selenium2Library.Input Text    //input[contains(@id, 'username')]    ${uname}
+    Selenium2Library.Input Password    //input[contains(@id, 'password')]    ${pass}
+    Selenium2Library.Click Element    //button[text()='Masuk']
+    ### should be on admin CLI page
+    Wait Until Keyword Succeeds    20x    3s    Selenium2Library.Page Should Contain    Dashboard
+    Log    >>> Log in complete. User ${uname} LOGGED IN TO CLI successfully
+
+Open Order Bucket
+    Log    >>> Opening ORDER bucket <<<
+    ### click order bucket
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    ${xpath_orders_bucket}    timeout=30s
+    Selenium2Library.Click Element    ${xpath_orders_bucket}
+    wait loading data to complete
+    make sure on order bucket already
+    Log    >>> ORDER bucket opened <<<
+
+Open Pending Tab
+    make sure on order bucket already
+    ### click pending tab
+    Selenium2Library.Click Element    ${xpath_orders_pending}
+    wait loading data to complete
+    Log    >>> Pending Tab Opened Successfully
+
+Open Processing Tab
+    make sure on order bucket already
+    ### click processing tab
+    Selenium2Library.Click Element    ${xpath_orders_processing}
+    wait loading data to complete
+    Log    >>> Processing Tab Opened Successfully
+
+Pending Doc Check
+    [Arguments]    ${order_no}    ${university}    ${photo_ktp}    ${photo_selfie}    ${photo_ktm}    ${photo_agreement}
+    Comment    loginadmin
+    Optional Login as Admin to OLD    dev@cicil.co    Rahasia1
+    Selenium2Library.Wait Until Element Is Visible    //div[text()="Order Processing"]
+    Selenium2Library.Click Element    //div[text()="Order Processing"]
+    Selenium2Library.Wait Until Element Is Visible    //div//option[contains(@value,"order_no")]
+    Selenium2Library.Click Element    //div//option[contains(@value,"order_no")]
+    Selenium2Library.Input Text    //div/input[contains(@class,"form-control ng-untouched ng-pristine ng-valid")]    ${order_no}
+    Sleep    3s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-pending/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/span/span
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-pending/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/span/span
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="form"]
+    ${university_cek}    Selenium2Library.Get Value    //*[@id="form"]
+    Should Be Equal As Strings    ${university_cek}    ${university}
+    ${photo_ktp_cek}    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    ${photo_selfie_cek}    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_selfie}"]    src
+    Should Be Equal As Strings    ${photo_selfie_cek}    ${photo_selfie}
+    ${photo_ktm_cek}    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktm}"]    src
+    Should Be Equal As Strings    ${photo_ktm_cek}    ${photo_ktm}
+    ${photo_agreement_cek}    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_agreement}"]    src
+    Should Be Equal As Strings    ${photo_agreement_cek}    ${photo_agreement}
+    Selenium2Library.Click Element    //div//button[text()="Approve"]
+
+For Ordering Check
+    [Arguments]    ${order_no}    ${price}    ${university}    ${email}    ${phone}    ${address}
+    ...    ${district_address}    ${city_address}    ${zip_code}    ${email_ambassador}
+    Comment    loginadminCLI
+    Optional Login as Admin to CLI    dev@cicil.co    Rahasia1
+    sleep    3s
+    Selenium2Library.Wait Until Element Is Visible    //div//span[contains(text(),"Orders")]    timeout=5s
+    Selenium2Library.Click Element    //div//span[contains(text(),"Orders")]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//li[2]/span[contains(@class,"child")]    timeout=5
+    Selenium2Library.Click Element    //div//li[2]/span[contains(@class,"child")]
+    Selenium2Library.Wait Until Element Is Visible    //div/span[contains(text(),"For Ordering")]    timeout=5
+    Selenium2Library.Click Element    //div/span[contains(text(),"For Ordering")]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//div//div[contains(@class,'toggle ng-star-inserted')]    timeout=5
+    Selenium2Library.Click Element    //div//div//div[contains(@class,'toggle ng-star-inserted')]
+    Selenium2Library.Wait Until Element Is Visible    //div//ul//li//span[text()="Order No"]    timeout=5
+    Selenium2Library.Click Element    //div//ul//li//span[text()="Order No"]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//input[contains(@placeholder,"Search...")]    timeout=5
+    Selenium2Library.Input Text    //div//input[contains(@placeholder,"Search...")]    ${order_no}
+    #click view detail
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //td//button[contains(text(),"View Detail")]    timeout=5
+    Selenium2Library.Click Element    //td//button[contains(text(),"View Detail")]
+    # Check order information
+    Order Information    ${order_no}    ${price}
+    #Check user information
+    user information    ${university}    ${email}    ${phone}    ${address}    ${district_address}    ${city_address}
+    ...    ${zip_code}
+    # Check Ambassador Information
+    Ambassador Information    ${email_ambassador}
+    Selenium2Library.Wait Until Element Is Visible    //div[3]/div[2]/div/div/button[1]    timeout=5s
+    Selenium2Library.Click Element    //div[3]/div[2]/div/div/button[1]
+    Sleep    2s
+    # Procedd With Purchase
+    Selenium2Library.Wait Until Element Is Visible    //div//div/div[2][contains(@class,'toggle ng-star-inserted')]
+    Selenium2Library.Click Element    //div//div/div[2][contains(@class,'toggle ng-star-inserted')]
+    Selenium2Library.Click Element    //div/div[2]/ul/li[1]/span[contains(text(),"JNE")]
+    Selenium2Library.Input Text    //*[@id="shipment_cost"]    0
+    Selenium2Library.Wait Until Element Is Visible    (//div/div/ng-select/div/div/div[2][contains(@class,'toggle ng-star-inserted')])[2]
+    Selenium2Library.Click Element    (//div/div/ng-select/div/div/div[2][contains(@class,'toggle ng-star-inserted')])[2]
+    Selenium2Library.Click Element    //div/div[2]/ul/li[1]/span[contains(text(),"Annisa")]
+    Selenium2Library.Click Element    (//div/div/ng-select/div/div/div[2][contains(@class,'toggle ng-star-inserted')])[3]
+    Selenium2Library.Click Element    //div/div[2]/ul/li[5]/span[contains(text(),"New Mandiri Virtual Account")]
+    ${shop_name}=    Set Variable    Tokopedia
+    Selenium2Library.Input Text    //*[@id="shop_name"]    ${shop_name}
+    ${eCommerce_account_name}    Set Variable    Annisa
+    Selenium2Library.Input Text    //*[@id="payment_account_name"]    ${eCommerce_account_name}
+    ${eCommerce_bank_name}    Set Variable    Mandiri
+    Selenium2Library.Input Text    //*[@id="payment_bank_name"]    ${eCommerce_bank_name}
+    ${eCommerce_account_number}    Set Variable    9291829718
+    Selenium2Library.Input Text    //*[@id="payment_account_no"]    ${eCommerce_account_number}
+    ${invoice_no}    Set Variable    2819829819829
+    Selenium2Library.Input Text    //*[@id="invoice_no"]    ${invoice_no}
+    ${invoice_url}    Set Variable    https://www.tokopedia.com/
+    Selenium2Library.Input Text    //*[@id="invoice_url"]    ${invoice_url}
+    ${total_payment}    Set Variable    90000
+    Selenium2Library.Input Text    //*[@id="total_payment"]    ${total_payment}
+    ${invoice_picture}    Set Variable    ${EXECDIR}${slashdir_${slashdir_envused}}Global-Resources${slashdir${slashdir_envused}}admin-images${slashdir${slashdir_envused}}rabbit.jpg
+    Choose File    //*[@id="invoice_document"]    ${invoice_picture}
+    ${notes}    Set Variable    testing
+    Selenium2Library.Input Text    //*[@id="order_process_notes"]    ${notes}
+    Set Global Variable    ${shop_name}
+    Set Global Variable    ${eCommerce_account_name}
+    Set Global Variable    ${eCommerce_bank_name}
+    Set Global Variable    ${eCommerce_account_number}
+    Set Global Variable    ${invoice_no}
+    Set Global Variable    ${invoice_url}
+    Set Global Variable    ${total_payment}
+    Set Global Variable    ${notes}
+    Sleep    5s
+    Wait Until Element Is Enabled    //div[2]/button[contains(@class,"btn btn-orange")]    timeout=10s
+    Selenium2Library.Click Element    //div[2]/button[contains(@class,"btn btn-orange")]
+    Selenium2Library.Wait Until Element Is Visible    //div/div/div[1]/div/button    timeout=10s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="logout-button"]    timeout=10s
+    Selenium2Library.Click Element    //*[@id="logout-button"]
+
+For Review Check
+    [Arguments]    ${order_no}    ${price}    ${university}    ${email}    ${phone}    ${address}
+    ...    ${district_address}    ${city_address}    ${zip_code}    ${email_ambassador}
+    Comment    loginadminCLI[Dream]
+    Optional Login as Admin to CLI    dream@mailinator.com    1234567A
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//span[contains(text(),"Orders")]    timeout=10s
+    Selenium2Library.Click Element    //div//span[contains(text(),"Orders")]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//li[2]/span[contains(@class,"child")]    timeout=10s
+    Selenium2Library.Click Element    //div//li[2]/span[contains(@class,"child")]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div/span[contains(text(),"For Review")]    timeout=10s
+    Selenium2Library.Click Element    //div/span[contains(text(),"For Review")]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div//div//div[contains(@class,'toggle ng-star-inserted')]    timeout=10s
+    Selenium2Library.Click Element    //div//div//div[contains(@class,'toggle ng-star-inserted')]
+    Selenium2Library.Wait Until Element Is Visible    //div//ul//li//span[text()="Order No"]    timeout=10s
+    Selenium2Library.Click Element    //div//ul//li//span[text()="Order No"]
+    Selenium2Library.Input Text    //*[@id="undefined"]    ${order_no}
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //td//button[contains(text(),"View Detail")]    timeout=10s
+    Selenium2Library.Click Element    //td//button[contains(text(),"View Detail")]
+    # Check order information
+    Order Information    ${order_no}    ${price}
+    #Check user information
+    user information    ${university}    ${email}    ${phone}    ${address}    ${district_address}    ${city_address}
+    ...    ${zip_code}
+    # Check Ambassador Information
+    Ambassador Information    ${email_ambassador}
+    # Check Addtional Information
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    (//div/div/div/span[contains(text(),"")])[6]
+    Comment    ${account_check}    Selenium2Library.Get Text    (//div/div/div/span[contains(text(),"")])[6]
+    Comment    Should Be Equal    ${account_check}    ${eCommerce_account_name}
+    Comment    \    \    (//div/div/div/span[contains(text(),"")])[8]
+    ${shop_name_check}    Selenium2Library.Get Text    //div/p[contains(text(),"")]
+    ${shop_name_global}=    Get Variable Value    ${shop_name}
+    Should Be Equal    ${shop_name_check}    ${shop_name_global}
+    ${eCommerce_account_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[2]
+    Should Be Equal    ${eCommerce_account_check}    ${eCommerce_account_name}
+    ${eCommerce_bank_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[3]
+    Should Be Equal    ${eCommerce_bank_check}    ${eCommerce_bank_name}
+    ${account_number_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[4]
+    Should Be Equal    ${account_number_check}    ${eCommerce_account_number}
+    ${invoice_no_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[5]
+    Should Be Equal    ${invoice_no_check}    ${invoice_no}
+    ${invoice_url_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[6]
+    Should Be Equal    ${invoice_url_check}    ${invoice_url}
+    ${total_payment_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[7]
+    ${total_payment_check}    Evaluate    '${total_payment_check}'.replace('.','')
+    ${total_payment_check}    Evaluate    '${total_payment_check}'.replace('Rp ','')
+    Should Be Equal    ${total_payment_check}    ${total_payment}
+    ${notes_check}    Selenium2Library.Get Text    (//div/p[contains(text(),"")])[9]
+    Should Be Equal    ${notes_check}    ${notes}
+    Sleep    2s
+    Selenium2Library.Click Element    //div[3]/div[2]/div/div/button[1]
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="remark1"]    timeout=10s
+    Selenium2Library.Input Text    //*[@id="remark1"]    test1
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="remark2"]    timeout=10s
+    Selenium2Library.Input Text    //*[@id="remark2"]    test2
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="pin"]    timeout=10s
+    Selenium2Library.Input Text    //*[@id="pin"]    123
+    Sleep    5s
+    Selenium2Library.Wait Until Element Is Visible    //div/div/cicil-admin-dynamic-form/div[2]/button    timeout=10s
+    Selenium2Library.Click Element    //div/div/cicil-admin-dynamic-form/div[2]/button
+
+Disbursement Pending Check
+    [Arguments]    ${orderNo}
+    ### call "Open Order Bucket" and then "Open Processing Tab" before calling this
+    make sure on order bucket already
+    ### click disbursement pending tab
+    Selenium2Library.Click Element    //span[text()='Disbursement Pending']
+    wait loading data to complete
+    ${isOnPending}=    search data on order    Email    Order No    ${orderNo}
+    ${loopResult}=    Set Variable    0
+    ${loops}=    Run Keyword If    '${isOnPending}'=='True'    refresh until paid or reject
+    ${loopResult}=    Set Variable If    '${loops}'!='None'    1
+    ${loopResult}=    Set Variable If    '${loops}'=='None'    0
+    ### should be dissapeared on pending right now
+    Should Be Equal As Strings    ${loopResult}    0
+    Log    >>> Order not in Pending. Searching on "For Ordering" tab
+    ### check should not be back to "For Ordering"
+    Selenium2Library.Click Element    //span[text()='For Ordering']
+    wait loading data to complete
+    ${isOnForOrdering}=    search data on order    Email    Order No    ${orderNo}
+    Should Be Equal As Strings    ${isOnForOrdering}    False    ignore_case=False
+    ### check should be on "Paid"
+    Log    >>> Order not in For Ordering. Searching on "Paid" tab
+    Selenium2Library.Click Element    (//span[text()='Paid'])[1]
+    wait loading data to complete
+    ${isOnPaid}=    search data on order    Email    Order No    ${orderNo}
+    Should Be Equal As Strings    ${isOnPaid}    True    ignore_case=False
+    Log    >>> Order ${orderNo} already moved to PAID
+    Log    >>> checking order on PAID for ${orderNo}
+
+Paid Check
+    [Arguments]    ${checkedText}    ${orderNo}
+    ### call "Open Order Bucket" and then "Open Processing Tab" before calling this
+    Comment    make sure on order bucket already
+    Comment    Selenium2Library.Click Element    (//span[text()='Paid'])[1]
+    Comment    wait loading data to complete
+    Comment    ${isDataExists}=    search data on order    ${checkedText}    Order No    ${orderNo}
+    Comment    Should Be Equal As Strings    ${isDataExists}    True    ignore_case=False
+    ### enter detail of paid order
+    Selenium2Library.Click Element    ${xpath_order_processing_resultrow_viewdetailbutton}
+    wait loading data to complete
+    Comment    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Page Should Contain    Order Detail for
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Page Should Contain Element    //cicil-admin-dynamic-form
+    Log    >>> Landed on Paid Order detail page
+    ### getting data from detail page
+    Log    >>> getting data from detail page
+    Log    >>> getting data from Order Information
+    ${verify_orderinformation_orderno}=    Selenium2Library.Get Text    ${xpath_op_paid_orderinformation_orderno}
+    ${verify_orderinformation_orderno}=    Get Substring    ${verify_orderinformation_orderno}    1
+    ${verify_orderinformation_url}=    Selenium2Library.Get Text    ${xpath_op_paid_orderinformation_URL}
+    ${verify_orderinformation_customernotes}=    Selenium2Library.Get Text    ${xpath_op_paid_orderinformation_customernotes}
+    ${verify_orderinformation_price}=    Selenium2Library.Get Text    ${xpath_op_paid_orderinformation_price}
+    ${verify_orderinformation_price}=    Make Plain Numbers    ${verify_orderinformation_price}
+    ${verify_orderinformation_downpayment}=    Selenium2Library.Get Text    ${xpath_op_paid_orderinformation_downpayment}
+    ${verify_orderinformation_downpayment}=    Make Plain Numbers    ${verify_orderinformation_downpayment}
+    ${verify_orderinformation_installment}=    Selenium2Library.Get Text    ${xpath_op_paid_orderinformation_installment}
+    Log    >>> getting data from User Information
+    ${verify_userinformation_university}=    Selenium2Library.Get Text    ${xpath_op_paid_userinformation_university}
+    ${verify_userinformation_name}=    Selenium2Library.Get Text    ${xpath_op_paid_userinformation_name}
+    ${verify_userinformation_email}=    Selenium2Library.Get Text    ${xpath_op_paid_userinformation_email}
+    ${verify_userinformation_phone}=    Selenium2Library.Get Text    ${xpath_op_paid_userinformation_phone}
+    ${verify_userinformation_shippingaddress}=    Selenium2Library.Get Text    ${xpath_op_paid_userinformation_shippingaddress}
+    Log    >>> getting order from Ambassador Information
+    ${verify_ambasinfo_university}=    Selenium2Library.Get Text    ${xpath_op_paid_ambasinfo_university}
+    ${verify_ambasinfo_name}=    Selenium2Library.Get Text    ${xpath_op_paid_ambasinfo_name}
+    ${verify_ambasinfo_email}=    Selenium2Library.Get Text    ${xpath_op_paid_ambasinfo_email}
+    ${verify_ambasinfo_phone}=    Selenium2Library.Get Text    ${xpath_op_paid_ambasinfo_phone}
+    Log    >>> getting data from Other (bottom card)
+    ${verify_other_account}=    Selenium2Library.Get Text    ${xpath_op_paid_other_account}
+    ${verify_other_method}=    Selenium2Library.Get Text    ${xpath_op_paid_other_method}
+    ${verify_other_ecommerce}=    Selenium2Library.Get Text    ${xpath_op_paid_other_ecommerce}
+    ${verify_other_ecommerceaccountname}=    Selenium2Library.Get Text    ${xpath_op_paid_other_ecommerceaccountname}
+    ${verify_other_ecommercebankname}=    Selenium2Library.Get Text    ${xpath_op_paid_other_ecommercebankname}
+    ${verify_other_ecommerceaccountnumber}=    Selenium2Library.Get Text    ${xpath_op_paid_other_ecommerceaccountnumber}
+    ${verify_other_invoiceno}=    Selenium2Library.Get Text    ${xpath_op_paid_other_invoiceno}
+    ${verify_other_invoiceurl}=    Selenium2Library.Get Text    ${xpath_op_paid_other_invoiceurl}
+    ${verify_other_totalpayment}=    Selenium2Library.Get Text    ${xpath_op_paid_other_totalpayment}
+    ${verify_other_totalpayment}=    Make Plain Numbers    ${verify_other_totalpayment}
+    ${verify_other_validatedaccountname}=    Selenium2Library.Get Text    ${xpath_op_paid_other_validatedaccountname}
+    ${verify_other_invoice}=    Selenium2Library.Get Element Attribute    ${xpath_op_paid_other_invoice}    src
+    Log    >>> ALL DATA FROM DETAIL PAGE GATHERED.
+    ### getting data to be validated with data on page
+    Log    >>> Validating data
+    ${param_orderno}=    Set Variable    ${orderNo}
+    ### validating data
+    Should Be Equal As Strings    ${param_orderno}    ${verify_orderinformation_orderno}
+    Log    >>> All data from params validated successfully.
+    ### informing the order to already paid
+    ${label_confirm}=    Set Variable    What would you like to do with order
+    ${label_confirm}=    Catenate    ${label_confirm} #${verify_orderinformation_orderno}?
+    ${xpath_informpaid}=    Set Variable    //p[text()='${label_confirm}']/following-sibling::*
+    Comment    Execute Javascript    window.scrollBy(0, 300)
+    Log    >>> Sleep 3s and scrolling to xpath
+    Wait Until Keyword Succeeds    10x    3s    Selenium2Library.Page Should Contain Element    ${xpath_informpaid}
+    Scroll To Xpath    ${xpath_informpaid}
+    Log    >>> clicking inform paid button
+    Selenium2Library.Click Element    ${xpath_informpaid}
+    Wait Until Keyword Succeeds    10x    3s    Selenium2Library.Page Should Contain Element    //button[text()='Submit']
+    Scroll To Xpath    //button[text()='Submit']
+    Wait Until Keyword Succeeds    10x    2s    Selenium2Library.Page Should Contain Element    (//div[contains(@class, 'mce-container-body')])[1]
+    Log    >>> curdir is ${CURDIR}
+    Log    >>> execdir is ${EXECDIR}
+    Log    >>> Uploading Invoice Paid Doc from: ${invoice_paid_doc_dir}
+    Selenium2Library.Choose File    ${xpath_op_paid_invoicepaiddocument}    ${invoice_paid_doc_dir}
+    Wait Until Keyword Succeeds    30x    3s    Selenium2Library.Element Should Be Enabled    //button[text()='Submit']
+    Log    >>> button submit is now enabled.
+    Selenium2Library.Click Element    //button[text()='Submit']
+    Comment    Wait Until Keyword Succeeds    10x    3s    Selenium2Library.Page Should Contain Element    //button[text()='Submit']
+    wait loading data to complete
+    Log    >>> order ${orderNo} confirmed to already paid successfully.

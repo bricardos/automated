@@ -1,0 +1,3 @@
+*** Variables ***
+${payment_label_noinstallment}    Kamu tidak memiliki data cicilan
+${payment_label_choosebank}    Pilih bank yang sesuai denganmu

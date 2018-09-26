@@ -1,0 +1,27 @@
+*** Variables ***
+${isuse_vouchercode}    0
+${isuse_vouchercode_value}    CICILREF
+${vouchercode_verif_msg_success}    Voucher Valid
+${vouchercode_verif_msg_failed}    Kode Voucher tidak dapat ditemukan
+${formsubmit_drag_offsetx_4bulan}    10
+${formsubmit_drag_offsetx_5bulan}    200
+${formsubmit_drag_offsetx_2bulan}    -250
+${formsubmit_drag_offsetx_1bulan}    -500
+${formsubmit_drag_offsetx_3bulan}    0
+${formsubmit_drag_offsetx_6bulan}    300
+${formsubmit_label_jangkawaktu_1bulan}    1 Bulan
+${formsubmit_label_jangkawaktu_2bulan}    2 Bulan
+${formsubmit_label_jangkawaktu_3bulan}    3 Bulan
+${formsubmit_label_jangkawaktu_4bulan}    4 Bulan
+${formsubmit_label_jangkawaktu_5bulan}    5 Bulan
+${formsubmit_label_jangkawaktu_6bulan}    6 Bulan
+${formsubmit_input_nominalpembayaran}    5000000
+${formsubmit_input_jumlahuangmuka}    1000000
+${formsubmit_input_catatan}    automate lorem ipsum dolor sit amet
+${formsubmit_drag_offsetY}    0
+${formsubmit_label_premiproteksi}    38800
+${tenure_length}    1
+${down_payment}    50000000
+${ambass_name}    dream@mailinator.com
+${ambass_pwd}     1234567A
+${downpayment_percentage_of_price}    0.5

@@ -1,0 +1,15 @@
+*** Settings ***
+Resource          ../Helpers/javascript-action.txt
+
+*** Variables ***
+${generalTimeout}    30s
+${notificationContainer}    //div[contains(@class, "notification-container")]
+${notif_popup_profile_berhasil}    Data berhasil dikirim
+${notif_popup_meetup_berhasil}    Tanggal meet up berhasil disimpan
+${notif_popup_meetupfoto_berhasil}    Foto berhasil disimpan
+${notif_logout}    Kamu telah keluar
+
+*** Keywords ***
+Wait Until Notification Is Shown
+    [Arguments]    ${text}
+    Selenium2Library.Wait Until Element Is Visible    ${notificationContainer}/div[contains(text(), ${text})]    timeout=${generalTimeout}

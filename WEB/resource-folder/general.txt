@@ -1,0 +1,14 @@
+*** Variables ***
+${url_staging_main}    https://staging.cicil.co.id
+${timeout_general}    5s
+${url_staging_profile}    https://staging.cicil.co.id/profile
+${url_staging_marvel}    https://marvel-staging.cicil.co.id/
+${slashdir_windows}    \\
+${slashdir_linux}    /
+${slashdir_envused}    windows
+${image_folder}    sample-pictures
+${scrollY_prevent_bannerclick}    100
+${url_staging_scd}    https://scd-staging.cicil.co.id/
+${url_staging_beta}    https://staging-beta.cicil.co.id/
+${admin_username}    dev@cicil.co
+${admin_password}    Rahasia1

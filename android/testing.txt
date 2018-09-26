@@ -1,0 +1,377 @@
+*** Settings ***
+Library           AppiumLibrary
+Library           RequestsLibrary
+Library           XML
+Resource          ../global-keyword/global.txt
+Library           HttpLibrary.HTTP
+Resource          ../global-keyword/Admin.txt
+Library           Selenium2Library
+
+*** Test Cases ***
+Login android
+    Open Application    http://localhost:4723/wd/hub    platformName=Android    platformVersion=7.1    deviceName=192.168.56.101:5555    appPackage=id.co.cicil.staging    appActivity=id.co.cicil.ui.launcher.LauncherActivity
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]    timeout=${timeout_general}
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]    timeout=${timeout_general}
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]    timeout=${timeout_general}
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]
+    AppiumLibrary.Click Element    //*[contains(@text,"Lanjut")]
+    AppiumLibrary.Click Element    //*[contains(@text,"Lanjut")]
+    AppiumLibrary.Click Element    //*[contains(@text,"Lanjut")]
+    AppiumLibrary.Click Element    //*[contains(@text,"Lanjut")]
+    Comment    Click Element    id=btn_start
+    AppiumLibrary.Wait Until Element Is Visible    //*[contains(@text,"Cek Sekarang")]    timeout=5s
+    AppiumLibrary.Click Element    //*[contains(@text,"Cek Sekarang")]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.FrameLayout[contains(@resource-id,'id.co.cicil.staging:id/nav_account')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.FrameLayout[contains(@resource-id,'id.co.cicil.staging:id/nav_account')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_email')]    timeout=5s
+    Input Value    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_email')]    testing+andrew103@cicil.co.id
+    Comment    Input Value    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_email')]    ${ID}
+    Comment    Set Global Variable    ${ID}
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_password')]    timeout=5s
+    Input Value    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_password')]    1234567A
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@text,'Masuk')]
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@text,'Masuk')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@text,'Profile')]    timeout=20s
+    Comment    ${text button}=    Get Text    id=text_title_suggestion
+    Comment    BuiltIn.Should Contain    ${text button}    Profilku
+
+order
+    ${down_payment}=    Set Variable    500000
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.FrameLayout[contains(@resource-id,'id.co.cicil.staging:id/nav_home')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.FrameLayout[contains(@resource-id,'id.co.cicil.staging:id/nav_home')]
+    Comment    Wait Until Element Is Visible    //android.widget.ImageButton[contains(@resource-id,'id.co.cicil.staging:id/button_close')]    timeout=5s
+    Comment    Click Element    //android.widget.ImageButton[contains(@resource-id,'id.co.cicil.staging:id/button_close')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/text_example_url')]    timeout=10s
+    AppiumLibrary.Click Element    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/text_example_url')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.LinearLayout[contains(@resource-id,'id.co.cicil.staging:id/linear_search')]    timeout=10s
+    AppiumLibrary.Click Element    //android.widget.LinearLayout[contains(@resource-id,'id.co.cicil.staging:id/linear_search')]
+    sleep    2s
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/text_price')]    timeout=10s
+    ${price}=    AppiumLibrary.Get Text    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/text_price')]
+    ${price}=    Remove String    ${price}    Rp \
+    Log    >>remove
+    ${price}=    Remove String    ${price}    .
+    Log    >>remove2
+    Set Global Variable    ${price}
+    cari element by swipe    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/text_maximum_tenure')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_downpayment')]    timeout=5s
+    Clear Text    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_downpayment')]
+    Input Value    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_downpayment')]    ${down_payment}
+    Set Global Variable    ${down_payment}
+    Tap    //android.widget.SeekBar[contains(@resource-id,'id.co.cicil.staging:id/seekbar_tenure')]    x_offset=150    y_offset=0    count=1
+    ${seekbar}=    Get Element Location    //android.widget.SeekBar[contains(@resource-id,'id.co.cicil.staging:id/seekbar_tenure')]
+    ${seekbar}=    Convert To String    ${seekbar}
+    ${y}=    Get Substring    ${seekbar}    6
+    ${y}=    Get Substring    ${y}    \    3
+    Click A Point    x=450    y=${y}    duration=100
+    sleep    1s
+    cari element by swipe    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/textinput_counter')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_note')]    timeout=5s
+    Input Value    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_note')]    automated temptatis
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_submit')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_submit')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'android:id/button2')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'android:id/button2')]
+    sleep    1s
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@text,'Alamat Tinggal Sehari-Hari Selama Kuliah')]    timeout=5s
+    cari element by swipe    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@text,'Alamat Tinggal Sehari-Hari Selama Kuliah')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.TextView[contains(@text,'Alamat Tinggal Sehari-Hari Selama Kuliah')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]
+    sleep    1s
+    cari element by swipe    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]
+    cari element by swipe    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]
+    sleep    1s
+    cari element by swipe    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.CheckBox[contains(@resource-id,'id.co.cicil.staging:id/cb_agreement')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.CheckBox[contains(@resource-id,'id.co.cicil.staging:id/cb_agreement')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]
+    sleep    1s
+    Comment    cari element by swipe    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_submit')]    0    0    400    200
+    Comment    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_resend_otp')]    timeout=5s
+    Comment    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_resend_otp')]
+    Sleep    35s
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_otp')]
+    AppiumLibrary.Click Element    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_otp')]
+    Sleep    15s
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_submit')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_submit')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_order_process')]    timeout=${timeout_general}
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_order_process')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@instance,'4')]    timeout=${timeout_general}
+    AppiumLibrary.Click Element    //android.widget.TextView[contains(@instance,'4')]
+    sleep    1s
+    ${order_no}=    AppiumLibrary.Get Text    //android.widget.TextView[contains(@instance,'0')]
+    ${order_no}=    Get Substring    ${order_no}    1
+    Log    text=${order_no}
+    Set Global Variable    ${order_no}
+    ${tenure}=    AppiumLibrary.Get Text    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/tv_order_tenure')]
+    ${tenure}=    Get Substring    ${tenure}    \    -6
+    log    >>tenure
+    Set Global Variable    ${tenure}
+    ${installment}=    AppiumLibrary.Get Text    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/tv_order_installment')]
+    ${installment}=    Remove String    ${installment}    .
+    log    >>installment
+    Set Global Variable    ${installment}
+    sleep    1s
+    Close Application
+
+admin
+    Optional Login as Admin to OLD    dev@cicil.co    Rahasia1
+    Verification test
+
+*** Keywords ***
+Verification test
+    Optional Login as Admin to OLD    dev@cicil.co    Rahasia1
+    Selenium2Library.Wait Until Element Is Visible    //div//div[text()="Verification"]    timeout=15s
+    Selenium2Library.Click Element    //div//div[text()="Verification"]
+    Selenium2Library.Wait Until Element Is Visible    //input [@formcontrolname="fcSearch"]    timeout=15s
+    Selenium2Library.Input Text    //input [@formcontrolname="fcSearch"]    testing+andrew103@cicil.co.id
+    Selenium2Library.Wait Until Element Is Visible    //tr[contains(@class, "yellow-text clickable")]/td[1]/span[1]    timeout=15s
+    Selenium2Library.Click Element    //tr[contains(@class, "yellow-text clickable")]/td[1]/span[1]
+    Selenium2Library.Wait Until Element Is Visible    //button/*[text()="Mulai Verifikasi" or text()="Lanjutkan Verifikasi"]    timeout=15s
+    Selenium2Library.Click Element    //button/*[text()="Mulai Verifikasi" or text()="Lanjutkan Verifikasi"]
+    #1.Does the ID card originals
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    Comment    Comment    Log    photo ktp: ${photo_ktp}
+    Comment    Log    //div//img[@src="${photo_ktp}"]
+    Comment    Comment    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Comment    Log    sama
+    Comment    Selenium2Library.Wait Until Element Is Visible    //div//label[@class="btn btn-secondary"]    timeout=15s
+    Comment    Selenium2Library.Click Element    //div//label[@class="btn btn-secondary"]
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label    timeout=10s
+    Log    >>> make sure on question 1
+    ${question1}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question1}    originals    ignore_case=True
+    Log    >>> passed
+    sleep    2s
+    Wait Until Element Is Enabled    //div//label[@class="btn btn-secondary"]    timeout=5s
+    Selenium2Library.Click Element    //div//label[@class="btn btn-secondary"]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #2.Does the ID Card information readable?
+    Sleep    3s
+    Log    >>> make sure on question 2
+    ${question2}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question2}    ID Card information    ignore_case=True
+    Log    >>> passed
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    Comment    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Wait Until Element Is Enabled    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=15s
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Comment    Selenium2Library.Wait Until Element Is Visible    //div//label[@class="btn btn-secondary"]    timeout=10s
+    Comment    Selenium2Library.Click Element    //div//label[@class="btn btn-secondary"]
+    sleep    3s
+    Wait Until Element Is Enabled    //button[contains(text(), "Next")]    timeout=5s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #3.Does the ID card number match?
+    Sleep    3s
+    Log    >>> make sure on question 3
+    ${question3}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question3}    ID Card number    ignore_case=True
+    Log    >>> passed
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Comment    ${no_ktp_cek}    Selenium2Library.Get Element Attribute    //input[contains(@id,"id_no")]    id
+    Comment    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Comment    ${no_ktp_cek}=    Get Value    //*[@id="id_no"]
+    Comment    Should Be Equal As Strings    ${no_ktp_cek}    ${no_ktp}
+    Comment    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Comment    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=10s
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #4. Does the name on the ID match?
+    Sleep    3s
+    Log    >>> make sure on question 4
+    ${question4}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question4}    ID match    ignore_case=True
+    Log    >>> passed
+    Comment    Selenium2Library.Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    Comment    ${first_name_cek}=    Get Value    //*[@id="firstname"]
+    Comment    Should Be Equal As Strings    ${first_name_cek}    ${first_name}
+    Comment    ${last_name_cek}=    Get Value    //*[@id="lastname"]
+    Comment    Should Be Equal As Strings    ${last_name_cek}    ${last_name}
+    Comment    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Comment    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=10s
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #5. Does the person email match his name ?
+    Sleep    2s
+    Log    >>> make sure on question 5
+    ${question5}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question5}    email match    ignore_case=True
+    Log    >>> passed
+    Comment    Selenium2Library.Wait Until Element Is Visible    //*[@id="email"]    timeout=5s
+    Comment    ${email_cek}=    Get Value    //*[@id="email"]
+    Comment    Should Be Equal As Strings    ${email_cek}    ${email}
+    Comment    ${first_name_cek}=    Get Value    //*[@id="firstname"]
+    Comment    Should Be Equal As Strings    ${first_name_cek}    ${first_name}
+    Comment    ${last_name_cek}=    Get Value    //*[@id="lastname"]
+    Comment    Should Be Equal As Strings    ${last_name_cek}    ${last_name}
+    Comment    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Comment    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=10s
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #6. Does the selfie photo taken properly?
+    Sleep    2s
+    Log    >>> make sure on question 6
+    ${question6}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question6}    taken    ignore_case=True
+    Log    >>> passed
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_selfie}"]    timeout=15s
+    Comment    ${photo_selfie_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_selfie}"]    src
+    Comment    Should Be Equal As Strings    ${photo_selfie_cek}    ${photo_selfie}
+    Comment    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Comment    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=10s
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #7.Does the person in the selfie match the photo on his cards?
+    Sleep    2s
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]    timeout=15s
+    Comment    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Comment    ${photo_selfie_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_selfie}"]    src
+    Comment    Should Be Equal As Strings    ${photo_selfie_cek}    ${photo_selfie}
+    Comment    Selenium2Library.Wait Until Element Is Visible    //div//label[@class="btn btn-secondary"]    timeout=10s
+    Comment    Selenium2Library.Click Element    //div//label[@class="btn btn-secondary"]
+    sleep    1s
+    Wait Until Element Is Enabled    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #8. Does the permanent address match the address on KTP?
+    Sleep    2s
+    Comment    Log    >>> make sure on question 8
+    Comment    ${question8}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Comment    Should Contain    ${question8}    address on KTP    ignore_case=True
+    Comment    Log    >>> passed
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]    timeout=15s
+    Comment    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Comment    ${tipe_address_cek}=    Get Value    //*[@id="fix_address_type"]
+    Comment    Should Be Equal As Strings    ${tipe_address_cek}    ${tipe_address1}
+    Comment    ${address_cek}=    Get Value    //*[@id="fix_address"]
+    Comment    Should Be Equal As Strings    ${address_cek}    ${address1}
+    Comment    ${city_address_cek}=    Get Value    //*[@id="fix_city"]
+    Comment    Should Be Equal As Strings    ${city_address_cek}    ${city_address1}
+    Comment    ${district_address_cek}=    Get Value    //*[@id="fix_district"]
+    Comment    Should Be Equal As Strings    ${district_address_cek}    ${district_address1}
+    sleep    1s
+    Selenium2Library.Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #10.Does the Student Card Original
+    Sleep    2s
+    Log    >>> make sure on question 10
+    ${question10}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question10}    Student Card Original    ignore_case=True
+    Log    >>> passed
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktm}"]    timeout=15s
+    Comment    ${photo_ktm_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktm}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktm_cek}    ${photo_ktm}
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #9.Is Currently a student
+    Sleep    2s
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktm}"]    timeout=15s
+    Comment    ${photo_ktm_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktm}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktm_cek}    ${photo_ktm}
+    Comment    ${no_ktm_cek}=    Get Value    //*[@id="student_no"]
+    Comment    Should Be Equal As Strings    ${no_ktm_cek}    ${no_ktm}
+    Comment    ${university_cek}=    Get Value    //*[@id="university"]
+    Comment    Should Be Equal As Strings    ${university_cek}    ${university}
+    Comment    ${faculty_cek}=    Get Value    //*[@id="faculty"]
+    Comment    Should Be Equal As Strings    ${faculty_cek}    ${faculty}
+    Comment    Comment    ${start_month_cek}=    Get Value    //*[@id="start_month"]
+    Comment    Comment    Should Be Equal As Strings    ${start_month_cek}    ${start_month}
+    Comment    ${start_year_cek}=    Get Value    //*[@id="start_year"]
+    Comment    Should Be Equal As Strings    ${start_year_cek}    ${start_year}
+    Comment    ${end_year_cek}=    Get Value    //*[@id="end_year"]
+    Comment    Should Be Equal As Strings    ${end_year_cek}    ${end_year}
+    Comment    Comment    ${end_month_cek}=    Get Value    //*[@id="end_month"]
+    Comment    Comment    Should Be Equal As Strings    ${end_month_cek}    ${end_month}
+    sleep    1s
+    Selenium2Library.Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #11.Does his current address match his university city
+    Sleep    2s
+    Comment    Selenium2Library.Wait Until Element Is Visible    //*[@id="university"]    timeout=15s
+    Comment    ${university_cek}=    Get Value    //*[@id="university"]
+    Comment    Should Be Equal As Strings    ${university_cek}    ${university}
+    Comment    ${address_cek}=    Get Value    //*[@id="address"]
+    Comment    Should Be Equal As Strings    ${address_cek}    ${address2}
+    Comment    ${district_address_cek}=    Get Value    //*[@id="district"]
+    Comment    Should Be Equal As Strings    ${district_address_cek}    ${district_address2}
+    Comment    ${tipe_address_cek}=    Get Value    //*[@id="address_type"]
+    Comment    Should Be Equal As Strings    ${tipe_address_cek}    ${tipe_address2}
+    Comment    ${city_address_cek}=    Get Value    //*[@id="city"]
+    Comment    Should Be Equal As Strings    ${city_address_cek}    ${city_address2}
+    Comment    sleep    1s
+    Selenium2Library.Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #12. Do Guardian contacts is real?
+    Sleep    1s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="firstname"]    timeout=15s
+    Comment    ${first_name_parent_cek}=    Get Value    //*[@id="firstname"]
+    Comment    Should Be Equal As Strings    ${first_name_parent_cek}    ${first_name_parent1}
+    Comment    ${last_name_parent_cek}=    Get Value    //*[@id="lastname"]
+    Comment    Should Be Equal As Strings    ${last_name_parent_cek}    ${last_name_parent1}
+    Comment    ${no_hp_parent_cek}=    Get Value    //*[@id="phone"]
+    Comment    Should Be Equal As Strings    ${no_hp_parent_cek}    ${no_hp_parent1}
+    Comment    ${no_hp_alternative_cek}=    Get Value    //*[@id="phone_alt"]
+    Comment    Should Be Equal As Strings    ${no_hp_alternative_cek}    ${no_hp_alternative}
+    sleep    1s
+    Selenium2Library.Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[text()=" Complete Data Verification "]    timeout=15s
+    Selenium2Library.Click Element    //button[text()=" Complete Data Verification "]
+    Selenium2Library.Wait Until Element Is Visible    //button[text()="See Order"]    timeout=15s
+    Selenium2Library.Click Element    //button[text()="See Order"]

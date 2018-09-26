@@ -1,0 +1,60 @@
+version: "2"
+services:
+  robot:
+    build:
+      context: .
+    volumes:
+      - ./test_suites:/test_suites
+      - ./output:/output
+    network_mode: host
+    environment: 
+      - SELENIUM_HUB_URL=http://localhost:4444/wd/hub
+      - TARGET_FRONT_URL=http://localhost:4000
+      - TARGET_BACK_URL=http://localhost:3000
+      - API_URL=http://localhost:8081/v1
+      - OTP_API_URL=http://dhooker.kiubernetis.cf
+      - FRONT_USER_EMAIL=marshalllaura@hotmail.com
+      - FRONT_USER_PASSWORD=Rahasia1
+      - BACK_USER_EMAIL=developer@cicil.co.id
+      - BACK_USER_PASSWORD=Rahasia1
+      - PHONE_NUMBER=+6285574670301
+      - TEST_FILE=
+      - TEST_ENV=staging
+
+  selenium_debug:
+    image: selenium/standalone-chrome-debug
+    shm_size: '2gb'
+    volumes:
+      - ./test_suites:/test_suites
+    network_mode: host
+    ports:
+      - "4444:4444"
+      - "49338:5900"
+
+  backend:
+    image: gcr.io/proven-dream-143310/api:1.19.4-dev
+    network_mode: host
+    volumes:
+      - ~/.config/gcloud:/root/.config/gcloud
+      - ./docker/api:/conf
+    ports:
+      - "8081:8081"
+  
+  frontend:
+    image: gcr.io/proven-dream-143310/cli-universal:2.3.36-dev
+    network_mode: host
+    ports:
+      - "4000:4000"
+    depends_on: 
+      - backend
+  
+  frontend_old:
+    image: gcr.io/proven-dream-143310/universal:1.14.11-dev
+    network_mode: host
+    ports:
+      - "3000:3000"
+    depends_on: 
+      - backend
+  
+  
+  

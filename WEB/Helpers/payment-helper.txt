@@ -1,0 +1,71 @@
+*** Settings ***
+Library           XML
+Library           RequestsLibrary
+Library           String
+Library           FakerLibrary
+Library           HttpLibrary.HTTP
+
+*** Variables ***
+${url_hit}        http://scd-api.cicil.co.id/v1
+${msg_notify_success}    CONTINUE
+${url_hit_staging}    http://api-staging.cicil.co.id/v1
+${url_hit_marvel}    http://marvel-api.cicil.co.id/v1
+
+*** Keywords ***
+Inquiry Payment
+    [Arguments]    ${payment_code}    ${amount}
+    Create Session    acceptor    ${url_hit_staging}
+    ${headers}=    Create Dictionary    key=token    Content-Type=application/x-www-form-urlencoded
+    ${inquiry_data}=    Create Dictionary    MALLID=4924    CHAINMERCHANT=0    AMOUNT=${amount}    WORDS=d68265033cdf4cc434f20787e0038ce4f0da4a10    PAYMENTCHANNEL=22
+    ...    PAYMENTCODE=${payment_code}
+    ${inquiry_hit}=    Post Request    acceptor    /payment/callback/doku/inquiry    data=${inquiry_data}    headers=${headers}
+    ${inquiry_response}=    Parse Xml    ${inquiry_hit.text}
+    ${transid_merchant}=    Get Element    ${inquiry_response}    TRANSIDMERCHANT
+    Log    ${transid_merchant.text}
+    Return From Keyword    ${transid_merchant.text}
+
+Notify Payment
+    [Arguments]    ${payment_code}    ${mcn}    ${amount}    ${transid_merchant}
+    Create Session    acceptor2    ${url_hit_staging}
+    ${notifypayment}    Create Dictionary    MALLID=0    AMOUNT=${amount}    CHAINMERCHANT=0    TRANSIDMERCHANT=${transid_merchant}    WORDS=737cb3824d3c52be9b5f608b643f3ac0b26694a3
+    ...    STATUSTYPE=P    RESPONSECODE=0    APPROVALCODE=102476957    RESULTMSG=SUCCESS    PAYMENTCHANNEL=34    PAYMENTCODE=${payment_code}
+    ...    SESSIONID=session1    BANK=BRI    MCN=${mcn}    PAYMENTDATETIME=20171119130851    VERIFYID=0    VERIFYSCORE=-1
+    ...    VERIFYSTATUS=NA
+    ${headers2}=    Create Dictionary    key=Content-Type    Content-Type=application/x-www-form-urlencoded
+    ${resppayment2}    Post Request    acceptor2    /payment/callback/doku/notify    data=${notifypayment}    headers=${headers2}
+
+Xendit Payment
+    [Arguments]    ${bank_code}    ${va_number}    ${amount}
+    ### prepare headers and session
+    ${headers}=    Create Dictionary    Content-Type=application/json    X-CALLBACK-TOKEN=NTkwNTg5MmQwY2VmZWY0MTEyMDU0YjM5ZjE4MTQ4NjAxNjcxOTA0NA==
+    Create Session    session    ${url_hit}
+    ### prepare variables
+    ${merchant_code}=    Get Substring    ${va_number}    \    5
+    ${account_number}=    Get Substring    ${va_number}    -10
+    ${payment_id}=    Set Variable    22a222
+    ${external_id}=    Set Variable    1495100281-backend luk-auto-xendit-install
+    ${id_random}=    FakerLibrary.Random Number    digits=2
+    ${id}=    Catenate    58affe551421ea2a44ce1e${id_random}
+    ${body}=    Set Variable    { \ \ "updated": "2017-02-24T09:35:17.567Z", \ \ "created": "2017-02-24T09:35:17.567Z", \ \ "payment_id": "${payment_id}", \ \ "callback_virtual_account_id": "333s33", \ \ "owner_id": "5892d0cefef4112054b39f18", \ \ "external_id": "${external_id}", \ \ "account_number": "${account_number}", \ \ "bank_code": "${bank_code}", \ \ "amount": ${amount}, \ \ "transaction_timestamp": "2017-02-24T09:35:17.394Z", \ \ "merchant_code": "${merchant_code}", \ \ "id": "${id}" }
+    Log    >>> Body: ${body}
+    ${result}=    Post Request    session    /payment/callback/va    data=${body}    headers=${headers}
+    ${resultjson}=    Set Variable    ${result.content}
+    ### verify result
+    ${res_status}=    Get Json Value    ${resultjson}    /status
+    ${res_status}=    Evaluate    '${res_status}'.replace('"','')
+    ${res_external_id}=    Get Json Value    ${resultjson}    /data/external_id
+    ${res_external_id}=    Evaluate    '${res_external_id}'.replace('"','')
+    ${res_payment_id}=    Get Json Value    ${resultjson}    /data/payment_id
+    ${res_payment_id}=    Evaluate    '${res_payment_id}'.replace('"','')
+    ${res_id}=    Get Json Value    ${resultjson}    /data/id
+    ${res_id}=    Evaluate    '${res_id}'.replace('"','')
+    ${res_amount}=    Get Json Value    ${resultjson}    /data/amount
+    ${res_amount}=    Evaluate    '${res_amount}'.replace('"','')
+    ${res_merchant_code}=    Get Json Value    ${resultjson}    /data/merchant_code
+    ${res_merchant_code}=    Evaluate    '${res_merchant_code}'.replace('"','')
+    Should Be Equal As Strings    ${res_status}    success
+    Should Be Equal As Strings    ${res_external_id}    ${external_id}
+    Should Be Equal As Strings    ${res_payment_id}    ${payment_id}
+    Should Be Equal As Strings    ${res_amount}    ${amount}
+    Should Be Equal As Strings    ${res_merchant_code}    ${merchant_code}
+    Log    >>> payment xendit completed.

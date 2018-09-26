@@ -1,0 +1,123 @@
+*** Settings ***
+Library           Selenium2Library
+Resource          ../resource-folder/order.txt
+Library           String
+Resource          ../resource-folder/notification.txt
+Library           AppiumLibrary
+Resource          ../resource-folder/general.txt
+
+*** Keywords ***
+Drag Slider Tenure
+    [Arguments]    ${jumlahBulan}
+    Log    >>> Dragging ${jumlahBulan} bulan with offset ${formsubmit_drag_offsetx_${jumlahBulan}bulan}
+    Comment    Drag And Drop By Offset    //*[@id="tenure"]    ${formsubmit_drag_offsetx_${jumlahBulan}bulan}    ${formsubmit_drag_offsetY}
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="undefined"]    timeout=${generalTimeout}
+    Drag And Drop By Offset    //*[@id="undefined"]    ${formsubmit_drag_offsetx_${jumlahBulan}bulan}    ${formsubmit_drag_offsetY}
+
+Make Plain Numbers
+    [Arguments]    ${rawNumber}
+    Log    >>> start Log from keyword <<<
+    ${rawNumber}=    Evaluate    '${rawNumber}'.replace('Rp ','')
+    ${rawNumber}=    Evaluate    '${rawNumber}'.replace('.','')
+    Log    >>> end Log from keyword <<<
+    Return From Keyword    ${rawNumber}
+
+Verify Detail Pesanan Right Float
+    [Arguments]    ${hargaBarang}    ${uangMuka}    ${jangkaWaktu}    ${cicilanPerBulan}    ${catatanPenjual}    ${namaBarang}
+    ...    ${imgsrc_left}
+    Log    >>> Log from Keyword <<<
+    Log    >>> Verifying detail pesanan on right floating div
+    ### get numbers on screen
+    Log    >>> getting numbers on screen
+    ${stuffNameOnScreen}=    Selenium2Library.Get Text    //h5[contains(@class, 'ng-star-inserted')]
+    ${priceOnScreen}=    Selenium2Library.Get Text    //h5[contains(@class, 'text-cicil-orange')]
+    ${priceOnScreen}=    Make Plain Numbers    ${priceOnScreen}
+    ${down_payment_onScreen}=    Selenium2Library.Get Text    //span[text()='Uang Muka']/parent::*/parent::*/div[2]/span
+    ${down_payment_onScreen}=    Make Plain Numbers    ${down_payment_onScreen}
+    ${down_payment_total_onScreen}=    Selenium2Library.Get Text    //span[text()='Total uang muka']/parent::*/parent::*/div[2]/span
+    ${down_payment_total_onScreen}=    Make Plain Numbers    ${down_payment_total_onScreen}
+    ${tenureOnScreen}=    Selenium2Library.Get Text    //p[text()='Jangka waktu']/parent::*/span
+    ${tenureOnScreen}=    Substring Tenure Only Number    ${tenureOnScreen}
+    ${installmentOnScreen}=    Selenium2Library.Get Text    //p[text()='Cicilan perbulan']/parent::*/span
+    ${installmentOnScreen}=    Make Plain Numbers    ${installmentOnScreen}
+    ${catatanOnScreen}=    Selenium2Library.Get Text    //p[text()='Catatan untuk penjual (opsional)']/parent::*/span
+    ${imgsrc_right}=    Selenium2Library.Get Element Attribute    //h5[contains(@class, 'ng-star-inserted')]/parent::*/parent::*/div[1]/img    src
+    ### verifying with parameters given
+    Log    >>> verifying with parametes given
+    Should Be Equal As Strings    ${catatanOnScreen}    ${catatanPenjual}
+    Should Be Equal As Strings    ${priceOnScreen}    ${hargaBarang}
+    Should Be Equal As Strings    ${down_payment_onScreen}    ${uangMuka}
+    Should Be Equal As Strings    ${tenureOnScreen}    ${jangkaWaktu}
+    Should Be Equal As Strings    ${installmentOnScreen}    ${cicilanPerBulan}
+    Should Be Equal As Strings    ${stuffNameOnScreen}    ${namaBarang}
+    Should Be Equal As Strings    ${imgsrc_right}    ${imgsrc_left}
+    Log    >>> End Log from Keyword <<<
+
+Substring Tenure Only Number
+    [Arguments]    ${rawTenure}
+    Log    >>> Log from Keyword <<<
+    ${tenure}=    Get Substring    ${rawTenure}    \    -6
+    Log    >>> End Log from Keyword <<<
+    Return From Keyword    ${tenure}
+
+Fill In Voucher Code
+    ### input and submit voucher code
+    Selenium2Library.Wait Until Element Is Visible    //input[contains(@placeholder, 'Masukkan kode voucher')]    timeout=${generalTimeout}
+    Selenium2Library.Element Should Be Disabled    //button[text()='Gunakan']
+    Selenium2Library.Input Text    //input[contains(@placeholder, 'Masukkan kode voucher')]    ${isuse_vouchercode_value}
+    Selenium2Library.Element Should Be Enabled    //button[text()='Gunakan']
+    Selenium2Library.Click Element    //button[text()='Gunakan']
+    Wait Until Voucher Notification Shown    text="${vouchercode_verif_msg_success}"
+
+Wait Until Voucher Notification Shown
+    [Arguments]    ${text}
+    Selenium2Library.Wait Until Element Is Visible    ${notificationContainer}/div[contains(text(), ${text})]    timeout=${generalTimeout}
+
+Login
+    [Arguments]    ${uname}    ${pass}
+    ${mainBrowser}=    Open Browser    ${url_staging_beta}    chrome
+    Maximize Browser Window
+    Wait Until Keyword Succeeds    10    1    Selenium2Library.Wait Until Element Is Visible    //a[text()="Masuk"]    timeout=${timeout_general}
+    Selenium2Library.Click Element    //a[text()="Masuk"]
+    ### login form
+    Selenium2Library.Wait Until Element Is Visible    //input[contains(@id, 'username')]    timeout=${generalTimeout}
+    Sleep    3s
+    Selenium2Library.Input Text    //input[contains(@id, 'username')]    ${uname}
+    Selenium2Library.Input Password    //input[contains(@id, 'password')]    ${pass}
+    Selenium2Library.Click Element    //button[text()='Masuk']
+    ### modification for staging beta.. comment if using marvel
+    Sleep    2s
+    Go To    ${url_staging_beta}
+    ### home page
+    Selenium2Library.Wait Until Element Is Visible    //button[text()='Akun Saya']    timeout=${generalTimeout}
+    SLeep    7s
+    Location Should Be    ${url_staging_beta}
+    Log    >>> Log in complete. User ${uname} logged in successfully
+
+Wait Until Meetup Notification Shown
+    [Arguments]    ${text}
+    Selenium2Library.Wait Until Element Is Visible    ${notificationContainer}/div[contains(text(), ${text})]    timeout=${generalTimeout}
+
+Click Ambas Last Order
+    [Arguments]    ${divXpath}
+    ${xpath_base_count}=    Set Variable    ${divXpath}
+    ${count}=    Selenium2Library.Get Element Count    ${xpath_base_count}
+    Log    >>> Start Keyword Log <<<
+    Log    >>> there are ${count} rows iin the Student List
+    ### number of row found. now click the last one
+    ${xpath_final}=    Catenate    ${xpath_base_count}/div[${count}]/cicil-accordion/div/div/div/cicil-accordion-header/div/div/div/div/div[1]/accordion-header/div/div[2]/span
+    Log    >>> Clicking Student List on xpath: ${xpath_final}
+    Selenium2Library.Click Element    ${xpath_final}
+    Sleep    3s
+    Log    >>> slept
+    Log    >>> End Keyword Log <<<
+
+Count DownPayment by Percentage of Price
+    [Arguments]    ${stuffPrice}
+    Log    >>> start Log from keyword <<<
+    Log    >>> counting price multiplied by ${downpayment_percentage_of_price}
+    ${dpFinal}=    Evaluate    ${downpayment_percentage_of_price} * ${stuffPrice}
+    ${dpFinal}=    Convert To Integer    ${dpFinal}
+    ${dpFinal}=    Convert To String    ${dpFinal}
+    Log    >>> end Log from keyword <<<
+    Return From Keyword    ${dpFinal}

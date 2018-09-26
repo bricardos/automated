@@ -1,0 +1,22 @@
+*** Settings ***
+Library           Selenium2Library
+
+*** Variables ***
+${formDatePicker}    xpath=//ngb-datepicker
+${formDatePickerMonth}    xpath=(//ngb-datepicker-navigation-select/select)[1]
+${formDatePickerYear}    xpath=(//ngb-datepicker-navigation-select/select)[2]
+${formDatePickerDay}    //ngb-datepicker-month-view
+
+*** Keywords ***
+Pick A Date From Date Picker
+    [Arguments]    ${year}    ${month}    ${day}
+    Selenium2Library.Wait Until Element Is Visible    ${formDatePickerDay}
+    Selenium2Library.Click Element    ${formDatePickerYear}
+    Selenium2Library.Select From List By Value    ${formDatePickerYear}    ${year}
+    Selenium2Library.Click Element    ${formDatePickerMonth}
+    Selenium2Library.Select From List By Value    ${formDatePickerMonth}    ${month}
+    ${activeDayTerm}=    Set Variable    not(contains(@class, "text-muted"))
+    ${selectedDay}=    Set Variable    text()="${day}"
+    ${day}=    Set Variable    ${formDatePickerDay}//div[${activeDayTerm} and ${selectedDay}]
+    Log    xpath DAY: ${formDatePickerDay}//div[${activeDayTerm} and ${selectedDay}]
+    Selenium2Library.Click Element    xpath=${day}

@@ -1,0 +1,8 @@
+*** Variables ***
+${isuse_kodereferral}    0
+${isuse_kodereferral_value}    amb5@mailinator.com_2018011
+${isuse_kodereferral_value_success}    Kode Referral Valid
+${isuse_kodereferral_value_failed}    Kode Referal tidak ditemukan
+${hp_luki}        +6285710020377
+${email_name}     Luki
+${gmail_hangouts_iframe_locator}    //body/div[7]/div[3]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/div[2]/div[1]/iframe[2]

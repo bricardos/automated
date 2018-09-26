@@ -1,0 +1,971 @@
+*** Settings ***
+Library           HttpLibrary.HTTP
+Library           Selenium2Library
+Library           RequestsLibrary
+
+*** Variables ***
+${urlscd}         https://scd-staging.cicil.co.id/
+${urlstag}        https://staging.cicil.co.id/
+${ord}            ORD171115-122362
+${ua}             dev@cicil.co
+
+*** Test Cases ***
+Register
+    Open Browser    https://staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath://*[@id="header"]/div/div/div[2]/div/div/div[3]/div/a/span[2]
+    Click Element    xpath://*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[1]/div[2]/div
+    Input Text    xpath://*[@id="email"]    gg+1@mailinator.com
+    Input Text    xpath://*[@id="phonenumber"]    89686195576
+    Input Text    xpath://*[@id="password"]    user pass
+    Input Text    xpath://*[@id="verify_password"]    user pass
+    Click Button    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/div/i
+    Click Button    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]
+    Click Button    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[60]
+    Click Button    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[1]/option[11]
+
+Completed profile data pribadi
+    Open Browser    https://scd-staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath ://*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    Input Text    xpath://*[@id="username"]    oi@mailinator.com
+    Input Text    xpath://*[@id="password"]    user pass
+    Click Element    xpath://*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
+    Set Selenium Speed    3seconds
+    Click Element    xpath://*[@id="header"]/div/div/div[1]/div/div/div[3]/div
+    Input Text    xpath://*[@id="firstname"]    oi
+    Input Text    xpath://*[@id="lastname"]    kim
+    Scroll page to Location    50    500
+    Click Element    xpath://*[@id="dob"]
+    Click Element    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[2]/option[60]
+    Click Element    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[1]/option[11]
+    Click Element    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[1]/personal-form/div[3]/div[2]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[3]/td[3]/div
+    Input Text    xpath://*[@id="wa_acc"]    089686195576
+    Input Text    xpath://*[@id="line_acc"]    linegg
+    Input Text    xpath://*[@id="id_card_no"]    7172891901829271
+    Execute Javascript    window.scrollBy(0,400)
+    Choose File    xpath://*[@id="id_card_button"]    D:\\bug.png
+    Sleep    4s
+    Choose File    xpath://*[@id="photo_button"]    D:\\bug.png
+    Sleep    4s
+    Click Button    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[2]/ciciluser_accordion[1]/div/div[2]/div/div/div[2]/button
+
+Completed profile data akademis
+    Open Browser    https://scd-staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath ://*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    Input Text    xpath://*[@id="username"]    oi@mailinator.com
+    Input Text    xpath://*[@id="password"]    user pass
+    Click Element    xpath://*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
+    Set Selenium Speed    3seconds
+    Click Element    xpath://*[@id="header"]/div/div/div[1]/div/div/div[3]/div
+    Execute Javascript    window.scrollBy(0,300)
+    Input Text    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[1]/mdform_typeahead/div/input    jaka
+    Click Element    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[1]/mdform_typeahead/div/typeahead-container/ul/li[1]/a
+    Input Text    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[2]/mdform_typeahead/div/input    bin
+    Click Element    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[1]/div[2]/mdform_typeahead/div/typeahead-container/ul/li[1]/a
+    Input Text    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[2]/div/mdform_typeahead/div/input    Akuntansi
+    Click Element    xpath://*[@id="start_month"]/option[1]
+    Click Element    xpath://*[@id="end_month"]/option[7]
+    Input Text    xpath://*[@id="start_year"]    2017
+    Input Text    xpath://*[@id="end_year"]    2020
+    Input Text    xpath://*[@id="gpa"]    3
+    Input Text    xpath://*[@id="student_no"]    1501189418
+    Choose File    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[1]/academic-form/form/div[10]/div[3]/mdform_image_uploader/div/div[1]/div/label[2]/span    D:\\rabbit.png
+    Click Button    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[2]/div/div[2]/div/div/div[2]/button
+    Input Text    xpath://*[@id="address"]    jl kemanggisan raya no 8
+    Input Text    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[2]/div[1]/mdform_typeahead/div/input    jakarta
+    Click Element    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[2]/div[1]/mdform_typeahead/div/typeahead-container/ul/li[1]/a/strong
+    Click Element    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[2]/div[2]/mdform_typeahead/div/typeahead-container/ul/li[6]/a
+    Click Element    xpath://*[@id="account_component"]/div[2]/ciciluser/div/div[3]/ciciluser_accordion[3]/div/div[2]/div/div/div[1]/address-form/div[5]/div/div/label
+
+verification account by admin
+    [Documentation]    User willl verify all data student about account profile, after user register and create first order
+    [Tags]    admin
+    loginadmin
+    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[6]/div[2]
+    #Input Email
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[2]/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    timeout=5s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[2]/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    bangkev12+1des
+    #Click email
+    Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[2]/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]/span/span    timeout=5s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[2]/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]/span/span
+    #Click Mulai Verifikasi button
+    sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-doc-list/div[1]/div/button[2]
+    #Question 1, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 2, Click yes and next
+    sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 3, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 4, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 5, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 6, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 7, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 8, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 10, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 9, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 11, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    #Question 12, Click yes and next
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[3]/button[3]
+    sleep    2s
+    Scroll Page To Location    50    300
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-email/section/div[1]/div/div[2]/button[3]
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-email/section/div[2]/button[1]
+
+Register new UI
+    Open Browser    ${urlscd}    chrome
+    Click Element    //*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a/span[2]
+    Click Element    //*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/div/div/div/small/span[1]
+
+assign ambassador & approve order
+    [Documentation]    Assign ambassador in campus coordinator and approve order in order modul
+    [Tags]    assign
+    loginadmin
+    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[5]
+    Sleep    5s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${ord}
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-list/div/div/div/div/div/div[2]/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[10]/div/a/button/span
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-detail/div/div/admin_view/div/div[1]/div/div/div/div/admin_action/div/div/div/button[1]
+    Click Element    //*[@id="assigned_ambassador"]/option[12]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-campus-coordinator/admin-campus-coordinator-detail/div/div/admin_view/div/div[1]/div/div/div/div/admin_action/div[2]/div[4]/div/div/button
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[7]
+    #Input Order
+    Sleep    3s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${ord}
+    #Click order
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[3]/span/span
+    #Click Approve Button
+    Sleep    3s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin_order/div/div/admin_view/div/div[1]/div/div/div/div/admin_action/div/div/div/button[1]
+    #Click Proceed Button
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin_order/div/div/admin_view/div/div[1]/div/div/div/div/admin_action/div[2]/div[4]/div/div/button
+
+Confirmation DP
+    loginadmin
+    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[9]/div[2]
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin_payment_confirmation_list/div/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    pending
+
+Upload aggreement
+    [Documentation]    Upload foto student in user list menu
+    ...    login as ambasador
+    loginamb
+    sleep    2s
+    Click Element    //*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    sleep    2s
+    Click Element    //*[@id="account_component"]/div[1]/account-sidenav/sidenav_new/div/ul/li[6]/span[2]
+    # click icon meetup
+    sleep    2s
+    Click Element    //*[@id="account_component"]/div[2]/user_list/div/div/div/div[2]/div/div/div/user_list_accordion[1]/div/div/div/div/div[2]/div[1]/img
+    # setting date meetup
+    sleep    2s
+    Click Element    //*[@id="account_component"]/div[2]/user_list/div/div/div/div[2]/div/div/div/user_list_accordion[1]/div/div/div/div[2]/div/div[1]/mdform_datepicker/div/div/div/i
+    Click Element    //*[@id="account_component"]/div[2]/user_list/div/div/div/div[2]/div/div/div/user_list_accordion[1]/div/div/div/div[2]/div/div[1]/mdform_datepicker/div/div/ngb-datepicker/ngb-datepicker-navigation/table/tbody/tr/td[2]/ngb-datepicker-navigation-select/select[1]/option[2]
+    Click Element    //*[@id="account_component"]/div[2]/user_list/div/div/div/div[2]/div/div/div/user_list_accordion[1]/div/div/div/div[2]/div/div[1]/mdform_datepicker/div/div/ngb-datepicker/table/tbody/tr/td/ngb-datepicker-month-view/table/tbody/tr[4]/td[7]/div
+    #input note
+    sleep    3s
+    Input Text    //*[@id="meetup_note"]    automate test
+    # save date
+    Sleep    1s
+    Click Element    //*[@id="account_component"]/div[2]/user_list/div/div/div/div[2]/div/div/div/user_list_accordion[1]/div/div/div/div[2]/div/div[3]/button
+    # upload picture
+    Sleep    3s
+    Click Element    //*[@id="account_component"]/div[2]/user_list/div/div/div/div[2]/div/div/div/user_list_accordion[1]/div/div/div/div/div[2]/div[2]/img
+    # upload picture
+    Choose File    //*[@id="account_component"]/div[2]/user_list/div/div/div/div[2]/div/div/div/user_list_accordion[1]/div/div/div/div[2]/div/div/div[1]/mdform_image_uploader/div/div[2]/div/label/span    D:\\rabbit.jpg
+
+Order Processing
+    [Documentation]    testing in Pending Doc, For Processing, For Monitoring, Completed Order
+    loginadmin
+    sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[8]/div[2]
+    # filter show DP paid and agreement upload
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-pending/div/admin-multiple-filter/div/div[2]/div/div[2]/button[1]
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-pending/div/admin-multiple-filter/div/div[2]/div/div[2]/button[2]
+    # Change filter from email be Order by
+    Sleep    3s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-pending/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    # input no order
+    Sleep    3s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-pending/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${ord}
+    # click detail order
+    Sleep    3s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-pending/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]/span/span
+    # Click approve
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-pending-detail/div/div/div/div/div[4]/div/button[1]
+    # click tab for proccessing
+    Sleep    5s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-nav-tab/div/div/ul/li[2]
+    # Change filter be order no
+    Sleep    3s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    # Input order
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${ord}
+    # Select Order
+    Sleep    3s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr[1]/td[1]/span/span
+    # Click purchase with order
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/admin-order-process-action/ul/li[1]/button
+    #Scroll window
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,1050)
+    # Input Shipment Cost
+    Sleep    2s
+    Input Text    //*[@id="shipment_cost"]    9000
+    # Input e-commerce
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/admin-order-process-processing-detail-payment/div/div[2]/dynamic_mdform/div/div[3]/div[2]/mdform_typeahead/div/input    tokopedia
+    # Input E-commerce name
+    Input Text    //*[@id="payment_account_name"]    Annisa
+    # Input E-commerce Bank
+    Input Text    //*[@id="payment_bank_name"]    BCA
+    # Input E-commerce Number
+    Input Text    //*[@id="payment_account_no"]    12907218
+    # Input invoice no
+    Input Text    //*[@id="invoice_no"]    INV201819291
+    # Input total payment
+    Input Text    //*[@id="total_payment"]    9000
+    # check box file uploder
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/admin-order-process-processing-detail-payment/div/div[2]/dynamic_mdform/div/div[11]/div[2]/mdform_image_optional_paste_uploader/mdform_checkbox/div/label
+    # Upload Photo
+    sleep    2s
+    Choose File    //*[@id="side-img_button"]    D://rabbit.jpg
+    # Click button confirm
+    sleep    2s
+    Execute Javascript    window.scrollBy(0,1100)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/div/button
+    # Click Tab Follow up finance
+    Sleep    5s
+    Execute Javascript    window.scrollBy(0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin-table-filter/div/div/ul/li[4]
+    # Change be filter order no
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    # Input No Order
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${ord}
+    # Click Order
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/span/span
+    # Check box use file uploader
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/admin-order-process-processing-detail-payment-receipt/div/div[1]/dynamic_mdform/div/div/div[2]/mdform_image_optional_paste_uploader/mdform_checkbox/div/label
+    Execute Javascript    window.scrollBy(0,1050)
+    # upload file
+    Sleep    3s
+    Choose File    //*[@id="side-img_button"]    D:\\bug.png
+    #click button Already Paid
+    Sleep    3s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/div/button
+    # Click Tab Paid
+    Sleep    5s
+    Execute Javascript    window.scrollBy(0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin-table-filter/div/div/ul/li[5]
+    # Change be filter order no
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    # input no order
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${ord}
+    # click order
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]
+    # Click check box
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/admin-order-process-processing-detail-paid/div/div[1]/dynamic_mdform/div/div[1]/div[2]/mdform_image_optional_paste_uploader/mdform_checkbox/div/label
+    # upload invoice
+    Sleep    2s
+    Choose File    //*[@id="side-img_button"]    D:\\bug.png
+    # click confirms
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/div/button
+    # click tab for monitoring
+    Sleep    5s
+    Execute Javascript    window.scrollBy(0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-nav-tab/div/div/ul/li[3]
+    # filter order no
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    # Input order no
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${ord}
+    # Click order
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,400)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr[1]/td[1]
+    # click button process shipment
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,400)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-proceedshipping/div/div/admin-order-process-action/ul/li[1]/button
+    # Click Button Proceed
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,1000)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-proceedshipping/div/div[2]/div/button
+    # Click Tab Shippement
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/admin-table-filter/div/div/ul/li[3]
+    # Click data order
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]
+    # Click button delivery confirm
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-shipping/div/div[1]/admin-order-process-action/ul/li[1]/button
+    # Click Process
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,900)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-shipping/div/div[2]/div/button
+    # Click Delivery Confirmed
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/admin-table-filter/div/div/ul/li[4]
+    # Click data order
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/span/span
+    # Click Delivery Completed
+    Sleep    2s
+    Execute Javascript    window.scrollBy (0,500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-deliveryconfirmed/div/div/admin-order-process-action/ul/li[1]/button
+    # Click Process
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,900)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-deliveryconfirmed/div/div[2]/div/button
+    # Click Tab Completed Order
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-nav-tab/div/div/ul/li[4]
+    # Change Filter
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-completed/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    #Input Order
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-completed/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${ord}
+
+test
+    Open Browser    https://scd-staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    xpath ://*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    sleep    5s
+    Input Text    //*[@id="username"]    dev@cicil.co
+    Input Text    //*[@id="password"]    Rahasia1
+    Click Element    xpath://*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
+    Sleep    3s
+    Go To    https://scd-staging.cicil.co.id/cicil4j4
+
+follow up finance
+    loginadmin
+    sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[8]/div[2]
+    # click tab for proccessing
+    Sleep    5s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-nav-tab/div/div/ul/li[2]
+    # Click Tab Follow up finance
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin-table-filter/div/div/ul/li[4]
+    # Change be filter order no
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    # Input No Order
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ORD180226-167086
+    # Click Order
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/span/span
+    # Check box use file uploader
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/admin-order-process-processing-detail-payment-receipt/div/div[1]/dynamic_mdform/div/div/div[2]/mdform_image_optional_paste_uploader/mdform_checkbox/div/label
+    Execute Javascript    window.scrollBy(0,1050)
+    # upload file
+    Sleep    3s
+    Choose File    //*[@id="side-img_button"]    D:\\bug.png
+    #click button Already Paid
+    Sleep    3s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/div/button
+
+test3
+    Open Browser    https://scd-staging.cicil.co.id/    chrome
+    Execute Javascript    window.open.("gdhs","_blank")
+
+Paid
+    loginadmin
+    sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[8]/div[2]
+    # click tab for proccessing
+    Sleep    5s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-nav-tab/div/div/ul/li[2]
+    # Click Tab Paid
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin-table-filter/div/div/ul/li[5]
+    # Change be filter order no
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    # input no order
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ORD180226-167086
+    # click order
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]
+    # Click check box
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/admin-order-process-processing-detail-paid/div/div[1]/dynamic_mdform/div/div[1]/div[2]/mdform_image_optional_paste_uploader/mdform_checkbox/div/label
+    # upload invoice
+    Sleep    2s
+    Choose File    //*[@id="side-img_button"]    D:\\bug.png
+    # click confirms
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-processing-detail/div/div/div/div/div/div[2]/div/button
+
+for monitoring
+    loginadmin
+    sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[8]/div[2]
+    # click tab for monitoring
+    Sleep    5s
+    Execute Javascript    window.scrollBy(0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-nav-tab/div/div/ul/li[3]
+    # filter order no
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    # Input order no
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${ord}
+    # Click order
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,400)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr[1]/td[1]
+    # click button process shipment
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,400)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-proceedshipping/div/div/admin-order-process-action/ul/li[1]/button
+    # Click Button Proceed
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,1000)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-proceedshipping/div/div[2]/div/button
+    # Click Tab Shippement
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/admin-table-filter/div/div/ul/li[3]
+    # Click data order
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]
+    # Click button delivery confirm
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-shipping/div/div[1]/admin-order-process-action/ul/li[1]/button
+    # Click Process
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,900)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-shipping/div/div[2]/div/button
+    # Click Delivery Confirmed
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/admin-table-filter/div/div/ul/li[4]
+    # Click data order
+    Sleep    2s
+    Execute Javascript    window.scrollBy(0,500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-monitoring/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[2]/span/span
+    # Click Delivery Completed
+    Sleep    2s
+    Execute Javascript    window.scrollBy (0,500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-deliveryconfirmed/div/div/admin-order-process-action/ul/li[1]/button
+    # Click Process
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,900)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/selector/div/div/div/div/div/div[2]/div/admin-order-process-monitoring-detail-deliveryconfirmed/div/div[2]/div/button
+    # Click Tab Completed Order
+    Sleep    3s
+    Execute Javascript    window.scrollBy (0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-nav-tab/div/div/ul/li[4]
+    # Change Filter
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-completed/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[1]/select/option[2]
+    #Input Order
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-order-process/admin-order-process-completed/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    ${ord}
+
+contact parent
+    [Documentation]    Verify contact parent
+    loginadmin
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[1]/admin_sidenav/sidenav/div/div[6]/div[2]
+    # Click tab Contact Parent
+    Sleep    2s
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-nav-tab/div/div/ul/li[4]
+    # Input email
+    Sleep    2s
+    Input Text    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-parent-contact/div/div/admin_table_serverside/div/div/div/div/div[1]/div[2]/ssd_search/div/div[2]/div[1]/input    fw+6@aa.aa
+    # Click Yes
+    Sleep    2s
+    Execute Javascript    window.scroll(0,-500)
+    Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-component/admin-verification-parent-contanct-detail/div/div/div[2]/dynamic_mdform/div/div[1]/div[2]/mdform_radio/div/div/label[1]
+
+logA
+    Open Browser    https://scd-staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    Click Element    //*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    Sleep    2s
+    Input Text    //*[@id="password"]    Rahasia1hjk
+
+CLI
+    CLIAdmin
+    sleep    3s
+    Click Element    /html/body/cicil-app/cicil-admin-layout/div/div[1]/div[1]/cicil-admin-sidenav/ul/li[6]/div/span
+
+Login android
+    Open Application    http://localhost:4723/wd/hub    platformName=Android    platformVersion=7.1    deviceName=192.168.56.101:5555    appPackage=id.co.cicil.staging    appActivity=id.co.cicil.ui.launcher.LauncherActivity
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]    timeout=${timeout_general}
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]    timeout=${timeout_general}
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]    timeout=${timeout_general}
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'com.android.packageinstaller:id/permission_allow_button')]
+    AppiumLibrary.Click Element    //*[contains(@text,"Lanjut")]
+    AppiumLibrary.Click Element    //*[contains(@text,"Lanjut")]
+    AppiumLibrary.Click Element    //*[contains(@text,"Lanjut")]
+    AppiumLibrary.Click Element    //*[contains(@text,"Lanjut")]
+    Comment    Click Element    id=btn_start
+    AppiumLibrary.Wait Until Element Is Visible    //*[contains(@text,"Cek Sekarang")]    timeout=5s
+    AppiumLibrary.Click Element    //*[contains(@text,"Cek Sekarang")]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.FrameLayout[contains(@resource-id,'id.co.cicil.staging:id/nav_account')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.FrameLayout[contains(@resource-id,'id.co.cicil.staging:id/nav_account')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_email')]    timeout=5s
+    Input Value    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_email')]    testing+andrew103@cicil.co.id
+    Comment    Input Value    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_email')]    ${ID}
+    Comment    Set Global Variable    ${ID}
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_password')]    timeout=5s
+    Input Value    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_password')]    1234567A
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@text,'Masuk')]
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@text,'Masuk')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@text,'Profile')]    timeout=20s
+    Comment    ${text button}=    Get Text    id=text_title_suggestion
+    Comment    BuiltIn.Should Contain    ${text button}    Profilku
+
+order
+    ${down_payment}=    Set Variable    500000
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.FrameLayout[contains(@resource-id,'id.co.cicil.staging:id/nav_home')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.FrameLayout[contains(@resource-id,'id.co.cicil.staging:id/nav_home')]
+    Comment    Wait Until Element Is Visible    //android.widget.ImageButton[contains(@resource-id,'id.co.cicil.staging:id/button_close')]    timeout=5s
+    Comment    Click Element    //android.widget.ImageButton[contains(@resource-id,'id.co.cicil.staging:id/button_close')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/text_example_url')]    timeout=10s
+    AppiumLibrary.Click Element    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/text_example_url')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.LinearLayout[contains(@resource-id,'id.co.cicil.staging:id/linear_search')]    timeout=10s
+    AppiumLibrary.Click Element    //android.widget.LinearLayout[contains(@resource-id,'id.co.cicil.staging:id/linear_search')]
+    sleep    2s
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/text_price')]    timeout=10s
+    ${price}=    AppiumLibrary.Get Text    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/text_price')]
+    ${price}=    Remove String    ${price}    Rp \
+    Log    >>remove
+    ${price}=    Remove String    ${price}    .
+    Log    >>remove2
+    Set Global Variable    ${price}
+    cari element by swipe    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/text_maximum_tenure')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_downpayment')]    timeout=5s
+    Clear Text    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_downpayment')]
+    Input Value    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_downpayment')]    ${down_payment}
+    Set Global Variable    ${down_payment}
+    Tap    //android.widget.SeekBar[contains(@resource-id,'id.co.cicil.staging:id/seekbar_tenure')]    x_offset=150    y_offset=0    count=1
+    ${seekbar}=    Get Element Location    //android.widget.SeekBar[contains(@resource-id,'id.co.cicil.staging:id/seekbar_tenure')]
+    ${seekbar}=    Convert To String    ${seekbar}
+    ${y}=    Get Substring    ${seekbar}    6
+    ${y}=    Get Substring    ${y}    \    3
+    Click A Point    x=450    y=${y}    duration=100
+    sleep    1s
+    cari element by swipe    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/textinput_counter')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_note')]    timeout=5s
+    Input Value    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_note')]    automated temptatis
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_submit')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_submit')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'android:id/button2')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'android:id/button2')]
+    sleep    1s
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@text,'Alamat Tinggal Sehari-Hari Selama Kuliah')]    timeout=5s
+    cari element by swipe    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@text,'Alamat Tinggal Sehari-Hari Selama Kuliah')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.TextView[contains(@text,'Alamat Tinggal Sehari-Hari Selama Kuliah')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]
+    sleep    1s
+    cari element by swipe    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_next')]
+    cari element by swipe    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]
+    sleep    1s
+    cari element by swipe    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]    0    0    400    200
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.CheckBox[contains(@resource-id,'id.co.cicil.staging:id/cb_agreement')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.CheckBox[contains(@resource-id,'id.co.cicil.staging:id/cb_agreement')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/btn_submit')]
+    sleep    1s
+    Comment    cari element by swipe    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_submit')]    0    0    400    200
+    Comment    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_resend_otp')]    timeout=5s
+    Comment    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_resend_otp')]
+    Sleep    35s
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_otp')]
+    AppiumLibrary.Click Element    //android.widget.EditText[contains(@resource-id,'id.co.cicil.staging:id/input_otp')]
+    Sleep    15s
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_submit')]    timeout=5s
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_submit')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_order_process')]    timeout=${timeout_general}
+    AppiumLibrary.Click Element    //android.widget.Button[contains(@resource-id,'id.co.cicil.staging:id/button_order_process')]
+    AppiumLibrary.Wait Until Element Is Visible    //android.widget.TextView[contains(@instance,'4')]    timeout=${timeout_general}
+    AppiumLibrary.Click Element    //android.widget.TextView[contains(@instance,'4')]
+    sleep    1s
+    ${order_no}=    AppiumLibrary.Get Text    //android.widget.TextView[contains(@instance,'0')]
+    ${order_no}=    Get Substring    ${order_no}    1
+    Log    text=${order_no}
+    Set Global Variable    ${order_no}
+    ${tenure}=    AppiumLibrary.Get Text    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/tv_order_tenure')]
+    ${tenure}=    Get Substring    ${tenure}    \    -6
+    log    >>tenure
+    Set Global Variable    ${tenure}
+    ${installment}=    AppiumLibrary.Get Text    //android.widget.TextView[contains(@resource-id,'id.co.cicil.staging:id/tv_order_installment')]
+    ${installment}=    Remove String    ${installment}    .
+    log    >>installment
+    Set Global Variable    ${installment}
+    sleep    1s
+    Close Application
+
+admin
+
+*** Keywords ***
+Scroll Page To Location
+    [Arguments]    ${x_location}    ${y_location}
+    Execute JavaScript    window.scrollTo(${x_location},${y_location})
+
+login
+    Input Text    xpath://*[@id="username"]    dev@cicil.co
+    Input Text    xpath://*[@id="password"]    Rahasia1
+    Click Element    xpath://*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
+
+loginadmin
+    Open Browser    ${urlstag}    chrome
+    Maximize Browser Window
+    Click Element    xpath ://*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    sleep    5s
+    Input Text    xpath://*[@id="username"]    dev@cicil.co
+    Input Text    xpath://*[@id="password"]    Rahasia1
+    Click Element    xpath://*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
+    Sleep    3s
+    Go To    https://staging.cicil.co.id/cicil4j4
+
+loginamb
+    Open Browser    ${urlscd}    chrome
+    Maximize Browser Window
+    Click Element    xpath ://*[@id="header"]/div/div/div[1]/div/div/div[3]/div/a
+    Input Text    xpath://*[@id="username"]    ice@mailinator.com
+    Input Text    xpath://*[@id="password"]    user pass
+    Click Element    xpath://*[@id="cicil_component"]/header-view/ngb-modal-window/div/div/account-modal/div/div/div/div/div[2]/div/div[3]/div/div/signin/section/div/form/div/div[3]/button
+
+test
+    ${text button}=    Get Text    xpath://*[@id="admin_component"]/div/div[2]/admin_order_list/div/div/admin_table_serverside/div/div/div/div/div[2]/div/div/table/tbody/tr/td[1]
+    BuiltIn.Should Contain    ${text button}=    waiting_downpayment
+
+CLIAdmin
+    Open Browser    https://marvel-staging.cicil.co.id/    chrome
+    Maximize Browser Window
+    sleep    3s
+    Click Element    //*[@id="top"]/cicil-header/div[1]/div/div/div[2]/div/div[2]/span/a
+    Sleep    5s
+    Input Text    //*[@id="username"]    dev@cicil.co
+    Input Text    //*[@id="password"]    Rahasia1
+    Click Element    //*[@id="top"]/cicil-login/div/div/div/div[3]/div/div[2]/div[2]/cicil-button-submit/div/button
+
+user pass
+    Rahasia1
+
+Verification test
+    Optional Login as Admin to OLD    dev@cicil.co    Rahasia1
+    Selenium2Library.Wait Until Element Is Visible    //div//div[text()="Verification"]    timeout=15s
+    Selenium2Library.Click Element    //div//div[text()="Verification"]
+    Selenium2Library.Wait Until Element Is Visible    //input [@formcontrolname="fcSearch"]    timeout=15s
+    Selenium2Library.Input Text    //input [@formcontrolname="fcSearch"]    ${email}
+    Selenium2Library.Wait Until Element Is Visible    //tr[contains(@class, "yellow-text clickable")]/td[1]/span[1]    timeout=15s
+    Selenium2Library.Click Element    //tr[contains(@class, "yellow-text clickable")]/td[1]/span[1]
+    Selenium2Library.Wait Until Element Is Visible    //button/*[text()="Mulai Verifikasi" or text()="Lanjutkan Verifikasi"]    timeout=15s
+    Selenium2Library.Click Element    //button/*[text()="Mulai Verifikasi" or text()="Lanjutkan Verifikasi"]
+    #1.Does the ID card originals
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    Comment    Comment    Log    photo ktp: ${photo_ktp}
+    Comment    Log    //div//img[@src="${photo_ktp}"]
+    Comment    Comment    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Comment    Log    sama
+    Comment    Selenium2Library.Wait Until Element Is Visible    //div//label[@class="btn btn-secondary"]    timeout=15s
+    Comment    Selenium2Library.Click Element    //div//label[@class="btn btn-secondary"]
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label    timeout=10s
+    Log    >>> make sure on question 1
+    ${question1}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question1}    originals    ignore_case=True
+    Log    >>> passed
+    sleep    2s
+    Wait Until Element Is Enabled    //div//label[@class="btn btn-secondary"]    timeout=5s
+    Selenium2Library.Click Element    //div//label[@class="btn btn-secondary"]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #2.Does the ID Card information readable?
+    Sleep    3s
+    Log    >>> make sure on question 2
+    ${question2}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question2}    ID Card information    ignore_case=True
+    Log    >>> passed
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    Comment    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Wait Until Element Is Enabled    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=15s
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    Comment    Selenium2Library.Wait Until Element Is Visible    //div//label[@class="btn btn-secondary"]    timeout=10s
+    Comment    Selenium2Library.Click Element    //div//label[@class="btn btn-secondary"]
+    sleep    3s
+    Wait Until Element Is Enabled    //button[contains(text(), "Next")]    timeout=5s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #3.Does the ID card number match?
+    Sleep    3s
+    Log    >>> make sure on question 3
+    ${question3}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question3}    ID Card number    ignore_case=True
+    Log    >>> passed
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Comment    ${no_ktp_cek}    Selenium2Library.Get Element Attribute    //input[contains(@id,"id_no")]    id
+    Comment    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Comment    ${no_ktp_cek}=    Get Value    //*[@id="id_no"]
+    Comment    Should Be Equal As Strings    ${no_ktp_cek}    ${no_ktp}
+    Comment    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Comment    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=10s
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #4. Does the name on the ID match?
+    Sleep    3s
+    Log    >>> make sure on question 4
+    ${question4}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question4}    ID match    ignore_case=True
+    Log    >>> passed
+    Comment    Selenium2Library.Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]
+    Comment    ${first_name_cek}=    Get Value    //*[@id="firstname"]
+    Comment    Should Be Equal As Strings    ${first_name_cek}    ${first_name}
+    Comment    ${last_name_cek}=    Get Value    //*[@id="lastname"]
+    Comment    Should Be Equal As Strings    ${last_name_cek}    ${last_name}
+    Comment    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Comment    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=10s
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #5. Does the person email match his name ?
+    Sleep    2s
+    Log    >>> make sure on question 5
+    ${question5}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question5}    email match    ignore_case=True
+    Log    >>> passed
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="email"]    timeout=5s
+    ${email_cek}=    Get Value    //*[@id="email"]
+    Should Be Equal As Strings    ${email_cek}    ${email}
+    ${first_name_cek}=    Get Value    //*[@id="firstname"]
+    Should Be Equal As Strings    ${first_name_cek}    ${first_name}
+    ${last_name_cek}=    Get Value    //*[@id="lastname"]
+    Should Be Equal As Strings    ${last_name_cek}    ${last_name}
+    Comment    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Comment    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=10s
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #6. Does the selfie photo taken properly?
+    Sleep    2s
+    Log    >>> make sure on question 6
+    ${question6}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question6}    taken    ignore_case=True
+    Log    >>> passed
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_selfie}"]    timeout=15s
+    Comment    ${photo_selfie_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_selfie}"]    src
+    Comment    Should Be Equal As Strings    ${photo_selfie_cek}    ${photo_selfie}
+    Comment    Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Comment    Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]    timeout=10s
+    Selenium2Library.Click Element    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/div/label[1]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #7.Does the person in the selfie match the photo on his cards?
+    Sleep    2s
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]    timeout=15s
+    Comment    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    Comment    ${photo_selfie_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_selfie}"]    src
+    Comment    Should Be Equal As Strings    ${photo_selfie_cek}    ${photo_selfie}
+    Comment    Selenium2Library.Wait Until Element Is Visible    //div//label[@class="btn btn-secondary"]    timeout=10s
+    Comment    Selenium2Library.Click Element    //div//label[@class="btn btn-secondary"]
+    sleep    1s
+    Wait Until Element Is Enabled    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #8. Does the permanent address match the address on KTP?
+    Sleep    2s
+    Comment    Log    >>> make sure on question 8
+    Comment    ${question8}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Comment    Should Contain    ${question8}    address on KTP    ignore_case=True
+    Comment    Log    >>> passed
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktp}"]    timeout=15s
+    Comment    ${photo_ktp_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktp}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktp_cek}    ${photo_ktp}
+    ${tipe_address_cek}=    Get Value    //*[@id="fix_address_type"]
+    Should Be Equal As Strings    ${tipe_address_cek}    ${tipe_address1}
+    ${address_cek}=    Get Value    //*[@id="fix_address"]
+    Should Be Equal As Strings    ${address_cek}    ${address1}
+    ${city_address_cek}=    Get Value    //*[@id="fix_city"]
+    Should Be Equal As Strings    ${city_address_cek}    ${city_address1}
+    ${district_address_cek}=    Get Value    //*[@id="fix_district"]
+    Should Be Equal As Strings    ${district_address_cek}    ${district_address1}
+    sleep    1s
+    Selenium2Library.Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #10.Does the Student Card Original
+    Sleep    2s
+    Log    >>> make sure on question 10
+    ${question10}=    Selenium2Library.Get Text    //*[@id="admin_component"]/div/div[2]/admin-verification-wizard/div/admin-verification-wizard-item/div[1]/div[2]/div/div[1]/div[1]/div[2]/div/mdform_radio/div/label
+    Should Contain    ${question10}    Student Card Original    ignore_case=True
+    Log    >>> passed
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktm}"]    timeout=15s
+    Comment    ${photo_ktm_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktm}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktm_cek}    ${photo_ktm}
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #9.Is Currently a student
+    Sleep    2s
+    Comment    Wait Until Element Is Visible    //div//img[@src="${photo_ktm}"]    timeout=15s
+    Comment    ${photo_ktm_cek}=    Selenium2Library.Get Element Attribute    //div//img[@src="${photo_ktm}"]    src
+    Comment    Should Be Equal As Strings    ${photo_ktm_cek}    ${photo_ktm}
+    ${no_ktm_cek}=    Get Value    //*[@id="student_no"]
+    Should Be Equal As Strings    ${no_ktm_cek}    ${no_ktm}
+    ${university_cek}=    Get Value    //*[@id="university"]
+    Should Be Equal As Strings    ${university_cek}    ${university}
+    ${faculty_cek}=    Get Value    //*[@id="faculty"]
+    Should Be Equal As Strings    ${faculty_cek}    ${faculty}
+    Comment    ${start_month_cek}=    Get Value    //*[@id="start_month"]
+    Comment    Should Be Equal As Strings    ${start_month_cek}    ${start_month}
+    ${start_year_cek}=    Get Value    //*[@id="start_year"]
+    Should Be Equal As Strings    ${start_year_cek}    ${start_year}
+    ${end_year_cek}=    Get Value    //*[@id="end_year"]
+    Should Be Equal As Strings    ${end_year_cek}    ${end_year}
+    Comment    ${end_month_cek}=    Get Value    //*[@id="end_month"]
+    Comment    Should Be Equal As Strings    ${end_month_cek}    ${end_month}
+    sleep    1s
+    Selenium2Library.Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #11.Does his current address match his university city
+    Sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="university"]    timeout=15s
+    ${university_cek}=    Get Value    //*[@id="university"]
+    Should Be Equal As Strings    ${university_cek}    ${university}
+    ${address_cek}=    Get Value    //*[@id="address"]
+    Should Be Equal As Strings    ${address_cek}    ${address2}
+    ${district_address_cek}=    Get Value    //*[@id="district"]
+    Should Be Equal As Strings    ${district_address_cek}    ${district_address2}
+    ${tipe_address_cek}=    Get Value    //*[@id="address_type"]
+    Should Be Equal As Strings    ${tipe_address_cek}    ${tipe_address2}
+    ${city_address_cek}=    Get Value    //*[@id="city"]
+    Should Be Equal As Strings    ${city_address_cek}    ${city_address2}
+    sleep    1s
+    Selenium2Library.Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    #12. Do Guardian contacts is real?
+    Sleep    1s
+    Selenium2Library.Wait Until Element Is Visible    //*[@id="firstname"]    timeout=15s
+    ${first_name_parent_cek}=    Get Value    //*[@id="firstname"]
+    Should Be Equal As Strings    ${first_name_parent_cek}    ${first_name_parent1}
+    ${last_name_parent_cek}=    Get Value    //*[@id="lastname"]
+    Should Be Equal As Strings    ${last_name_parent_cek}    ${last_name_parent1}
+    ${no_hp_parent_cek}=    Get Value    //*[@id="phone"]
+    Should Be Equal As Strings    ${no_hp_parent_cek}    ${no_hp_parent1}
+    Comment    ${no_hp_alternative_cek}=    Get Value    //*[@id="phone_alt"]
+    Comment    Should Be Equal As Strings    ${no_hp_alternative_cek}    ${no_hp_alternative}
+    sleep    1s
+    Selenium2Library.Wait Until Element Is Visible    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label    timeout=15s
+    Selenium2Library.Click Element    //div[@class="answers_box"]//div[@class="question"]//input[@value="yes"]/parent::label
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[contains(text(), "Next")]    timeout=15s
+    Selenium2Library.Click Element    //button[contains(text(), "Next")]
+    sleep    2s
+    Selenium2Library.Wait Until Element Is Visible    //button[text()=" Complete Data Verification "]    timeout=15s
+    Selenium2Library.Click Element    //button[text()=" Complete Data Verification "]
+    Selenium2Library.Wait Until Element Is Visible    //button[text()="See Order"]    timeout=15s
+    Selenium2Library.Click Element    //button[text()="See Order"]

@@ -3,6 +3,20 @@ Library           HttpLibrary.HTTP
 Library           Selenium2Library
 
 *** Test Cases ***
+Login admin
+    Open Browser    https://staging.cicil.co.id/    Chrome
+    Maximize Browser Window
+    Selenium2Library.Wait Until Element Is Visible    //span[text()="Login/Register"]    timeout=10s
+    Selenium2Library.Click Element    //span[text()="Login/Register"]
+    Selenium2Library.Wait Until Element Is Visible    //input[@id="username"]    timeout=10s
+    Selenium2Library.Input Text    //input[@id="username"]    Dev@cicil.co
+    Selenium2Library.Wait Until Element Is Visible    //input[@id="password"]    timeout=5s
+    Selenium2Library.Input Text    //input[@id="password"]    Rahasia1
+    Selenium2Library.Wait Until Element Is Visible    //button[text()="Login"]    timeout=10s
+    Selenium2Library.Click Element    //button[text()="Login"]
+    Sleep    5s
+    Go To    https://staging.cicil.co.id/cicil4j4
+
 register
     Open Browser    https://staging.cicil.co.id/    chrome
     Set Selenium Speed    2 seconds
@@ -132,7 +146,7 @@ order
     sleep    2 seconds
     Click Element    xpath=//*[@id="copasurl_form"]/button
     Execute Javascript    window.scrollBy(0,250)
-    Input Text    xpath=//*[@id="tab-1"]/div[2]/div[1]/input    500000
+    Input Text    xpath=//*[@id="tab-1"]/div[2]/div[1]/input    100000
     Click Element    xpath=//*[@id="tab-1"]/div[2]/div[2]/select
     Click Element    xpath=//*[@id="tab-1"]/div[2]/div[2]/select/option[20]
     Execute Javascript    window.scrollBy(0,350)
